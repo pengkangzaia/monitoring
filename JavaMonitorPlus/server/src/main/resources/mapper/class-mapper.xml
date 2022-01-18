@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.camille.server.database.dao.ClassLoadRepository">
+
+    <sql id="selectFields">
+        id, date, address, name, bytes1, bytes2, compiled, failed, invalid, loaded, unloaded, time1, time2
+    </sql>
+
+    <sql id="insertFields">
+        date, address, name, bytes1, bytes2, compiled, failed, invalid, loaded, unloaded, time1, time2
+    </sql>
+
+    <select id="findAllByAddressAndName" resultType="com.github.camille.server.database.entity.ClassLoadEntity">
+        select <include refid="selectFields"></include>
+        from class_table
+        where address = #{address}
+        and name = #{name}
+    </select>
+
+    <insert id="save" parameterType="com.github.camille.server.database.entity.ClassLoadEntity">
+        insert into class_table(<include refid="insertFields"></include>)
+        values(#{date},#{address},#{name},#{bytes1},#{bytes2},#{compiled},#{failed},#{invalid},#{loaded},#{unloaded},
+        #{time1},#{time2})
+    </insert>
+
+    <delete id="deleteAll">
+        delete from class_table
+    </delete>
+
+
+</mapper>

@@ -40,7 +40,7 @@ function s1(data) {
                     name: "S1C",
                     type: 'line',
                     data: data.map(function (item) {
-                        return item.s1C;
+                        return item.s1c;
                     }),
                     lineStyle: {
                         color: colors[0]
@@ -50,7 +50,7 @@ function s1(data) {
                     name: "S1U",
                     type: 'line',
                     data: data.map(function (item) {
-                        return item.s1U;
+                        return item.s1u;
                     }),
                     lineStyle: {
                         color: colors[1]

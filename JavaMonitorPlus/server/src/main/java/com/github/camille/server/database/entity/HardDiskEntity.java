@@ -12,12 +12,8 @@ import javax.persistence.Table;
  * @create 2022-01-16 13:34
  **/
 @Data
-@Entity
-@Table(name = "disk_table")
 public class HardDiskEntity {
 
-    @Id
-    @GeneratedValue
     private Integer id;
     private String address;
     private String date;

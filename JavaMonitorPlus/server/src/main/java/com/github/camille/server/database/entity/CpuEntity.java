@@ -12,12 +12,8 @@ import javax.persistence.Table;
  * @create 2021-11-01 9:03
  **/
 @Data
-@Entity
-@Table(name = "cpu_table")
 public class CpuEntity {
 
-    @Id
-    @GeneratedValue
     private Integer id;
     private String address; //进程所在主机
     private String date; //x：时间

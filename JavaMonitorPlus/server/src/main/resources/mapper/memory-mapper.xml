@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.camille.server.database.dao.MemoryRepository">
+
+    <sql id="selectFields">
+        id, date, address, used, used_percent
+    </sql>
+
+    <sql id="insertFields">
+        date, address, used, used_percent
+    </sql>
+
+    <select id="findAllByAddress" resultType="com.github.camille.server.database.entity.MemEntity">
+        select <include refid="selectFields"></include>
+        from memory_table
+        where address = #{address}
+    </select>
+
+    <insert id="save" parameterType="com.github.camille.server.database.entity.MemEntity">
+        insert into memory_table(<include refid="insertFields"></include>)
+        values(#{date},#{address},#{used},#{usedPercent})
+    </insert>
+
+    <delete id="deleteAll">
+        delete from memory_table
+    </delete>
+
+
+</mapper>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.camille.server.database.dao.DiskRepository">
+
+    <sql id="selectFields">
+        id, date, address, rio, wio, rkb, wkb, r_await, w_await, svctm, util
+    </sql>
+
+    <sql id="insertFields">
+        date, address, rio, wio, rkb, wkb, r_await, w_await, svctm, util
+    </sql>
+
+    <select id="findAllByAddress" resultType="com.github.camille.server.database.entity.HardDiskEntity">
+        select <include refid="selectFields"></include>
+        from disk_table
+        where address = #{address}
+    </select>
+
+    <insert id="save" parameterType="com.github.camille.server.database.entity.HardDiskEntity">
+        insert into disk_table(<include refid="insertFields"></include>)
+        values(#{date},#{address},#{rio},#{wio},#{rkb},#{wkb},#{rAwait},#{wAwait},#{svctm},#{util})
+    </insert>
+
+    <delete id="deleteAll">
+        delete from disk_table
+    </delete>
+
+
+</mapper>

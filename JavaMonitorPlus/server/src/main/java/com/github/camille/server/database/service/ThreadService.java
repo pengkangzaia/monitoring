@@ -26,9 +26,9 @@ public class ThreadService {
         entity.setName(name);
         entity.setDate(date);
         entity.setTotal(jstatk.getTotal());
-        entity.setRUNNABLE(jstatk.getRUNNABLE());
-        entity.setTIMED_WAITING(jstatk.getTIMED_WAITING());
-        entity.setWAITING(jstatk.getWAITING());
+        entity.setRunnable(jstatk.getRUNNABLE());
+        entity.setTimedWaiting(jstatk.getTIMED_WAITING());
+        entity.setWaiting(jstatk.getWAITING());
         threadRepository.save(entity);
     }
 

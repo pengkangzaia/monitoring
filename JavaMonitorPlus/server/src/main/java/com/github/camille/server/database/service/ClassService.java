@@ -17,7 +17,8 @@ public class ClassService {
     private ClassLoadRepository classLoadRepository;
 
     public List<ClassLoadEntity> findAllByAddressAndName(String address, String name) {
-        return classLoadRepository.findAllByAddressAndName(address, name);
+        List<ClassLoadEntity> res = classLoadRepository.findAllByAddressAndName(address, name);
+        return res;
     }
 
 

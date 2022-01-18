@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.camille.server.database.dao.CpuRepository">
+
+    <sql id="selectFields">
+        id, date, address, cpu_usage, one_minute_load, five_minute_load, fifteen_minute_load
+    </sql>
+
+    <sql id="insertFields">
+        date, address, cpu_usage, one_minute_load, five_minute_load, fifteen_minute_load
+    </sql>
+
+    <select id="findAllByAddress" resultType="com.github.camille.server.database.entity.CpuEntity">
+        select <include refid="selectFields"></include>
+        from cpu_table
+        where address = #{address}
+    </select>
+
+    <insert id="save" parameterType="com.github.camille.server.database.entity.CpuEntity">
+        insert into cpu_table(<include refid="insertFields"></include>)
+        values(#{date},#{address},#{cpuUsage},#{oneMinuteLoad},#{fiveMinuteLoad},#{fifteenMinuteLoad})
+    </insert>
+
+    <delete id="deleteAll">
+        delete from cpu_table
+    </delete>
+
+
+</mapper>

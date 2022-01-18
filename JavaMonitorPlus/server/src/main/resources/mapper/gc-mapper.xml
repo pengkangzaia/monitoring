@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.camille.server.database.dao.GcRepository">
+
+    <sql id="selectFields">
+        id, date, address, name, ccsc, ccsu, ec, eu, fgc, fgct, gct, mc, mu, oc, ou, s0c, s0u, s1c, s1u, ygc, ygct
+    </sql>
+
+    <sql id="insertFields">
+        date, address, name, ccsc, ccsu, ec, eu, fgc, fgct, gct, mc, mu, oc, ou, s0c, s0u, s1c, s1u, ygc, ygct
+    </sql>
+
+    <select id="findAllByAddressAndName" resultType="com.github.camille.server.database.entity.GcEntity">
+        select <include refid="selectFields"></include>
+        from gc_table
+        where address = #{address}
+        and name = #{name}
+    </select>
+
+    <insert id="save" parameterType="com.github.camille.server.database.entity.GcEntity">
+        insert into gc_table(<include refid="insertFields"></include>)
+        values(#{date},#{address},#{name},#{ccsc},#{ccsu},#{ec},#{eu},#{fgc},#{fgct},#{gct},#{mc},#{mu},#{oc},#{ou},
+        #{s0c},#{s0u},#{s1c},#{s1u},#{ygc},#{ygct})
+    </insert>
+
+    <delete id="deleteAll">
+        delete from gc_table
+    </delete>
+
+
+</mapper>
