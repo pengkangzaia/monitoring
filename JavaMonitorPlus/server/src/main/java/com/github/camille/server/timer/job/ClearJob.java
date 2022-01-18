@@ -22,7 +22,7 @@ public class ClearJob extends QuartzJobBean {
     @Autowired
     private ThreadService threadService;
     @Autowired
-    private CpuService cpuService;
+    private CPUService cpuService;
     @Autowired
     private MemoryService memoryService;
 

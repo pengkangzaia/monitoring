@@ -38,4 +38,8 @@ public class MemoryService {
     }
 
 
+    public List<MemoryEntity> selectPredictData(String address, int slidingWindowSize) {
+        List<MemoryEntity> res = memoryRepository.selectLimitByAddress(address, slidingWindowSize);
+        return res;
+    }
 }

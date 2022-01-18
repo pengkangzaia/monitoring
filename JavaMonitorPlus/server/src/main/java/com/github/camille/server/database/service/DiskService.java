@@ -41,4 +41,8 @@ public class DiskService {
         diskRepository.deleteAll();
     }
 
+    public List<DiskEntity> selectPredictData(String address, int slidingWindowSize) {
+        List<DiskEntity> res = diskRepository.selectLimitByAddress(address, slidingWindowSize);
+        return res;
+    }
 }

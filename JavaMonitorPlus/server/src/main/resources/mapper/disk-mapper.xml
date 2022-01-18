@@ -25,6 +25,13 @@
         from disk_table
         where address = #{address}
     </select>
+    <select id="selectLimitByAddress" resultType="com.github.camille.server.core.entity.DiskEntity">
+        select <include refid="selectFields"></include>
+        from disk_table
+        where address = #{address}
+        order by id
+        limit #{limit}
+    </select>
 
     <insert id="save" parameterType="com.github.camille.server.database.entity.HardDiskEntity">
         insert into disk_table(<include refid="insertFields"></include>)

@@ -7,7 +7,7 @@ import lombok.Data;
  * @create 2021-11-01 9:03
  **/
 @Data
-public class CpuEntity {
+public class CPUEntity {
 
     private Integer id;
     private String address; //进程所在主机

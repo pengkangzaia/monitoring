@@ -1,6 +1,7 @@
 package com.github.camille.server.timer.config;
 
 import com.github.camille.server.timer.job.ClearJob;
+import com.github.camille.server.timer.job.PredictJob;
 import com.github.camille.server.timer.job.UpdataJob;
 import com.github.camille.server.timer.parm.CronParm;
 import org.quartz.*;
@@ -21,13 +22,13 @@ public class QuartzConfig {
     private CronParm cronParm;
 
     @Bean
-    public JobDetail clearQuartzDetail(){
+    public JobDetail clearQuartzDetail() {
         return JobBuilder.newJob(ClearJob.class).withIdentity("clearJob").storeDurably().build();
     }
 
     @Bean
-    public Trigger clearQuartzTrigger(){
-        logger.warn("monitor.cron: "+cronParm.getCron());
+    public Trigger clearQuartzTrigger() {
+        logger.warn("monitor.cron: " + cronParm.getCron());
         return TriggerBuilder.newTrigger().forJob(clearQuartzDetail())
                 .withIdentity("clearTrigger") // 定义name/group
                 .startNow()
@@ -39,13 +40,13 @@ public class QuartzConfig {
     }
 
     @Bean
-    public JobDetail updataQuartzDetail(){
+    public JobDetail updataQuartzDetail() {
         return JobBuilder.newJob(UpdataJob.class).withIdentity("updataJob").storeDurably().build();
     }
 
     @Bean
-    public Trigger updataQuartzTrigger(){
-        logger.warn("monitor.rate: "+cronParm.getRate());
+    public Trigger updataQuartzTrigger() {
+        logger.warn("monitor.rate: " + cronParm.getRate());
         return TriggerBuilder.newTrigger().forJob(updataQuartzDetail())
                 .withIdentity("updataTrigger")
                 .startNow()
@@ -56,5 +57,25 @@ public class QuartzConfig {
                 )
                 .build();
     }
-    
+
+
+    @Bean
+    public JobDetail predictQuartzDetail() {
+        return JobBuilder.newJob(PredictJob.class).withIdentity("predictJob").storeDurably().build();
+    }
+
+    @Bean
+    public Trigger predictQuartzTrigger() {
+        logger.warn("monitor.rate: " + cronParm.getRate());
+        return TriggerBuilder.newTrigger().forJob(predictQuartzDetail())
+                .withIdentity("predictTrigger")
+                .startNow()
+                .withSchedule(
+                        SimpleScheduleBuilder.simpleSchedule()
+                                .withIntervalInSeconds(cronParm.getRate())
+                                .repeatForever()
+                )
+                .build();
+    }
+
 }

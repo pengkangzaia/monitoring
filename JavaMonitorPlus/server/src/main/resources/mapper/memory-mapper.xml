@@ -23,6 +23,13 @@
         from memory_table
         where address = #{address}
     </select>
+    <select id="selectLimitByAddress" resultType="com.github.camille.server.core.entity.MemoryEntity">
+        select <include refid="selectFields"></include>
+        from memory_table
+        where address = #{address}
+        order by id
+        limit #{limit}
+    </select>
 
     <insert id="save" parameterType="com.github.camille.server.database.entity.MemEntity">
         insert into memory_table(<include refid="insertFields"></include>)

@@ -1,5 +1,6 @@
 package com.github.camille.server.database.dao;
 
+import com.github.camille.server.core.entity.DiskEntity;
 import com.github.camille.server.database.entity.HardDiskEntity;
 import com.github.camille.server.database.entity.statistic.MinMaxDiskMetric;
 import org.apache.ibatis.annotations.Mapper;
@@ -20,4 +21,6 @@ public interface DiskRepository {
     void deleteAll();
 
     MinMaxDiskMetric selectMinMaxMetricByAddress(String address);
+
+    List<DiskEntity> selectLimitByAddress(String address, int limit);
 }

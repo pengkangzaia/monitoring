@@ -24,7 +24,7 @@ public class GreetingController {
     @Autowired
     private ThreadService threadService;
     @Autowired
-    private CpuService cpuService;
+    private CPUService cpuService;
     @Autowired
     private MemoryService memoryService;
     @Autowired
@@ -50,7 +50,7 @@ public class GreetingController {
 
     @MessageMapping("/cpu")
     @SendTo("/topic/cpu")
-    public List<CpuEntity> socketCpu(Message message) {
+    public List<CPUEntity> socketCpu(Message message) {
         return cpuService.findAllByAddress(message.getAddress());
     }
 
