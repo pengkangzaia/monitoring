@@ -12,7 +12,7 @@ public class TimerUtil {
      * @return
      */
     public static String now(){
-        SimpleDateFormat format = new SimpleDateFormat("MM/dd HH:mm");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return format.format(new Date());
     }
 }

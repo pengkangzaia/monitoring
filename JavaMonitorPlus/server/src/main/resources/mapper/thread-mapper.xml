@@ -17,6 +17,7 @@
         from thread_table
         where address = #{address}
         and name = #{name}
+        order by id
     </select>
 
     <insert id="save" parameterType="com.github.camille.server.database.entity.ThreadEntity">

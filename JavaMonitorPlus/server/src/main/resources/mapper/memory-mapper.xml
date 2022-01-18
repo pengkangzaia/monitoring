@@ -16,6 +16,7 @@
         select <include refid="selectFields"></include>
         from memory_table
         where address = #{address}
+        order by id
     </select>
 
     <insert id="save" parameterType="com.github.camille.server.database.entity.MemEntity">
