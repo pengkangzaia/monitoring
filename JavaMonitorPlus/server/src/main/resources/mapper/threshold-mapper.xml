@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.camille.server.database.dao.ThresholdRepository">
+
+    <sql id="selectFields">
+        id, address, threshold
+    </sql>
+
+    <sql id="insertFields">
+        address, threshold
+    </sql>
+
+    <select id="getThresholdByAddress" resultType="com.github.camille.server.database.entity.Threshold">
+        select <include refid="selectFields"></include>
+        from threshold
+        where address = #{address}
+    </select>
+
+
+</mapper>
