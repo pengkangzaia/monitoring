@@ -1,10 +1,8 @@
 package com.github.camille.server.database.dao;
 
-import com.github.camille.server.database.entity.GcEntity;
 import com.github.camille.server.database.entity.MemEntity;
+import com.github.camille.server.database.entity.statistic.MinMaxMemMetric;
 import org.apache.ibatis.annotations.Mapper;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -20,4 +18,6 @@ public interface MemoryRepository {
     Integer save(MemEntity memEntity);
 
     void deleteAll();
+
+    MinMaxMemMetric selectMinMaxMetricByAddress(String address);
 }

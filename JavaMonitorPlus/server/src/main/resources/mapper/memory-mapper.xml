@@ -18,6 +18,11 @@
         where address = #{address}
         order by id
     </select>
+    <select id="selectMinMaxMetricByAddress" resultType="com.github.camille.server.database.entity.statistic.MinMaxMemMetric">
+        select min(used) as min_used, max(used) as max_used, min(used_percent) as min_used_percent, max(used_percent) as max_used_percent
+        from memory_table
+        where address = #{address}
+    </select>
 
     <insert id="save" parameterType="com.github.camille.server.database.entity.MemEntity">
         insert into memory_table(<include refid="insertFields"></include>)

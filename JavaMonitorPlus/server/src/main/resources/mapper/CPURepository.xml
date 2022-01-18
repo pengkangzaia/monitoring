@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.github.camille.server.database.dao.CpuRepository">
+<mapper namespace="com.github.camille.server.database.dao.CPURepository">
 
     <sql id="selectFields">
         id, date, address, cpu_usage, one_minute_load, five_minute_load, fifteen_minute_load
@@ -17,6 +17,12 @@
         from cpu_table
         where address = #{address}
         order by id
+    </select>
+    <select id="selectMinMaxMetricByAddress" resultType="com.github.camille.server.database.entity.statistic.MinMaxCPUMetric">
+        select min(cpu_usage) as min_cpu_usage, max(cpu_usage) as max_cpu_usage, min(one_minute_load) as min_one_minute_load, max(one_minute_load) as max_one_minute_load,
+               min(five_minute_load) as min_five_minute_load, max(five_minute_load) as max_five_minute_load, min(fifteen_minute_load) as min_fifteen_minute_load, max(fifteen_minute_load) as max_fifteen_minute_load
+        from cpu_table
+        where address = #{address}
     </select>
 
     <insert id="save" parameterType="com.github.camille.server.database.entity.CpuEntity">

@@ -1,10 +1,8 @@
 package com.github.camille.server.database.dao;
 
-import com.github.camille.server.database.entity.CpuEntity;
 import com.github.camille.server.database.entity.HardDiskEntity;
+import com.github.camille.server.database.entity.statistic.MinMaxDiskMetric;
 import org.apache.ibatis.annotations.Mapper;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -21,4 +19,5 @@ public interface DiskRepository {
 
     void deleteAll();
 
+    MinMaxDiskMetric selectMinMaxMetricByAddress(String address);
 }

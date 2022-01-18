@@ -2,11 +2,6 @@ package com.github.camille.server.database.entity;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
 /**
  * @author pengkangzaia@foxmail.com
  * @create 2021-11-01 9:03

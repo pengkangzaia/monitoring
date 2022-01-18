@@ -18,6 +18,13 @@
         where address = #{address}
         order by id
     </select>
+    <select id="selectMinMaxMetricByAddress" resultType="com.github.camille.server.database.entity.statistic.MinMaxDiskMetric">
+        select min(rio) as min_rio, max(rio) as max_rio, min(wio) as min_wio, max(wio) as max_wio, min(rkb) as min_rkb, max(rkb) as max_rkb,
+               min(wkb) as min_wkb, max(wkb) as max_wkb, min(r_await) as min_r_await, max(r_await) as max_r_await, min(w_await) as min_w_await, max(w_await) as max_w_await,
+               min(svctm) as min_svctm, max(svctm) as max_svctm, min(util) as min_util, max(util) as max_util
+        from disk_table
+        where address = #{address}
+    </select>
 
     <insert id="save" parameterType="com.github.camille.server.database.entity.HardDiskEntity">
         insert into disk_table(<include refid="insertFields"></include>)

@@ -1,7 +1,7 @@
 package com.github.camille.server.database.service;
 
 import com.github.camille.server.core.entity.CpuInfoEntity;
-import com.github.camille.server.database.dao.CpuRepository;
+import com.github.camille.server.database.dao.CPURepository;
 import com.github.camille.server.database.entity.CpuEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ import java.util.List;
 public class CpuService {
 
     @Autowired
-    private CpuRepository cpuRepository;
+    private CPURepository cpuRepository;
 
     public List<CpuEntity> findAllByAddress(String address) {
         return cpuRepository.findAllByAddress(address);
