@@ -2,19 +2,19 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.github.camille.server.database.dao.ThresholdRepository">
+<mapper namespace="com.github.camille.server.database.dao.AlarmConfigRepository">
 
     <sql id="selectFields">
-        id, address, threshold
+        id, address, alarm_email
     </sql>
 
     <sql id="insertFields">
-        address, threshold
+        address, alarm_email
     </sql>
 
-    <select id="getThresholdByAddress" resultType="com.github.camille.server.database.entity.data.Threshold">
+    <select id="selectByAddress" resultType="com.github.camille.server.database.entity.alarm.AlarmConfig">
         select <include refid="selectFields"></include>
-        from threshold
+        from alarm_config
         where address = #{address}
     </select>
 

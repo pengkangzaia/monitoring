@@ -2,7 +2,7 @@ package com.github.camille.server.database.service;
 
 import com.github.camille.server.core.entity.JstackEntity;
 import com.github.camille.server.database.dao.ThreadRepository;
-import com.github.camille.server.database.entity.ThreadEntity;
+import com.github.camille.server.database.entity.data.ThreadEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

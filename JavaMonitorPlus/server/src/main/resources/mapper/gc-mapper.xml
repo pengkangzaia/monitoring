@@ -12,7 +12,7 @@
         date, address, name, ccsc, ccsu, ec, eu, fgc, fgct, gct, mc, mu, oc, ou, s0c, s0u, s1c, s1u, ygc, ygct
     </sql>
 
-    <select id="findAllByAddressAndName" resultType="com.github.camille.server.database.entity.GcEntity">
+    <select id="findAllByAddressAndName" resultType="com.github.camille.server.database.entity.data.GcEntity">
         select <include refid="selectFields"></include>
         from gc_table
         where address = #{address}
@@ -20,7 +20,7 @@
         order by id
     </select>
 
-    <insert id="save" parameterType="com.github.camille.server.database.entity.GcEntity">
+    <insert id="save" parameterType="com.github.camille.server.database.entity.data.GcEntity">
         insert into gc_table(<include refid="insertFields"></include>)
         values(#{date},#{address},#{name},#{ccsc},#{ccsu},#{ec},#{eu},#{fgc},#{fgct},#{gct},#{mc},#{mu},#{oc},#{ou},
         #{s0c},#{s0u},#{s1c},#{s1u},#{ygc},#{ygct})

@@ -2,7 +2,7 @@ package com.github.camille.server.database.service;
 
 import com.github.camille.server.core.entity.KVEntity;
 import com.github.camille.server.database.dao.ClassLoadRepository;
-import com.github.camille.server.database.entity.ClassLoadEntity;
+import com.github.camille.server.database.entity.data.ClassLoadEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +17,7 @@ public class ClassService {
     private ClassLoadRepository classLoadRepository;
 
     public List<ClassLoadEntity> findAllByAddressAndName(String address, String name) {
-        List<ClassLoadEntity> res = classLoadRepository.findAllByAddressAndName(address, name);
-        return res;
+        return classLoadRepository.findAllByAddressAndName(address, name);
     }
 
 

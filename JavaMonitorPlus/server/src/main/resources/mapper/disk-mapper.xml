@@ -12,7 +12,7 @@
         date, address, rio, wio, rkb, wkb, r_await, w_await, svctm, util
     </sql>
 
-    <select id="findAllByAddress" resultType="com.github.camille.server.database.entity.HardDiskEntity">
+    <select id="findAllByAddress" resultType="com.github.camille.server.database.entity.data.HardDiskEntity">
         select <include refid="selectFields"></include>
         from disk_table
         where address = #{address}
@@ -33,7 +33,7 @@
         limit #{limit}
     </select>
 
-    <insert id="save" parameterType="com.github.camille.server.database.entity.HardDiskEntity">
+    <insert id="save" parameterType="com.github.camille.server.database.entity.data.HardDiskEntity">
         insert into disk_table(<include refid="insertFields"></include>)
         values(#{date},#{address},#{rio},#{wio},#{rkb},#{wkb},#{rAwait},#{wAwait},#{svctm},#{util})
     </insert>

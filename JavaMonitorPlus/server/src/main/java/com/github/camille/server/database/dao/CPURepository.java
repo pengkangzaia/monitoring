@@ -1,6 +1,6 @@
 package com.github.camille.server.database.dao;
 
-import com.github.camille.server.database.entity.CPUEntity;
+import com.github.camille.server.database.entity.data.CPUEntity;
 import com.github.camille.server.database.entity.statistic.MinMaxCPUMetric;
 import org.apache.ibatis.annotations.Mapper;
 

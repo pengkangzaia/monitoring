@@ -12,7 +12,7 @@
         date, address, used, used_percent
     </sql>
 
-    <select id="findAllByAddress" resultType="com.github.camille.server.database.entity.MemEntity">
+    <select id="findAllByAddress" resultType="com.github.camille.server.database.entity.data.MemEntity">
         select <include refid="selectFields"></include>
         from memory_table
         where address = #{address}
@@ -31,7 +31,7 @@
         limit #{limit}
     </select>
 
-    <insert id="save" parameterType="com.github.camille.server.database.entity.MemEntity">
+    <insert id="save" parameterType="com.github.camille.server.database.entity.data.MemEntity">
         insert into memory_table(<include refid="insertFields"></include>)
         values(#{date},#{address},#{used},#{usedPercent})
     </insert>

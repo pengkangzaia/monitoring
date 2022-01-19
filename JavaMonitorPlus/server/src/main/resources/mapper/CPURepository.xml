@@ -12,7 +12,7 @@
         date, address, cpu_usage, one_minute_load, five_minute_load, fifteen_minute_load
     </sql>
 
-    <select id="findAllByAddress" resultType="com.github.camille.server.database.entity.CPUEntity">
+    <select id="findAllByAddress" resultType="com.github.camille.server.database.entity.data.CPUEntity">
         select <include refid="selectFields"></include>
         from cpu_table
         where address = #{address}
@@ -24,7 +24,7 @@
         from cpu_table
         where address = #{address}
     </select>
-    <select id="selectLimitByAddress" resultType="com.github.camille.server.database.entity.CPUEntity">
+    <select id="selectLimitByAddress" resultType="com.github.camille.server.database.entity.data.CPUEntity">
         select <include refid="selectFields"></include>
         from cpu_table
         where address = #{address}
@@ -32,7 +32,7 @@
         limit #{limit}
     </select>
 
-    <insert id="save" parameterType="com.github.camille.server.database.entity.CPUEntity">
+    <insert id="save" parameterType="com.github.camille.server.database.entity.data.CPUEntity">
         insert into cpu_table(<include refid="insertFields"></include>)
         values(#{date},#{address},#{cpuUsage},#{oneMinuteLoad},#{fiveMinuteLoad},#{fifteenMinuteLoad})
     </insert>

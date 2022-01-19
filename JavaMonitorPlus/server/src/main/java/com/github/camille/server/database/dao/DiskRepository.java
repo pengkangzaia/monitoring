@@ -1,7 +1,7 @@
 package com.github.camille.server.database.dao;
 
 import com.github.camille.server.core.entity.DiskEntity;
-import com.github.camille.server.database.entity.HardDiskEntity;
+import com.github.camille.server.database.entity.data.HardDiskEntity;
 import com.github.camille.server.database.entity.statistic.MinMaxDiskMetric;
 import org.apache.ibatis.annotations.Mapper;
 

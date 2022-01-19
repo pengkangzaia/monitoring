@@ -1,7 +1,7 @@
 package com.github.camille.server.database.dao;
 
 
-import com.github.camille.server.database.entity.GcEntity;
+import com.github.camille.server.database.entity.data.GcEntity;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

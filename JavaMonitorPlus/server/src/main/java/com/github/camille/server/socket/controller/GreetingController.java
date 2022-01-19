@@ -1,7 +1,7 @@
 package com.github.camille.server.socket.controller;
 
 
-import com.github.camille.server.database.entity.*;
+import com.github.camille.server.database.entity.data.*;
 import com.github.camille.server.database.service.*;
 import com.github.camille.server.view.entity.Message;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class GreetingController {
 
     @MessageMapping("/gc")
     @SendTo("/topic/gc")
-    public List<GcEntity> socketGc(Message message) throws Exception {
+    public List<GcEntity> socketGc(Message message) {
         return gcService.findAllByAddressAndName(message.getAddress(),message.getPid());
     }
 
@@ -57,15 +57,13 @@ public class GreetingController {
     @MessageMapping("/memory")
     @SendTo("/topic/memory")
     public List<MemEntity> socketMemory(Message message) {
-        List<MemEntity> res = memoryService.findAllByAddress(message.getAddress());
-        return res;
+        return memoryService.findAllByAddress(message.getAddress());
     }
 
     @MessageMapping("/disk")
     @SendTo("/topic/disk")
     public List<HardDiskEntity> socketDisk(Message message) {
-        List<HardDiskEntity> res = diskService.findAllByAddress(message.getAddress());
-        return res;
+        return diskService.findAllByAddress(message.getAddress());
     }
 
 }

@@ -2,7 +2,7 @@ package com.github.camille.server.database.service;
 
 import com.github.camille.server.core.entity.MemoryEntity;
 import com.github.camille.server.database.dao.MemoryRepository;
-import com.github.camille.server.database.entity.MemEntity;
+import com.github.camille.server.database.entity.data.MemEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +39,6 @@ public class MemoryService {
 
 
     public List<MemoryEntity> selectPredictData(String address, int slidingWindowSize) {
-        List<MemoryEntity> res = memoryRepository.selectLimitByAddress(address, slidingWindowSize);
-        return res;
+        return memoryRepository.selectLimitByAddress(address, slidingWindowSize);
     }
 }

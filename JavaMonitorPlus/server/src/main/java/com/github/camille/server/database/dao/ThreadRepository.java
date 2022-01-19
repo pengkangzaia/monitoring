@@ -1,6 +1,6 @@
 package com.github.camille.server.database.dao;
 
-import com.github.camille.server.database.entity.ThreadEntity;
+import com.github.camille.server.database.entity.data.ThreadEntity;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

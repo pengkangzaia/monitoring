@@ -2,7 +2,7 @@ package com.github.camille.server.database.service;
 
 import com.github.camille.server.core.entity.CpuInfoEntity;
 import com.github.camille.server.database.dao.CPURepository;
-import com.github.camille.server.database.entity.CPUEntity;
+import com.github.camille.server.database.entity.data.CPUEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +39,6 @@ public class CPUService {
     }
 
     public List<CPUEntity> selectPredictData(String address, int slidingWindowSize) {
-        List<CPUEntity> res = cpuRepository.selectLimitByAddress(address, slidingWindowSize);
-        return res;
+        return cpuRepository.selectLimitByAddress(address, slidingWindowSize);
     }
 }

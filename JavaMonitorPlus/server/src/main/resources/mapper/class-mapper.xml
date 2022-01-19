@@ -12,7 +12,7 @@
         date, address, name, bytes1, bytes2, compiled, failed, invalid, loaded, unloaded, time1, time2
     </sql>
 
-    <select id="findAllByAddressAndName" resultType="com.github.camille.server.database.entity.ClassLoadEntity">
+    <select id="findAllByAddressAndName" resultType="com.github.camille.server.database.entity.data.ClassLoadEntity">
         select <include refid="selectFields"></include>
         from class_table
         where address = #{address}
@@ -20,7 +20,7 @@
         order by id
     </select>
 
-    <insert id="save" parameterType="com.github.camille.server.database.entity.ClassLoadEntity">
+    <insert id="save" parameterType="com.github.camille.server.database.entity.data.ClassLoadEntity">
         insert into class_table(<include refid="insertFields"></include>)
         values(#{date},#{address},#{name},#{bytes1},#{bytes2},#{compiled},#{failed},#{invalid},#{loaded},#{unloaded},
         #{time1},#{time2})

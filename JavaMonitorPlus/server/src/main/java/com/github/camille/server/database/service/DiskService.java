@@ -2,7 +2,7 @@ package com.github.camille.server.database.service;
 
 import com.github.camille.server.core.entity.DiskEntity;
 import com.github.camille.server.database.dao.DiskRepository;
-import com.github.camille.server.database.entity.HardDiskEntity;
+import com.github.camille.server.database.entity.data.HardDiskEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +42,6 @@ public class DiskService {
     }
 
     public List<DiskEntity> selectPredictData(String address, int slidingWindowSize) {
-        List<DiskEntity> res = diskRepository.selectLimitByAddress(address, slidingWindowSize);
-        return res;
+        return diskRepository.selectLimitByAddress(address, slidingWindowSize);
     }
 }

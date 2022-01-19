@@ -12,7 +12,7 @@
         date, address, name, total, runnable, timed_waiting, waiting
     </sql>
 
-    <select id="findAllByAddressAndName" resultType="com.github.camille.server.database.entity.ThreadEntity">
+    <select id="findAllByAddressAndName" resultType="com.github.camille.server.database.entity.data.ThreadEntity">
         select <include refid="selectFields"></include>
         from thread_table
         where address = #{address}
@@ -20,7 +20,7 @@
         order by id
     </select>
 
-    <insert id="save" parameterType="com.github.camille.server.database.entity.ThreadEntity">
+    <insert id="save" parameterType="com.github.camille.server.database.entity.data.ThreadEntity">
         insert into thread_table(<include refid="insertFields"></include>)
         values(#{date},#{address},#{name},#{total},#{runnable},#{timedWaiting},#{waiting})
     </insert>

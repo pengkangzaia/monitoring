@@ -1,7 +1,7 @@
 package com.github.camille.server.database.dao;
 
 import com.github.camille.server.core.entity.MemoryEntity;
-import com.github.camille.server.database.entity.MemEntity;
+import com.github.camille.server.database.entity.data.MemEntity;
 import com.github.camille.server.database.entity.statistic.MinMaxMemMetric;
 import org.apache.ibatis.annotations.Mapper;
 

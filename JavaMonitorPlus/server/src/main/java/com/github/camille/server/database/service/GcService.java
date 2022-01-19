@@ -2,7 +2,7 @@ package com.github.camille.server.database.service;
 
 import com.github.camille.server.core.entity.KVEntity;
 import com.github.camille.server.database.dao.GcRepository;
-import com.github.camille.server.database.entity.GcEntity;
+import com.github.camille.server.database.entity.data.GcEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,8 +42,7 @@ public class GcService {
     }
 
     public List<GcEntity> findAllByAddressAndName(String address, String name) {
-        List<GcEntity> res = gcRepository.findAllByAddressAndName(address, name);
-        return res;
+        return gcRepository.findAllByAddressAndName(address, name);
     }
 
     public void clearAll() {

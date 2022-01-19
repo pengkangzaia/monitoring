@@ -1,12 +1,13 @@
 package com.github.camille.server.timer.job;
 
 import com.alibaba.fastjson.JSON;
+import com.github.camille.server.alarm.MailEntity;
 import com.github.camille.server.core.entity.DiskEntity;
 import com.github.camille.server.core.entity.MemoryEntity;
-import com.github.camille.server.database.entity.CPUEntity;
-import com.github.camille.server.database.service.CPUService;
-import com.github.camille.server.database.service.DiskService;
-import com.github.camille.server.database.service.MemoryService;
+import com.github.camille.server.database.dao.AlarmConfigRepository;
+import com.github.camille.server.database.entity.alarm.AlarmConfig;
+import com.github.camille.server.database.entity.data.CPUEntity;
+import com.github.camille.server.database.service.*;
 import com.github.camille.server.remote.parm.AddressParm;
 import com.github.camille.server.remote.parm.entity.Address;
 import com.github.camille.server.remote.util.HttpClient;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,10 +43,14 @@ public class PredictJob extends QuartzJobBean {
     private MemoryService memoryService;
     @Autowired
     private DiskService diskService;
+    @Autowired
+    private MailService mailService;
+    @Autowired
+    private AlarmConfigService alarmConfigService;
 
 
     @Override
-    protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+    protected void executeInternal(JobExecutionContext jobExecutionContext) {
         if (addressParm.getServe() == null || addressParm.getServe().size() == 0) {
             throw new RuntimeException("没有配置要监控的远程主机");
         }
@@ -54,9 +60,9 @@ public class PredictJob extends QuartzJobBean {
             List<CPUEntity> cpuEntities = cpuService.selectPredictData(add, slidingWindowSize);
             List<MemoryEntity> memoryEntities = memoryService.selectPredictData(add, slidingWindowSize);
             List<DiskEntity> diskEntities = diskService.selectPredictData(add, slidingWindowSize);
-            if (cpuEntities == null || memoryEntities == null && diskEntities == null) {
+            if (cpuEntities == null || memoryEntities == null || diskEntities == null) {
                 logger.warn("数据库中无数据，无法预测");
-                return;
+                continue;
             }
             if (cpuEntities.size() == memoryEntities.size() && cpuEntities.size() == diskEntities.size()) {
                 // 整合数据
@@ -89,16 +95,24 @@ public class PredictJob extends QuartzJobBean {
                 // 发送POST请求
                 String response = HttpClient.doPost(modelPredUrl, JSON.toJSONString(res), null, "POST");
                 response = response.replaceAll("\r\n", "");
+                logger.info("主机地址：" + add + " 模型反馈：" + response);
                 if ("1".equals(response)) {
                     // 转到报警流程
+                    MailEntity mail = new MailEntity();
+                    mail.setSentDate(new Date());
+                    AlarmConfig alarmConfig = alarmConfigService.getAlarmConfigByAddress(add);
+                    String alarmEmails = alarmConfig.getAlarmEmail();
+                    String[] emails = alarmEmails.split(",");
+                    mail.setTo(emails);
+                    mail.setSubject("系统监控告警");
+                    mail.setText("系统发生异常，请您检查主机" + add + "运行状况");
+                    mailService.sendSimpleMailMessage(mail);
                     System.out.println("我报警了！！！！！！！！！");
                 }
-                return;
+                continue;
             }
             // 大小不相等，无法预测
             logger.warn("数据库中数据不足，当前无法预测，请稍后再试");
-            return;
-
         }
     }
 }

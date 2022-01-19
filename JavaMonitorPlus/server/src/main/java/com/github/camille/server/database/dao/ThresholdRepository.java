@@ -1,6 +1,6 @@
 package com.github.camille.server.database.dao;
 
-import com.github.camille.server.database.entity.Threshold;
+import com.github.camille.server.database.entity.data.Threshold;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
