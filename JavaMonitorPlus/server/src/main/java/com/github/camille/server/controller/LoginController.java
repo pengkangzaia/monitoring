@@ -35,8 +35,8 @@ public class LoginController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String login(String username, String password, HttpServletResponse response) {
-        User user = userService.get(username);
+    public String login(String email, String password, HttpServletResponse response) {
+        User user = userService.get(email);
         if (user == null) {
             // 用户不存在，需要注册
             return getResponse(1001, "用户不存在，请您先注册");
@@ -62,6 +62,23 @@ public class LoginController extends BaseController {
         // 重定向
         return "redirect:login";
     }
+
+    @RequestMapping(value = "registerPage", method = RequestMethod.GET)
+    public String registerPage() {
+        return "register";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "register", method = RequestMethod.POST)
+    public String register(String username, String email, String password) {
+        User user = userService.get(email);
+        if (user != null) {
+            return getResponse(1001, "该邮箱已被注册");
+        }
+        userService.register(username, email, password);
+        return getResponse(0, "注册成功");
+    }
+
 
 
 

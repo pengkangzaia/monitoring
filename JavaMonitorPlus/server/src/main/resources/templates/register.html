@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>云监控-登陆</title>
+    <title>云监控-注册</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta http-equiv="Access-Control-Allow-Origin" content="*">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -43,7 +43,7 @@
         html {height:100%;}
         .login-main .login-bottom .tip {clear:both;height:16px;line-height:16px;width:288px;margin:0 auto;}
         .login-main .login-bottom .tip .login-tip {font-family:MicrosoftYaHei;font-size:12px;font-weight:400;font-stretch:normal;letter-spacing:0;color:#9abcda;cursor:pointer;}
-        .login-main .login-bottom .tip .register-account {font-stretch:normal;letter-spacing:0;color:#1391ff;text-decoration:none;position:absolute;right:62px;}
+        .login-main .login-bottom .tip .forget-password {font-stretch:normal;letter-spacing:0;color:#1391ff;text-decoration:none;position:absolute;right:62px;}
         .login-main .login-bottom .login-btn {width:288px;height:40px;background-color:#1E9FFF;border-radius:16px;margin:24px auto 0;text-align:center;line-height:40px;color:#fff;font-size:14px;letter-spacing:0;cursor:pointer;border:none;}
         .login-main .login-bottom .center .item .validateImg {position:absolute;right:1px;cursor:pointer;height:36px;border:1px solid #e6e6e6;}
         .footer {left:0;bottom:0;color:#fff;width:100%;position:absolute;text-align:center;line-height:30px;padding-bottom:10px;text-shadow:#000 0.1em 0.1em 0.1em;font-size:14px;}
@@ -59,7 +59,7 @@
 <div class="main-body">
     <div class="login-main">
         <div class="login-top">
-            <span>登 录</span>
+            <span>邮箱注册</span>
             <span class="bg1"></span>
             <span class="bg2"></span>
         </div>
@@ -67,24 +67,22 @@
             <div class="center">
                 <div class="item">
                     <span class="icon icon-2"></span>
-                    <input type="text" name="email" lay-verify="required"  placeholder="请输入邮箱账号" maxlength="24"/>
+                    <input type="text" name="username" lay-verify="required"  placeholder="用户名" maxlength="24"/>
+                </div>
+                <div class="item">
+                    <span class="icon icon-2"></span>
+                    <input type="text" name="email" lay-verify="required"  placeholder="邮箱地址" maxlength="24"/>
                 </div>
 
                 <div class="item">
                     <span class="icon icon-3"></span>
-                    <input type="password" name="password" lay-verify="required"  placeholder="请输入密码" maxlength="20">
+                    <input type="password" name="password" lay-verify="required"  placeholder="密码" maxlength="20">
                     <span class="bind-password icon icon-4"></span>
                 </div>
 
             </div>
-            <div class="tip">
-                <span class="icon-nocheck"></span>
-                <span class="login-tip">保持登录</span>
-<!--                <a href="javascript:" class="register-account">忘记密码？</a>-->
-                <a href="javascript:" class="register-account">账号注册</a>
-            </div>
             <div class="layui-form-item" style="text-align:center; width:100%;height:100%;margin:0px;">
-                <button class="login-btn" lay-submit="" lay-filter="login">立即登录</button>
+                <button class="login-btn" lay-submit="" lay-filter="register">立即注册</button>
             </div>
         </form>
     </div>
@@ -117,13 +115,13 @@
             }
         });
 
-        $('.register-account').on('click', function () {
-            window.location.href = '/registerPage'
-        });
-
         // 进行登录操作
-        form.on('submit(login)', function (data) {
+        form.on('submit(register)', function (data) {
             data = data.field;
+            if (data.username == '') {
+                layer.msg('用户名不能为空');
+                return false;
+            }
             if (data.email == '') {
                 layer.msg('邮箱地址不能为空');
                 return false;
@@ -132,10 +130,10 @@
                 layer.msg('密码不能为空');
                 return false;
             }
-            $.post("login", data, function (result) {
+            $.post("register", data, function (result) {
                 result = $.parseJSON(result)
                 if (result.code == 0) {
-                    layer.msg("登录成功")
+                    layer.msg("注册成功，自动登录")
                     window.location.href = '/'
                 } else {
                     layer.msg(result.msg)

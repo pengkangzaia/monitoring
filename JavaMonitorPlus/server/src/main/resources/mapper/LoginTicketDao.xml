@@ -5,13 +5,11 @@
 <mapper namespace="com.github.camille.server.database.dao.LoginTicketDao">
 
     <sql id="selectFields">
-        id
-        , user_id, ticket, status, expired
+        id, user_id, ticket, status, expired
     </sql>
 
     <sql id="insertFields">
-        user_id
-        , ticket, status, expired
+        user_id, ticket, status, expired
     </sql>
     <insert id="insertTicket" parameterType="com.github.camille.server.database.entity.user.LoginTicket"
             keyProperty="id">

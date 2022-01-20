@@ -57,4 +57,12 @@ public class UserService {
     public void logout(String ticket) {
         loginTicketDao.updateStatus(ticket, 1);
     }
+
+    public void register(String username, String email, String password) {
+        User user = new User();
+        user.setEmail(email);
+        user.setUsername(username);
+        user.setPassword(password);
+        userDao.insertUser(user);
+    }
 }
