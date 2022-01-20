@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.camille.server.database.dao.UserDao">
+
+    <sql id="selectFields">
+        id
+        , username, password, email
+    </sql>
+
+    <sql id="insertFields">
+        username
+        , password, email
+    </sql>
+    <insert id="insertUser" parameterType="com.github.camille.server.database.entity.user.User" keyProperty="id">
+        insert into user(<include refid="insertFields"></include>)
+        values(#{username}, #{password}, #{email})
+    </insert>
+
+
+    <select id="selectByEmail" resultType="com.github.camille.server.database.entity.user.User">
+        select
+        <include refid="selectFields"></include>
+        from user
+        where email = #{email}
+    </select>
+
+
+</mapper>
