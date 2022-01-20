@@ -43,10 +43,9 @@ public class LoginTicketInterceptor implements HandlerInterceptor {
                 return true;
             }
         }
-//        response.sendRedirect("/loginPage");
-        request.getRequestDispatcher("/loginPage").forward(request, response);
+        // 未登录跳转到登录页面
+        request.getRequestDispatcher("/login").forward(request, response);
         return false;
-
     }
 
 

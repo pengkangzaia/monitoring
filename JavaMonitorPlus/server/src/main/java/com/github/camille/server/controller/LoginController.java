@@ -25,12 +25,9 @@ public class LoginController extends BaseController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private HostHolder hostHolder;
-
-    @RequestMapping(value = "/loginPage", method = RequestMethod.GET)
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String getLoginPage() {
-        return "login";
+        return "user/login";
     }
 
     @ResponseBody
@@ -60,12 +57,12 @@ public class LoginController extends BaseController {
     public String logout(@CookieValue("ticket") String ticket) {
         userService.logout(ticket);
         // 重定向
-        return "redirect:login";
+        return "redirect:/login";
     }
 
-    @RequestMapping(value = "registerPage", method = RequestMethod.GET)
+    @RequestMapping(value = "register", method = RequestMethod.GET)
     public String registerPage() {
-        return "register";
+        return "user/register";
     }
 
     @ResponseBody

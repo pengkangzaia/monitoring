@@ -12,11 +12,14 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Autowired
     private LoginTicketInterceptor loginTicketInterceptor;
 
+    private static final String[] NO_NEED_PERMISSION_ARRAY = new String[]{"/login", "/register"};
+
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loginTicketInterceptor)
-                .excludePathPatterns("/**/*.css", "/**/*.js", "/**/*.png", "/**/*.jpg", "/**/*.jpeg", "/loginPage", "/login", "/register", "/registerPage");
+                .excludePathPatterns(NO_NEED_PERMISSION_ARRAY)
+                .excludePathPatterns("/**/*.css", "/**/*.js", "/**/*.png", "/**/*.jpg", "/**/*.jpeg");
     }
 
 }
