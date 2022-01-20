@@ -1,8 +1,8 @@
 package com.github.camille.server;
 
 import com.github.camille.server.alarm.MailEntity;
-import com.github.camille.server.database.dao.AlarmConfigRepository;
-import com.github.camille.server.database.dao.ThresholdRepository;
+import com.github.camille.server.database.dao.AlarmConfigDao;
+import com.github.camille.server.database.dao.ThresholdDao;
 import com.github.camille.server.database.entity.alarm.AlarmConfig;
 import com.github.camille.server.database.entity.data.Threshold;
 import com.github.camille.server.database.entity.statistic.MinMaxMetric;
@@ -22,17 +22,17 @@ public class ServerApplicationTests {
 
 
     @Autowired
-    private ThresholdRepository thresholdRepository;
+    private ThresholdDao thresholdDao;
     @Autowired
     private StatisticsService statisticsService;
     @Autowired
-    private AlarmConfigRepository alarmConfigRepository;
+    private AlarmConfigDao alarmConfigDao;
     @Autowired
     private MailService mailService;
 
     @Test
     public void thresholdTest() {
-        Threshold threshold = thresholdRepository.getThresholdByAddress("http://101.35.159.221:8081");
+        Threshold threshold = thresholdDao.getThresholdByAddress("http://101.35.159.221:8081");
         System.out.println(threshold);
     }
 
@@ -44,7 +44,7 @@ public class ServerApplicationTests {
 
     @Test
     public void alarmConfigTest() {
-        AlarmConfig res = alarmConfigRepository.selectByAddress("http://101.35.159.221:8081");
+        AlarmConfig res = alarmConfigDao.selectByAddress("http://101.35.159.221:8081");
         System.out.println(res);
     }
 

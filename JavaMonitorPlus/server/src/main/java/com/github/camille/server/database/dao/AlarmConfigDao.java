@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
  * @create 2022-01-19 11:37
  **/
 @Mapper
-public interface AlarmConfigRepository {
+public interface AlarmConfigDao {
 
     AlarmConfig selectByAddress(String address);
 

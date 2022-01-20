@@ -4,7 +4,7 @@ import com.github.camille.server.database.entity.data.Threshold;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface ThresholdRepository {
+public interface ThresholdDao {
 
     Threshold getThresholdByAddress(String address);
 

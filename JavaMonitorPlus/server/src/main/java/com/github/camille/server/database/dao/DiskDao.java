@@ -12,7 +12,7 @@ import java.util.List;
  * @create 2022-01-16 13:30
  **/
 @Mapper
-public interface DiskRepository {
+public interface DiskDao {
 
     List<HardDiskEntity> findAllByAddress(String address);
 

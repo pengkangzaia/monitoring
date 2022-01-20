@@ -1,7 +1,7 @@
 package com.github.camille.server.database.service;
 
 import com.github.camille.server.core.entity.KVEntity;
-import com.github.camille.server.database.dao.GcRepository;
+import com.github.camille.server.database.dao.GcDao;
 import com.github.camille.server.database.entity.data.GcEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,7 @@ import java.util.List;
 @Service
 public class GcService {
     @Autowired
-    private GcRepository gcRepository;
+    private GcDao gcDao;
 
     public void write(String address, String name, String date, List<KVEntity> kvEntities) {
         GcEntity entity = new GcEntity();
@@ -38,14 +38,14 @@ public class GcService {
         entity.setFgc(kvEntities.get(14).getValue());
         entity.setFgct(kvEntities.get(15).getValue());
         entity.setGct(kvEntities.get(16).getValue());
-        gcRepository.save(entity);
+        gcDao.save(entity);
     }
 
     public List<GcEntity> findAllByAddressAndName(String address, String name) {
-        return gcRepository.findAllByAddressAndName(address, name);
+        return gcDao.findAllByAddressAndName(address, name);
     }
 
     public void clearAll() {
-        gcRepository.deleteAll();
+        gcDao.deleteAll();
     }
 }

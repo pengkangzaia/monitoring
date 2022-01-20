@@ -1,11 +1,9 @@
 package com.github.camille.server.database.service;
 
-import com.github.camille.server.database.dao.AlarmConfigRepository;
+import com.github.camille.server.database.dao.AlarmConfigDao;
 import com.github.camille.server.database.entity.alarm.AlarmConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * @author pengkangzaia@foxmail.com
@@ -15,10 +13,10 @@ import java.util.List;
 public class AlarmConfigService {
 
     @Autowired
-    private AlarmConfigRepository alarmConfigRepository;
+    private AlarmConfigDao alarmConfigDao;
 
     public AlarmConfig getAlarmConfigByAddress(String address) {
-        return alarmConfigRepository.selectByAddress(address);
+        return alarmConfigDao.selectByAddress(address);
     }
 
 

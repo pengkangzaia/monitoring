@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.github.camille.server.database.dao.GcRepository">
+<mapper namespace="com.github.camille.server.database.dao.GcDao">
 
     <sql id="selectFields">
         id, date, address, name, ccsc, ccsu, ec, eu, fgc, fgct, gct, mc, mu, oc, ou, s0c, s0u, s1c, s1u, ygc, ygct

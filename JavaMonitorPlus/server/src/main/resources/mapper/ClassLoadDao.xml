@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.github.camille.server.database.dao.ClassLoadRepository">
+<mapper namespace="com.github.camille.server.database.dao.ClassLoadDao">
 
     <sql id="selectFields">
         id, date, address, name, bytes1, bytes2, compiled, failed, invalid, loaded, unloaded, time1, time2

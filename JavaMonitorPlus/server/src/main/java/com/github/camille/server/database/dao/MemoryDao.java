@@ -12,7 +12,7 @@ import java.util.List;
  * @create 2021-11-01 9:00
  **/
 @Mapper
-public interface MemoryRepository {
+public interface MemoryDao {
 
     List<MemEntity> findAllByAddress(String address);
 

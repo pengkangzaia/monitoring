@@ -11,7 +11,7 @@ import java.util.List;
  * @create 2021-11-01 8:57
  **/
 @Mapper
-public interface CPURepository {
+public interface CPUDao {
     List<CPUEntity> findAllByAddress(String address);
 
     Integer save(CPUEntity cpuEntity);

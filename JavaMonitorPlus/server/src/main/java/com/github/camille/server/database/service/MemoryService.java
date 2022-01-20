@@ -1,7 +1,7 @@
 package com.github.camille.server.database.service;
 
 import com.github.camille.server.core.entity.MemoryEntity;
-import com.github.camille.server.database.dao.MemoryRepository;
+import com.github.camille.server.database.dao.MemoryDao;
 import com.github.camille.server.database.entity.data.MemEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,11 +16,11 @@ import java.util.List;
 public class MemoryService {
 
     @Autowired
-    private MemoryRepository memoryRepository;
+    private MemoryDao memoryDao;
 
 
     public List<MemEntity> findAllByAddress(String address) {
-        return memoryRepository.findAllByAddress(address);
+        return memoryDao.findAllByAddress(address);
     }
 
 
@@ -30,15 +30,15 @@ public class MemoryService {
         entity.setDate(date);
         entity.setUsed(memoryEntity.getUsed());
         entity.setUsedPercent(memoryEntity.getUsedPercent());
-        memoryRepository.save(entity);
+        memoryDao.save(entity);
     }
 
     public void clearAll() {
-        memoryRepository.deleteAll();
+        memoryDao.deleteAll();
     }
 
 
     public List<MemoryEntity> selectPredictData(String address, int slidingWindowSize) {
-        return memoryRepository.selectLimitByAddress(address, slidingWindowSize);
+        return memoryDao.selectLimitByAddress(address, slidingWindowSize);
     }
 }

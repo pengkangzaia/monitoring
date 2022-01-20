@@ -1,7 +1,7 @@
 package com.github.camille.server.database.service;
 
 import com.github.camille.server.core.entity.KVEntity;
-import com.github.camille.server.database.dao.ClassLoadRepository;
+import com.github.camille.server.database.dao.ClassLoadDao;
 import com.github.camille.server.database.entity.data.ClassLoadEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,10 +14,10 @@ import java.util.List;
 @Service
 public class ClassService {
     @Autowired
-    private ClassLoadRepository classLoadRepository;
+    private ClassLoadDao classLoadDao;
 
     public List<ClassLoadEntity> findAllByAddressAndName(String address, String name) {
-        return classLoadRepository.findAllByAddressAndName(address, name);
+        return classLoadDao.findAllByAddressAndName(address, name);
     }
 
 
@@ -35,10 +35,10 @@ public class ClassService {
         entity.setFailed(jstatClass.get(6).getValue());
         entity.setInvalid(jstatClass.get(7).getValue());
         entity.setTime2(jstatClass.get(8).getValue());
-        classLoadRepository.save(entity);
+        classLoadDao.save(entity);
     }
 
     public void clearAll() {
-        classLoadRepository.deleteAll();
+        classLoadDao.deleteAll();
     }
 }

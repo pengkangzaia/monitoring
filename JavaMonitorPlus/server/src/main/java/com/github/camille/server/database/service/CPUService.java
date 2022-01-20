@@ -1,7 +1,7 @@
 package com.github.camille.server.database.service;
 
 import com.github.camille.server.core.entity.CpuInfoEntity;
-import com.github.camille.server.database.dao.CPURepository;
+import com.github.camille.server.database.dao.CPUDao;
 import com.github.camille.server.database.entity.data.CPUEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,10 +16,10 @@ import java.util.List;
 public class CPUService {
 
     @Autowired
-    private CPURepository cpuRepository;
+    private CPUDao cpuDao;
 
     public List<CPUEntity> findAllByAddress(String address) {
-        return cpuRepository.findAllByAddress(address);
+        return cpuDao.findAllByAddress(address);
     }
 
 
@@ -31,14 +31,14 @@ public class CPUService {
         entity.setOneMinuteLoad(cpuInfo.getOneMinuteLoad());
         entity.setFiveMinuteLoad(cpuInfo.getFiveMinuteLoad());
         entity.setFifteenMinuteLoad(cpuInfo.getFifteenMinuteLoad());
-        cpuRepository.save(entity);
+        cpuDao.save(entity);
     }
 
     public void clearAll() {
-        cpuRepository.deleteAll();
+        cpuDao.deleteAll();
     }
 
     public List<CPUEntity> selectPredictData(String address, int slidingWindowSize) {
-        return cpuRepository.selectLimitByAddress(address, slidingWindowSize);
+        return cpuDao.selectLimitByAddress(address, slidingWindowSize);
     }
 }

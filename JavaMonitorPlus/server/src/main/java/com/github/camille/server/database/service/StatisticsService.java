@@ -1,8 +1,8 @@
 package com.github.camille.server.database.service;
 
-import com.github.camille.server.database.dao.CPURepository;
-import com.github.camille.server.database.dao.DiskRepository;
-import com.github.camille.server.database.dao.MemoryRepository;
+import com.github.camille.server.database.dao.CPUDao;
+import com.github.camille.server.database.dao.DiskDao;
+import com.github.camille.server.database.dao.MemoryDao;
 import com.github.camille.server.database.entity.statistic.MinMaxCPUMetric;
 import com.github.camille.server.database.entity.statistic.MinMaxDiskMetric;
 import com.github.camille.server.database.entity.statistic.MinMaxMemMetric;
@@ -18,17 +18,17 @@ import org.springframework.stereotype.Service;
 public class StatisticsService {
 
     @Autowired
-    private CPURepository cpuRepository;
+    private CPUDao cpuDao;
     @Autowired
-    private MemoryRepository memoryRepository;
+    private MemoryDao memoryDao;
     @Autowired
-    private DiskRepository diskRepository;
+    private DiskDao diskDao;
 
     public MinMaxMetric getMinMaxMetric(String address) {
         MinMaxMetric minMaxMetric = new MinMaxMetric();
-        MinMaxCPUMetric cpuMinMaxMetric = cpuRepository.selectMinMaxMetricByAddress(address);
-        MinMaxMemMetric memMinMaxMetric = memoryRepository.selectMinMaxMetricByAddress(address);
-        MinMaxDiskMetric diskMinMaxMetric = diskRepository.selectMinMaxMetricByAddress(address);
+        MinMaxCPUMetric cpuMinMaxMetric = cpuDao.selectMinMaxMetricByAddress(address);
+        MinMaxMemMetric memMinMaxMetric = memoryDao.selectMinMaxMetricByAddress(address);
+        MinMaxDiskMetric diskMinMaxMetric = diskDao.selectMinMaxMetricByAddress(address);
         // CPU
         minMaxMetric.setMinCPUUsage(cpuMinMaxMetric.getMinCPUUsage());
         minMaxMetric.setMaxCpuUsage(cpuMinMaxMetric.getMaxCpuUsage());

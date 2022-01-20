@@ -1,7 +1,7 @@
 package com.github.camille.server.database.service;
 
 import com.github.camille.server.core.entity.JstackEntity;
-import com.github.camille.server.database.dao.ThreadRepository;
+import com.github.camille.server.database.dao.ThreadDao;
 import com.github.camille.server.database.entity.data.ThreadEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,10 +14,10 @@ import java.util.List;
 @Service
 public class ThreadService {
     @Autowired
-    private ThreadRepository threadRepository;
+    private ThreadDao threadDao;
 
     public List<ThreadEntity> findAllByAddressAndName(String address, String name) {
-        return threadRepository.findAllByAddressAndName(address, name);
+        return threadDao.findAllByAddressAndName(address, name);
     }
 
     public void write(String address, String name, String date, JstackEntity jstatk) {
@@ -29,7 +29,7 @@ public class ThreadService {
         entity.setRunnable(jstatk.getRUNNABLE());
         entity.setTimedWaiting(jstatk.getTIMED_WAITING());
         entity.setWaiting(jstatk.getWAITING());
-        threadRepository.save(entity);
+        threadDao.save(entity);
     }
 
     public void clear() {
@@ -37,6 +37,6 @@ public class ThreadService {
     }
 
     public void clearAll() {
-        threadRepository.deleteAll();
+        threadDao.deleteAll();
     }
 }
