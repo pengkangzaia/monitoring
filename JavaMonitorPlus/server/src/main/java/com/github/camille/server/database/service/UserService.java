@@ -46,4 +46,11 @@ public class UserService {
     }
 
 
+    public LoginTicket findLoginTicket(String ticket) {
+        return loginTicketDao.selectByTicket(ticket);
+    }
+
+    public User findUserById(int userId) {
+        return userDao.selectById(userId);
+    }
 }

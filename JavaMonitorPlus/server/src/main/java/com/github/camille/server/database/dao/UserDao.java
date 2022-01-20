@@ -15,4 +15,5 @@ public interface UserDao {
     Integer insertUser(User user);
 
 
+    User selectById(int userId);
 }

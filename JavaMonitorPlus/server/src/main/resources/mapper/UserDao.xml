@@ -25,6 +25,11 @@
         from user
         where email = #{email}
     </select>
+    <select id="selectById" resultType="com.github.camille.server.database.entity.user.User">
+        select <include refid="selectFields"></include>
+        from user
+        where id = #{userId}
+    </select>
 
 
 </mapper>

@@ -23,7 +23,7 @@ public class LoginController extends BaseController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    @RequestMapping(value = "/loginPage", method = RequestMethod.GET)
     public String getLoginPage() {
         return "login";
     }
