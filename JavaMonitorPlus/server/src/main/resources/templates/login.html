@@ -127,13 +127,14 @@
                 layer.msg('密码不能为空');
                 return false;
             }
-            if (data.captcha == '') {
-                layer.msg('验证码不能为空');
-                return false;
-            }
-            layer.msg('登录成功', function () {
-                window.location = '/layuimini/index.html';
-            });
+            $.post("login", data, function (result) {
+                result = $.parseJSON(result)
+                if (result.code == 0) {
+                    window.location.href = '/'
+                } else {
+                    layer.msg(result.msg)
+                }
+            })
             return false;
         });
     });
