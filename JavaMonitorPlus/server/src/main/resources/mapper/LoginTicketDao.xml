@@ -18,6 +18,9 @@
         insert into login_ticket(<include refid="insertFields"></include>)
         values(#{userId}, #{ticket}, #{status}, #{expired})
     </insert>
+    <update id="updateStatus">
+        update login_ticket set status = #{status} where ticket = #{ticket}
+    </update>
 
     <select id="selectByTicket" resultType="com.github.camille.server.database.entity.user.LoginTicket">
         select

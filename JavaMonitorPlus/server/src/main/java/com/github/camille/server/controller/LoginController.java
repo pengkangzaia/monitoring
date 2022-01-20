@@ -3,9 +3,11 @@ package com.github.camille.server.controller;
 import com.github.camille.server.database.entity.user.LoginTicket;
 import com.github.camille.server.database.entity.user.User;
 import com.github.camille.server.database.service.UserService;
+import com.github.camille.server.util.HostHolder;
 import com.github.camille.server.util.MonitorConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -22,6 +24,9 @@ public class LoginController extends BaseController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private HostHolder hostHolder;
 
     @RequestMapping(value = "/loginPage", method = RequestMethod.GET)
     public String getLoginPage() {
@@ -49,8 +54,15 @@ public class LoginController extends BaseController {
             // 密码错误，登录失败
             return getResponse(1001, "密码错误，请重试");
         }
-
     }
+
+    @RequestMapping(value = "logout", method = RequestMethod.GET)
+    public String logout(@CookieValue("ticket") String ticket) {
+        userService.logout(ticket);
+        // 重定向
+        return "redirect:login";
+    }
+
 
 
 }

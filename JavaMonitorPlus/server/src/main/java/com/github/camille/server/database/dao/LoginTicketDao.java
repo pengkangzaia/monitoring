@@ -15,4 +15,5 @@ public interface LoginTicketDao {
     LoginTicket selectByTicket(String ticket);
 
 
+    void updateStatus(String ticket, int status);
 }

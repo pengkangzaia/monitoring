@@ -53,4 +53,8 @@ public class UserService {
     public User findUserById(int userId) {
         return userDao.selectById(userId);
     }
+
+    public void logout(String ticket) {
+        loginTicketDao.updateStatus(ticket, 1);
+    }
 }
