@@ -3,7 +3,6 @@ package com.github.camille.server.controller;
 import com.github.camille.server.database.entity.user.LoginTicket;
 import com.github.camille.server.database.entity.user.User;
 import com.github.camille.server.database.service.UserService;
-import com.github.camille.server.util.HostHolder;
 import com.github.camille.server.util.MonitorConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

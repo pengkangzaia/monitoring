@@ -31,7 +31,7 @@ public class ViewController {
             list.add(viewService.getIndex(address));
         }
         model.addAttribute("list",list);
-        return "index";
+        return "myindex";
     }
 
     @RequestMapping(value = "/main")
