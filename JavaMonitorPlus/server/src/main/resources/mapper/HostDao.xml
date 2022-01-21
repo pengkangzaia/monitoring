@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.camille.server.database.dao.HostDao">
+
+    <sql id="selectFields">
+        id, `name`, ip, `desc`
+    </sql>
+
+    <sql id="insertFields">
+        `name`, ip, `desc`
+    </sql>
+    <insert id="insert">
+        insert into host(<include refid="insertFields"></include>)
+        values(#{name}, #{ip}, #{desc})
+    </insert>
+    <select id="selectHosts" resultType="com.github.camille.server.database.entity.Host">
+        select <include refid="selectFields"></include>
+        from host
+        limit #{offset}, #{limit}
+    </select>
+    <select id="selectCount" resultType="java.lang.Integer">
+        select count(1) from host
+    </select>
+
+
+</mapper>

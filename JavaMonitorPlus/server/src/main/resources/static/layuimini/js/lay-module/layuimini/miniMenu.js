@@ -150,7 +150,8 @@ layui.define(["element","laytpl" ,"jquery"], function (exports) {
                 leftMenuCheckDefault = "layui-hide" ;
                 return topMenuItemHtml ;
             }).join("");
-            $('.layui-layout-body').addClass('layuimini-multi-module'); //多模块标识
+            // $('.layui-layout-body').addClass('layuimini-multi-module'); //多模块标识
+            $('.layui-layout-body').addClass('layuimini-single-module'); //多模块标识
             $('.layuimini-menu-header-pc').html(headerMenuHtml); //电脑
             $('.layuimini-menu-left').html(leftMenuHtml);
             $('.layuimini-menu-header-mobile').html(headerMobileMenuHtml); //手机

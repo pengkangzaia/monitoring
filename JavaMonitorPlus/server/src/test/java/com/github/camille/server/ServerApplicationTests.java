@@ -2,7 +2,9 @@ package com.github.camille.server;
 
 import com.github.camille.server.alarm.MailEntity;
 import com.github.camille.server.database.dao.AlarmConfigDao;
+import com.github.camille.server.database.dao.HostDao;
 import com.github.camille.server.database.dao.ThresholdDao;
+import com.github.camille.server.database.entity.Host;
 import com.github.camille.server.database.entity.alarm.AlarmConfig;
 import com.github.camille.server.database.entity.data.Threshold;
 import com.github.camille.server.database.entity.statistic.MinMaxMetric;
@@ -29,6 +31,8 @@ public class ServerApplicationTests {
     private AlarmConfigDao alarmConfigDao;
     @Autowired
     private MailService mailService;
+    @Autowired
+    private HostDao hostDao;
 
     @Test
     public void thresholdTest() {
@@ -56,6 +60,17 @@ public class ServerApplicationTests {
         mail.setSubject("发送邮件测试");
         mail.setText("系统发生异常，我要报警啦！");
         mailService.sendSimpleMailMessage(mail);
+    }
+
+    @Test
+    public void insertHost() {
+        for (int i = 0; i < 1000; i++) {
+            Host host = new Host();
+            host.setIp(i + "");
+            host.setName("主机" + i);
+            host.setDesc("这是第" + i + "个主机");
+            hostDao.insert(host);
+        }
     }
 
 

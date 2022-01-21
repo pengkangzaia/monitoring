@@ -20,5 +20,22 @@ public class BaseController {
         return JSON.toJSONString(map);
     }
 
+    public String getResponse(int code, String msg, Object data) {
+        Map<Object, Object> map = new HashMap<>();
+        map.put("msg", msg);
+        map.put("code", code);
+        map.put("data", data);
+        return JSON.toJSONString(map);
+    }
+
+    public String getResponse(int code, String msg, int count, Object data) {
+        Map<Object, Object> map = new HashMap<>();
+        map.put("msg", msg);
+        map.put("code", code);
+        map.put("count", count);
+        map.put("data", data);
+        return JSON.toJSONString(map);
+    }
+
 
 }
