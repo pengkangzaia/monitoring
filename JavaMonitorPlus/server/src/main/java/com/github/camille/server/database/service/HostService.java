@@ -17,14 +17,14 @@ public class HostService {
     @Autowired
     private HostDao hostDao;
 
-    public List<Host> hostList(int offset, int limit) {
-        List<Host> hosts = hostDao.selectHosts(offset, limit);
+    public List<Host> hostList(String hostName, String hostIp, int offset, int limit) {
+        List<Host> hosts = hostDao.selectHosts(hostName, hostIp, offset, limit);
         return hosts;
     }
 
 
-    public int hostCount() {
-        int count = hostDao.selectCount();
+    public int hostCount(String hostName, String hostIp) {
+        int count = hostDao.selectCount(hostName, hostIp);
         return count;
     }
 }

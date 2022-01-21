@@ -12,10 +12,10 @@ import java.util.List;
 @Mapper
 public interface HostDao {
 
-    List<Host> selectHosts(int offset, int limit);
+    List<Host> selectHosts(String hostName, String hostIp, int offset, int limit);
 
 
-    int selectCount();
+    int selectCount(String hostName, String hostIp);
 
     void insert(Host host);
 }

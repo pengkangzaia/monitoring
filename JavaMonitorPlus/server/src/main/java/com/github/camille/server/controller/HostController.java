@@ -28,10 +28,10 @@ public class HostController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/host/list", method = RequestMethod.GET)
-    public String getHostList(int page, int limit) {
+    public String getHostList(int page, int limit, String hostName, String hostIp) {
         int offset = (page - 1) * limit;
-        List<Host> hosts = hostService.hostList(offset, limit);
-        int count = hostService.hostCount();
+        List<Host> hosts = hostService.hostList(hostName, hostIp, offset, limit);
+        int count = hostService.hostCount(hostName, hostIp);
         return getResponse(0, "成功", count, hosts);
     }
 

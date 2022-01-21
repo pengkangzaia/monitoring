@@ -18,10 +18,26 @@
     <select id="selectHosts" resultType="com.github.camille.server.database.entity.Host">
         select <include refid="selectFields"></include>
         from host
+        <where>
+            <if test="hostName != null">
+                `name` like concat('%', #{hostName} ,'%')
+            </if>
+            <if test="hostIp != null">
+                and ip like concat('%', #{hostIp}, '%')
+             </if>
+        </where>
         limit #{offset}, #{limit}
     </select>
     <select id="selectCount" resultType="java.lang.Integer">
         select count(1) from host
+        <where>
+            <if test="hostName != null">
+                `name` like concat('%', #{hostName} ,'%')
+            </if>
+            <if test="hostIp != null">
+                and ip like concat('%', #{hostIp}, '%')
+            </if>
+        </where>
     </select>
 
 

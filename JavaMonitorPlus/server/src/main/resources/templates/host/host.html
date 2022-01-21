@@ -21,13 +21,13 @@
                         <div class="layui-inline">
                             <label class="layui-form-label">主机名称</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="username" autocomplete="off" class="layui-input">
+                                <input type="text" id="host-name" name="host" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
                             <label class="layui-form-label">主机IP</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="sex" autocomplete="off" class="layui-input">
+                                <input type="text" id="host-ip" name="ip" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
@@ -37,13 +37,6 @@
                 </form>
             </div>
         </fieldset>
-
-        <script type="text/html" id="toolbarDemo">
-            <div class="layui-btn-container">
-                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
-                <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 删除 </button>
-            </div>
-        </script>
 
         <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
 
@@ -87,11 +80,13 @@
         });
 
         // 监听搜索操作
-        form.on('submit(data-search-btn)', function (data) {
-            var result = JSON.stringify(data.field);
-            layer.alert(result, {
-                title: '最终的搜索信息'
-            });
+        form.on('submit(data-search-btn)', function () {
+            var hostName = $('#host-name');
+            var hostIp = $('#host-ip');
+
+            // layer.alert(result, {
+            //     title: '最终的搜索信息'
+            // });
 
             //执行搜索重载
             table.reload('currentTableId', {
@@ -99,7 +94,8 @@
                     curr: 1
                 }
                 , where: {
-                    searchParams: result
+                    hostName: hostName.val(),
+                    hostIp: hostIp.val()
                 }
             }, 'data');
 
