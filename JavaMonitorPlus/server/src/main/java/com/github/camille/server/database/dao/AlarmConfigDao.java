@@ -15,5 +15,5 @@ public interface AlarmConfigDao {
     int insertConfig(AlarmConfig alarmConfig);
 
 
-
+    void updateConfig(AlarmConfig config);
 }

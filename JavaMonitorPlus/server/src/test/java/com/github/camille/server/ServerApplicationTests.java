@@ -4,10 +4,12 @@ import com.github.camille.server.alarm.MailEntity;
 import com.github.camille.server.database.dao.AlarmConfigDao;
 import com.github.camille.server.database.dao.HostDao;
 import com.github.camille.server.database.dao.ThresholdDao;
+import com.github.camille.server.database.dao.UserDao;
 import com.github.camille.server.database.entity.Host;
 import com.github.camille.server.database.entity.alarm.AlarmConfig;
 import com.github.camille.server.database.entity.data.Threshold;
 import com.github.camille.server.database.entity.statistic.MinMaxMetric;
+import com.github.camille.server.database.entity.user.User;
 import com.github.camille.server.database.service.MailService;
 import com.github.camille.server.database.service.StatisticsService;
 import org.junit.Test;
@@ -16,7 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -33,6 +37,8 @@ public class ServerApplicationTests {
     private MailService mailService;
     @Autowired
     private HostDao hostDao;
+    @Autowired
+    private UserDao userDao;
 
     @Test
     public void thresholdTest() {
@@ -82,6 +88,15 @@ public class ServerApplicationTests {
             host.setDesc("这是第" + i + "个主机");
             hostDao.insert(host);
         }
+    }
+
+    @Test
+    public void selectByUserIds() {
+        List<Integer> list = new ArrayList<>();
+        list.add(1);
+        list.add(2);
+        List<User> res = userDao.selectByIds(list);
+        System.out.println(res);
     }
 
 

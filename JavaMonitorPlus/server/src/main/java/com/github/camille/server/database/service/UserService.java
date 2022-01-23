@@ -6,10 +6,13 @@ import com.github.camille.server.database.entity.user.LoginTicket;
 import com.github.camille.server.database.entity.user.User;
 import com.github.camille.server.util.MonitorConstant;
 import com.github.camille.server.util.MonitorUtil;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author pengkangzaia@foxmail.com
@@ -64,5 +67,13 @@ public class UserService {
         user.setUsername(username);
         user.setPassword(password);
         userDao.insertUser(user);
+    }
+
+    public List<User> findUserByIds(List<Integer> userIds) {
+        if (!CollectionUtils.isEmpty(userIds)) {
+            return userDao.selectByIds(userIds);
+        } else {
+            return new ArrayList<>();
+        }
     }
 }

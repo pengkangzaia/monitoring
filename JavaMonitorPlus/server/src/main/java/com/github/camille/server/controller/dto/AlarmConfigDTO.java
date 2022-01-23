@@ -9,6 +9,8 @@ import lombok.Data;
 @Data
 public class AlarmConfigDTO {
 
+    private int id;
+    private int hostId;
     private String name;
     private String remark;
     private int dynamic;

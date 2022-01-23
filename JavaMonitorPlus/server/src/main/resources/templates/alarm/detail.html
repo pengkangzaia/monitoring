@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/layuimini/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="/layuimini/css/public.css" media="all">
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-form layuimini-form">
+    <div class="layui-form-item">
+        <label class="layui-form-label required">策略名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="name" lay-verify="required" lay-reqtext="策略名称不能为空" th:value="${config.name}" class="layui-input">
+        </div>
+    </div>
+
+<!--    <div class="layui-form-item" style="display: none">-->
+<!--        <label class="layui-form-label required">策略名称</label>-->
+<!--        <div class="layui-input-block">-->
+<!--            <input type="text" name="configId" th:value="${config.id}" class="layui-input">-->
+<!--        </div>-->
+<!--    </div>-->
+
+    <div class="layui-form-item">
+        <label class="layui-form-label required">主机名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="hostId" value="" readonly  th:placeholder="${hostId}" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">备注信息</label>
+        <div class="layui-input-block">
+            <textarea name="remark" class="layui-textarea" th:text="${config.remark}"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label required">阈值类型</label>
+        <div class="layui-input-block">
+            <input type="radio" name="dynamic" value="1" title="动态" th:attr="checked=${config.dynamic?true:false}">
+            <input type="radio" name="dynamic" value="0" title="静态" th:attr="checked=${!config.dynamic?true:false}">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">通知类型</label>
+        <div class="layui-input-block">
+            <input type="checkbox" name="emailNotice" value="1" title="邮件" th:attr="checked=${config.emailNotice?true:false}">
+            <input type="checkbox" name="phoneNotice" value="1" title="电话" th:attr="checked=${config.phoneNotice?true:false}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">通知用户</label>
+        <div class="layui-input-inline">
+            <select name="noticeUserId" lay-verify="required" lay-search="">
+                <option value="1">搜索选择</option>
+                <option value="2">form</option>
+                <option value="3">layim</option>
+                <option value="4">element</option>
+                <option value="5">laytpl</option>
+                <option value="6">upload</option>
+                <option value="7">laydate</option>
+                <option value="8">laypage</option>
+                <option value="9">flow</option>
+                <option value="10">util</option>
+                <option value="11">code</option>
+                <option value="12">tree</option>
+                <option value="13">layedit</option>
+                <option value="14">nav</option>
+                <option value="15">tab</option>
+                <option value="16">table</option>
+                <option value="17">select</option>
+                <option value="18">checkbox</option>
+                <option value="19">switch</option>
+                <option value="20">radio</option>
+                <option value="21">layer</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认修改</button>
+        </div>
+    </div>
+</div>
+<script src="/layuimini/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+<script>
+    layui.use(['form'], function () {
+        var form = layui.form,
+            layer = layui.layer,
+            $ = layui.$;
+
+        //监听提交
+        form.on('submit(saveBtn)', function (data) {
+            var maintenancePlace = JSON.stringify(data.field);
+            console.log(maintenancePlace)
+
+            $.ajax({
+                type:'post',
+                url: '/alarm/config/edit',
+                data: JSON.stringify(data.field),
+                contentType:'application/json;charset=utf-8',
+                dataType:'json',
+                success:function(result){
+                    console.log(result)
+                    if (result.code === 0) {
+                        var iframeIndex = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(iframeIndex);
+                    } else {
+                        layer.msg(result.msg)
+                    }
+                }
+            });
+            return false;
+        });
+
+    });
+</script>
+</body>
+</html>

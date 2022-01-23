@@ -15,6 +15,14 @@
         insert into alarm_user_config(<include refid="insertFields"></include>)
         values(#{configId}, #{userId})
     </insert>
+    <delete id="deleteByConfigId">
+        delete from alarm_user_config where config_id = #{configId}
+    </delete>
+    <select id="selectByConfigId" resultType="com.github.camille.server.database.entity.alarm.AlarmUserConfig">
+        select <include refid="selectFields"></include>
+        from alarm_user_config
+        where config_id = #{configId}
+    </select>
 
 
 </mapper>

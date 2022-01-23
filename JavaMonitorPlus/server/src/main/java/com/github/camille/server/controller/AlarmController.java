@@ -2,6 +2,7 @@ package com.github.camille.server.controller;
 
 import com.github.camille.server.controller.dto.AlarmConfigDTO;
 import com.github.camille.server.database.entity.alarm.AlarmConfig;
+import com.github.camille.server.database.entity.user.User;
 import com.github.camille.server.database.service.AlarmConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -28,11 +30,14 @@ public class AlarmController extends BaseController {
     @RequestMapping(value = "/config", method = RequestMethod.GET)
     public String alarmConfigPage(int hostId, Model model) {
         AlarmConfig config = alarmConfigService.getConfigByHostId(hostId);
+        model.addAttribute("hostId", hostId);
         if (config == null) {
             return "alarm/add";
         } else {
+            List<User> noticeUsers = alarmConfigService.getNoticeUser(config.getId());
+            model.addAttribute("noticeUsers", noticeUsers);
             model.addAttribute("config", config);
-            return "alarm/edit";
+            return "alarm/detail";
         }
     }
 
@@ -50,6 +55,22 @@ public class AlarmController extends BaseController {
         int noticeUserId = alarmConfigDTO.getNoticeUserId();
         alarmConfigService.saveNoticeUser(config.getId(), noticeUserId);
         return getResponse(0, "添加成功");
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/config/edit", method = RequestMethod.POST)
+    public String editConfig(@RequestBody AlarmConfigDTO alarmConfigDTO) {
+        AlarmConfig config = alarmConfigService.getConfigByHostId(alarmConfigDTO.getHostId());
+        config.setName(alarmConfigDTO.getName());
+        config.setRemark(alarmConfigDTO.getRemark());
+        config.setDynamic(Objects.equals(alarmConfigDTO.getDynamic(), 1));
+        config.setEmailNotice(Objects.equals(alarmConfigDTO.getEmailNotice(), 1));
+        config.setPhoneNotice(Objects.equals(alarmConfigDTO.getPhoneNotice(), 1));
+        alarmConfigService.editConfig(config);
+        int noticeUserId = alarmConfigDTO.getNoticeUserId();
+        alarmConfigService.updateNoticeUser(config.getId(), noticeUserId);
+        return getResponse(0, "修改成功");
     }
 
 

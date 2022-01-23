@@ -30,6 +30,14 @@
         from user
         where id = #{userId}
     </select>
+    <select id="selectByIds" resultType="com.github.camille.server.database.entity.user.User">
+        select <include refid="selectFields"></include>
+        from user
+        where id in 
+        <foreach collection="userIds" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
 
 
 </mapper>

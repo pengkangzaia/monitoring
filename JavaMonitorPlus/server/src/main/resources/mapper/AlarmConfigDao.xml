@@ -11,10 +11,19 @@
     <sql id="insertFields">
         host_id, `name`, remark, `dynamic`, email_notice, phone_notice, group_id, create_time, modify_time
     </sql>
+
+    <sql id="updateFields">
+        `name`, remark, `dynamic`, email_notice, phone_notice, group_id, modify_time
+    </sql>
+
     <insert id="insertConfig" useGeneratedKeys="true" keyProperty="id" parameterType="com.github.camille.server.database.entity.alarm.AlarmConfig">
         insert into alarm_config(<include refid="insertFields"></include>)
         values(#{hostId}, #{name}, #{remark}, #{dynamic}, #{emailNotice}, #{phoneNotice}, #{groupId}, now(), now())
     </insert>
+    <update id="updateConfig">
+        update alarm_config(<include refid="updateFields"></include>)
+        values(#{name}, #{remark}, #{dynamic}, #{emailNotice}, #{phoneNotice}, #{groupId}, now())
+    </update>
 
     <select id="selectByHostId" resultType="com.github.camille.server.database.entity.alarm.AlarmConfig">
         select <include refid="selectFields"></include>
