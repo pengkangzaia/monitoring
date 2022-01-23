@@ -21,4 +21,6 @@ public interface UserDao {
     User selectById(int userId);
 
     List<User> selectByIds(@Param("userIds") List<Integer> userIds);
+
+    List<User> selectAll();
 }

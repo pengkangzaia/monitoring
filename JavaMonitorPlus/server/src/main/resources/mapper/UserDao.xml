@@ -38,6 +38,10 @@
             #{item}
         </foreach>
     </select>
+    <select id="selectAll" resultType="com.github.camille.server.database.entity.user.User">
+        select <include refid="selectFields"></include>
+        from user
+    </select>
 
 
 </mapper>

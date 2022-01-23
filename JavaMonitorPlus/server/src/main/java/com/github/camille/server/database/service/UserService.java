@@ -76,4 +76,8 @@ public class UserService {
             return new ArrayList<>();
         }
     }
+
+    public List<User> list() {
+        return userDao.selectAll();
+    }
 }
