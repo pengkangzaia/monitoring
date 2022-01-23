@@ -21,8 +21,10 @@
         values(#{hostId}, #{name}, #{remark}, #{dynamic}, #{emailNotice}, #{phoneNotice}, #{groupId}, now(), now())
     </insert>
     <update id="updateConfig">
-        update alarm_config(<include refid="updateFields"></include>)
-        values(#{name}, #{remark}, #{dynamic}, #{emailNotice}, #{phoneNotice}, #{groupId}, now())
+        update alarm_config set
+        name = #{name}, remark = #{remark}, dynamic = #{dynamic}, email_notice = #{emailNotice},
+        phone_notice = #{phoneNotice}, group_id = #{groupId}, modify_time = now()
+        where id = #{id}
     </update>
 
     <select id="selectByHostId" resultType="com.github.camille.server.database.entity.alarm.AlarmConfig">

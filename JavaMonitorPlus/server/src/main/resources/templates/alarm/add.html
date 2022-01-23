@@ -21,7 +21,6 @@
         <div class="layui-input-block">
             <input type="text" name="name" lay-verify="required" lay-reqtext="策略名称不能为空" placeholder="请输入策略名称" value=""
                    class="layui-input">
-            <!--            <tip>填写自己管理账号的名称。</tip>-->
         </div>
     </div>
 
@@ -31,6 +30,14 @@
             <textarea name="remark" class="layui-textarea" placeholder="请输入备注信息"></textarea>
         </div>
     </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label required">主机名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="hostId" th:value="${hostId}" th:placeholder="${hostId}" class="layui-input">
+        </div>
+    </div>
+
     <div class="layui-form-item">
         <label class="layui-form-label required">阈值类型</label>
         <div class="layui-input-block">
@@ -49,7 +56,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">通知用户</label>
         <div class="layui-input-inline">
-            <select id="userSelector" name="noticeUser" lay-verify="required" lay-search="">
+            <select id="userSelector" name="noticeUserId" lay-verify="required" lay-search="">
                 <option value="">搜索选择</option>
             </select>
         </div>

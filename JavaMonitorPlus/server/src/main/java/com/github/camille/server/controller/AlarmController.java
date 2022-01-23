@@ -35,7 +35,7 @@ public class AlarmController extends BaseController {
             return "alarm/add";
         } else {
             List<User> noticeUsers = alarmConfigService.getNoticeUser(config.getId());
-            model.addAttribute("noticeUsers", noticeUsers);
+            model.addAttribute("noticeUser", noticeUsers.get(0));
             model.addAttribute("config", config);
             return "alarm/detail";
         }
@@ -46,6 +46,7 @@ public class AlarmController extends BaseController {
     @RequestMapping(value = "/config/add", method = RequestMethod.POST)
     public String insertConfig(@RequestBody AlarmConfigDTO alarmConfigDTO) {
         AlarmConfig config = new AlarmConfig();
+        config.setHostId(alarmConfigDTO.getHostId());
         config.setName(alarmConfigDTO.getName());
         config.setRemark(alarmConfigDTO.getRemark());
         config.setDynamic(Objects.equals(alarmConfigDTO.getDynamic(), 1));

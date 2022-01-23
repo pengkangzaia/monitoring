@@ -33,7 +33,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label required">主机名称</label>
         <div class="layui-input-block">
-            <input type="text" name="hostId" value="" readonly  th:placeholder="${hostId}" class="layui-input">
+            <input type="text" name="hostId" th:value="${hostId}" readonly class="layui-input">
         </div>
     </div>
 
@@ -61,8 +61,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">通知用户</label>
         <div class="layui-input-inline">
-            <select id="userSelector" name="noticeUser" lay-verify="required" lay-search="">
-                <option value="">搜索选择</option>
+            <select id="userSelector" name="noticeUserId" lay-verify="required" lay-search="">
             </select>
         </div>
     </div>
@@ -74,7 +73,7 @@
     </div>
 </div>
 <script src="/layuimini/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
-<script>
+<script th:inline="javascript">
     layui.use(['form'], function () {
         var form = layui.form,
             layer = layui.layer,
@@ -96,6 +95,8 @@
                     datas += "<option value='" + id + "'>" + username + "</option>";
                 }
                 $('#userSelector').append(datas);
+                // 默认选择
+                $("#userSelector").val([[${noticeUser.id}]]);
                 form.render('select');
             }
         });
