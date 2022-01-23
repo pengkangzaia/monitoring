@@ -48,8 +48,19 @@ public class ServerApplicationTests {
 
     @Test
     public void alarmConfigTest() {
-        AlarmConfig res = alarmConfigDao.selectByAddress("http://101.35.159.221:8081");
-        System.out.println(res);
+        for (int i = 4; i < 10; i++) {
+            AlarmConfig config = new AlarmConfig();
+            config.setHostId(i);
+            config.setDynamic(true);
+            config.setName("告警配置测试" + i);
+            config.setRemark("备注");
+            config.setEmailNotice(true);
+            config.setPhoneNotice(false);
+            int res = alarmConfigDao.insertConfig(config);
+            System.out.println(config.getId());
+        }
+//        AlarmConfig config = alarmConfigDao.selectByHostId(1);
+//        System.out.println(config);
     }
 
     @Test

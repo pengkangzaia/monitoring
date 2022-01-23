@@ -26,11 +26,11 @@ public class ViewController {
 
     @RequestMapping(value = "/")
     public String index(ModelMap model) throws IOException {
-        List<Map<String,Object>> list = new ArrayList<>();
-        for (Address address : addressParm.getServe()) {
-            list.add(viewService.getIndex(address));
-        }
-        model.addAttribute("list",list);
+//        List<Map<String,Object>> list = new ArrayList<>();
+//        for (Address address : addressParm.getServe()) {
+//            list.add(viewService.getIndex(address));
+//        }
+//        model.addAttribute("list",list);
         return "myindex";
     }
 

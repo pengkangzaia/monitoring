@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.camille.server.database.dao.AlarmUserConfigDao">
+
+    <sql id="selectFields">
+        id, config_id, user_id
+    </sql>
+
+    <sql id="insertFields">
+        config_id, user_id
+    </sql>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.github.camille.server.database.entity.alarm.AlarmUserConfig">
+        insert into alarm_user_config(<include refid="insertFields"></include>)
+        values(#{configId}, #{userId})
+    </insert>
+
+
+</mapper>

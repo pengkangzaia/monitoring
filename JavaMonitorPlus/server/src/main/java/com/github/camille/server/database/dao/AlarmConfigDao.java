@@ -10,7 +10,9 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface AlarmConfigDao {
 
-    AlarmConfig selectByAddress(String address);
+    AlarmConfig selectByHostId(int hostId);
+
+    int insertConfig(AlarmConfig alarmConfig);
 
 
 

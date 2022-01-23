@@ -118,7 +118,6 @@
                     maxmin:true,
                     shadeClose: true,
                     area: ['100%', '100%'],
-                    // content: '/layuimini/page/table/edit.html',
                     content: '/monitor?address=' + data.ip
                 });
                 $(window).on("resize", function () {
@@ -126,10 +125,19 @@
                 });
                 return false;
             } else if (obj.event === 'delete') {
-                layer.confirm('真的删除行么', function (index) {
-                    obj.del();
-                    layer.close(index);
+                var idx = layer.open({
+                    title: '报警设置',
+                    type: 2,
+                    shade: 0.2,
+                    maxmin:true,
+                    shadeClose: true,
+                    area: ['100%', '100%'],
+                    content: '/alarm/config?hostId=' + data.id
                 });
+                $(window).on("resize", function () {
+                    layer.full(idx);
+                });
+                return false;
             }
         });
 

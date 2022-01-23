@@ -22,10 +22,24 @@
           "target": "_self"
         },
         {
-          "title": "报警服务",
+          "title": "告警服务",
           "href": "/layuimini/page/menu.html",
           "icon": "fa fa-window-maximize",
-          "target": "_self"
+          "target": "_self",
+          "child": [
+            {
+              "title": "告警策略",
+              "href": "/layuimini/page/form-step.html",
+              "icon": "fa fa-navicon",
+              "target": "_self"
+            },
+            {
+              "title": "告警历史",
+              "href": "/layuimini/page/form.html",
+              "icon": "fa fa-navicon",
+              "target": "_self"
+            }
+          ]
         },
         {
           "title": "系统管理",
