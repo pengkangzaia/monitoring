@@ -12,62 +12,182 @@
         body {
             background-color: #ffffff;
         }
+
+        .layui-form-item .layui-input-inline {
+            width: 170px;
+        }
     </style>
 </head>
 <body>
-<div class="layui-form layuimini-form">
-    <div class="layui-form-item">
-        <label class="layui-form-label required">策略名称</label>
-        <div class="layui-input-block">
-            <input type="text" name="name" lay-verify="required" lay-reqtext="策略名称不能为空" placeholder="请输入策略名称" value=""
-                   class="layui-input">
-        </div>
-    </div>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <div class="layui-form">
+            <div class="layui-form-item">
+                <label class="layui-form-label required">策略名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="name" lay-verify="required" lay-reqtext="策略名称不能为空" placeholder="请输入策略名称"
+                           value=""
+                           class="layui-input">
+                </div>
+            </div>
 
-    <div class="layui-form-item layui-form-text">
-        <label class="layui-form-label">备注信息</label>
-        <div class="layui-input-block">
-            <textarea name="remark" class="layui-textarea" placeholder="请输入备注信息"></textarea>
-        </div>
-    </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">备注信息</label>
+                <div class="layui-input-block">
+                    <textarea name="remark" class="layui-textarea" placeholder="请输入备注信息"></textarea>
+                </div>
+            </div>
 
-    <div class="layui-form-item">
-        <label class="layui-form-label required">主机名称</label>
-        <div class="layui-input-block">
-            <input type="text" name="hostId" th:value="${hostId}" th:placeholder="${hostId}" class="layui-input">
-        </div>
-    </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label required">主机名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="hostId" th:value="${hostId}" th:placeholder="${hostId}"
+                           class="layui-input">
+                </div>
+            </div>
 
-    <div class="layui-form-item">
-        <label class="layui-form-label required">阈值类型</label>
-        <div class="layui-input-block">
-            <input type="radio" name="dynamic" value="1" title="动态" checked="">
-            <input type="radio" name="dynamic" value="0" title="静态">
-        </div>
-    </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label required">阈值类型</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="dynamic" value="1" title="动态" checked="" lay-filter="dym">
+                    <input type="radio" name="dynamic" value="0" title="静态" lay-filter="static">
+                </div>
+            </div>
 
-    <div class="layui-form-item">
-        <label class="layui-form-label">通知类型</label>
-        <div class="layui-input-block">
-            <input type="checkbox" name="emailNotice" value="1" title="邮件" checked="">
-            <input type="checkbox" name="phoneNotice" value="1" title="电话">
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">通知用户</label>
-        <div class="layui-input-inline">
-            <select id="userSelector" name="noticeUserId" lay-verify="required" lay-search="">
-                <option value="">搜索选择</option>
-            </select>
-        </div>
-    </div>
 
-    <div class="layui-form-item">
-        <div class="layui-input-block">
-            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
+            <div class="layui-form-item" id="toshowid" name="condition">
+                <div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">if</label>
+                        <div class="layui-input-inline">
+                            <select name="metricName" lay-verify="required" lay-search="">
+                                <option value="cpuUsage">CPU利用率</option>
+                                <option value="cpuOneMinuteLoad">CPU平均一分钟负载</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <div class="layui-input-inline">
+                            <select name="operator" lay-verify="required" lay-search="">
+                                <option value="gt">大于</option>
+                                <option value="lt">小于</option>
+                                <option value="le">小于等于</option>
+                                <option value="ge">大于等于</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <div class="layui-input-inline" style="width: 100px;">
+                            <input type="text" name="value" placeholder="0%" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <!--                        <label class="layui-form-label">%</label>-->
+                        <div class="layui-input-inline">
+                            <select name="continuePeriod" lay-verify="required" lay-search="">
+                                <option value="1">持续1个数据点</option>
+                                <option value="2">持续2个数据点</option>
+                                <option value="3">持续3个数据点</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">then</label>
+                        <div class="layui-input-inline">
+                            <select name="noticeFrequency" lay-verify="required" lay-search="">
+                                <option value="1">每1个小时告警一次</option>
+                                <option value="2">每2个小时告警一次</option>
+                                <option value="3">每3个小时告警一次</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="layui-btn layui-btn-normal remove_column">删除</button>
+                </div>
+
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-btn-normal add_column">添加</button>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">通知类型</label>
+                <div class="layui-input-block">
+                    <input type="checkbox" name="emailNotice" value="1" title="邮件" checked="">
+                    <input type="checkbox" name="phoneNotice" value="1" title="电话">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">通知用户</label>
+                <div class="layui-input-inline">
+                    <select id="userSelector" name="noticeUserId" lay-verify="required" lay-filter="userList"
+                            lay-search="">
+                        <option value="">搜索选择</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <!--                    <button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>-->
+                    <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="saveBtn">确认保存</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
+
+<section style="display: none" id="template">
+    <div>
+        <div class="layui-inline">
+            <label class="layui-form-label">if</label>
+            <div class="layui-input-inline">
+                <select name="metricName" lay-verify="required" lay-search="">
+                    <option value="cpuUsage">CPU利用率</option>
+                    <option value="cpuOneMinuteLoad">CPU平均一分钟负载</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <select name="operator" lay-verify="required" lay-search="">
+                    <option value="gt">大于</option>
+                    <option value="lt">小于</option>
+                    <option value="le">小于等于</option>
+                    <option value="ge">大于等于</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="text" name="value" placeholder="0%" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <!--                        <label class="layui-form-label">%</label>-->
+            <div class="layui-input-inline">
+                <select name="continuePeriod" lay-verify="required" lay-search="">
+                    <option value="1">持续1个数据点</option>
+                    <option value="2">持续2个数据点</option>
+                    <option value="3">持续3个数据点</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">then</label>
+            <div class="layui-input-inline">
+                <select name="noticeFrequency" lay-verify="required" lay-search="">
+                    <option value="1">每1个小时告警一次</option>
+                    <option value="2">每2个小时告警一次</option>
+                    <option value="3">每3个小时告警一次</option>
+                </select>
+            </div>
+        </div>
+        <button class="layui-btn layui-btn-normal remove_column">删除</button>
+    </div>
+</section>
 <script src="/layuimini/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
 <script>
     layui.use(['form'], function () {
@@ -76,6 +196,7 @@
             $ = layui.$;
 
 
+        // form.on('select(userList)', function () {
         // 下拉搜索
         $.ajax({
             type: "GET",
@@ -95,16 +216,32 @@
                 form.render('select');
             }
         });
+        // });
+
+
+        // 监听radio选中
+        form.on('radio(static)', function () {
+            layui.$('#toshowid').show();
+        });
+
+        // 监听radio选中
+        form.on('radio(dym)', function () {
+            layui.$('#toshowid').hide();
+        });
 
         //监听提交
         form.on('submit(saveBtn)', function (data) {
-            var maintenancePlace = JSON.stringify(data.field);
-            console.log(maintenancePlace)
+            // var maintenancePlace =  $('#formId').serialize();
+            // var maintenancePlace = JSON.stringify(data.field);
+            console.log($(data.form).serialize());
+            console.log(data)
+            // layer.msg(maintenancePlace);
 
             $.ajax({
                 type: 'post',
                 url: '/alarm/config/add',
-                data: JSON.stringify(data.field),
+                // data: JSON.stringify(data.field),
+                data: $(data.form).serialize(),
                 contentType: 'application/json;charset=utf-8',
                 dataType: 'json',
                 success: function (result) {
@@ -120,7 +257,27 @@
             return false;
         });
 
+        /**
+         * 删除栏目
+         */
+        // $('#toshowid').delegate(".remove_column", "click", function () {
+        //     $(this).parent().remove();
+        // });
+        $('#toshowid').on("click", ".remove_column", function () {
+            $(this).parent().remove();
+        });
+
+        /**
+         * 新增栏目
+         */
+        $('.add_column').click(function () {
+            $('#toshowid').append(layui.$('#template').html());
+            form.render();
+        });
+
     });
+
+
 </script>
 </body>
 </html>
