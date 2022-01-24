@@ -44,7 +44,7 @@
                 </div>
             </div>
 
-            <div class="layui-form-item" id="toshowid">
+            <div class="layui-form-item" id="toshowid" style="display: none">
                 <div>
                     <div class="layui-inline">
                         <label class="layui-form-label">指标</label>
@@ -145,11 +145,6 @@
         // 监听radio选中
         form.on('radio(static)', function () {
             layui.$('#toshowid').show();
-        })
-
-        // 监听radio选中
-        form.on('radio(dym)', function () {
-            layui.$('#toshowid').hide();
         })
 
         //监听提交

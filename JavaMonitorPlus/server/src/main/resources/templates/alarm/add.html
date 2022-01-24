@@ -21,7 +21,7 @@
 <body>
 <div class="layuimini-container">
     <div class="layuimini-main">
-        <div class="layui-form">
+        <div class="layui-form" lay-filter="formData">
             <div class="layui-form-item">
                 <label class="layui-form-label required">策略名称</label>
                 <div class="layui-input-block">
@@ -55,7 +55,7 @@
             </div>
 
 
-            <div class="layui-form-item" id="toshowid" name="condition">
+            <div class="layui-form-item" id="toshowid" style="display: none">
                 <div>
                     <div class="layui-inline">
                         <label class="layui-form-label">if</label>
@@ -190,6 +190,42 @@
 </section>
 <script src="/layuimini/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
 <script>
+    function getFinalInputByName(name) {
+        var names = document.getElementsByName(name);
+        var finalName = [];
+        var i=0;
+        for (; i < names.length - 1; i++) {
+            finalName[i] = names[i].value
+        }
+        return finalName;
+    }
+
+
+    function buildObject(input, metricNames, operators, values, continuePeriods, noticeFrequencys) {
+        var conditions = [];
+        var i = 0;
+        for (; i < metricNames.length; i++) {
+            conditions[i] = {
+                metricName : metricNames[i],
+                operator: operators[i],
+                value: values[i],
+                continuePeriod: continuePeriods[i],
+                noticeFrequency: noticeFrequencys[i]
+            }
+        }
+        var res = {
+            name: input.name,
+            remark: input.remark,
+            hostId: input.hostId,
+            dynamic: input.dynamic,
+            phoneNotice: input.phoneNotice,
+            emailNotice: input.emailNotice,
+            noticeUserId: input.noticeUserId,
+            conditions: conditions
+        }
+        return res;
+    }
+
     layui.use(['form'], function () {
         var form = layui.form,
             layer = layui.layer,
@@ -203,10 +239,10 @@
             url: "/user/list",
             dataType: "json",
             success: function (result) {
-                console.log(result)
+                // console.log(result)
                 var datas = "";
                 var data = result.data;
-                console.log(data)
+                // console.log(data)
                 for (var i = 0; i < data.length; i++) {
                     var username = data[i].username
                     var id = data[i].id
@@ -224,24 +260,25 @@
             layui.$('#toshowid').show();
         });
 
-        // 监听radio选中
-        form.on('radio(dym)', function () {
-            layui.$('#toshowid').hide();
-        });
-
         //监听提交
         form.on('submit(saveBtn)', function (data) {
-            // var maintenancePlace =  $('#formId').serialize();
-            // var maintenancePlace = JSON.stringify(data.field);
-            console.log($(data.form).serialize());
-            console.log(data)
+            var input = form.val("formData");
+            console.log(input)
+            var metricNames = getFinalInputByName("metricName")
+            var operators = getFinalInputByName("operator")
+            var values = getFinalInputByName("value")
+            var continuePeriods = getFinalInputByName("continuePeriod")
+            var noticeFrequencys = getFinalInputByName("noticeFrequency")
+            // operator  value continuePeriod noticeFrequency
+            var finalData = buildObject(input, metricNames, operators, values, continuePeriods, noticeFrequencys)
+            console.log(finalData);
             // layer.msg(maintenancePlace);
 
             $.ajax({
                 type: 'post',
                 url: '/alarm/config/add',
                 // data: JSON.stringify(data.field),
-                data: $(data.form).serialize(),
+                data: JSON.stringify(finalData),
                 contentType: 'application/json;charset=utf-8',
                 dataType: 'json',
                 success: function (result) {
