@@ -63,50 +63,50 @@ public class PredictJob extends QuartzJobBean {
                 continue;
             }
             if (cpuEntities.size() == memoryEntities.size() && cpuEntities.size() == diskEntities.size()) {
-                // 整合数据
-                ArrayList<ArrayList<Double>> res = new ArrayList<>();
-                int size = cpuEntities.size();
-                for (int i = 0; i < size; i++) {
-                    ArrayList<Double> list = new ArrayList<>();
-                    // CPU
-                    CPUEntity cpuEntity = cpuEntities.get(i);
-                    list.add(Double.valueOf(cpuEntity.getCpuUsage()));
-                    list.add(Double.valueOf(cpuEntity.getOneMinuteLoad()));
-                    list.add(Double.valueOf(cpuEntity.getFiveMinuteLoad()));
-                    list.add(Double.valueOf(cpuEntity.getFifteenMinuteLoad()));
-                    // 内存
-                    MemoryEntity memoryEntity = memoryEntities.get(i);
-                    list.add(Double.valueOf(memoryEntity.getUsed()));
-                    list.add(Double.valueOf(memoryEntity.getUsedPercent()));
-                    // 磁盘
-                    DiskEntity diskEntity = diskEntities.get(i);
-                    list.add(Double.valueOf(diskEntity.getRio()));
-                    list.add(Double.valueOf(diskEntity.getWio()));
-                    list.add(Double.valueOf(diskEntity.getRkb()));
-                    list.add(Double.valueOf(diskEntity.getWkb()));
-                    list.add(Double.valueOf(diskEntity.getRAwait()));
-                    list.add(Double.valueOf(diskEntity.getWAwait()));
-                    list.add(Double.valueOf(diskEntity.getSvctm()));
-                    list.add(Double.valueOf(diskEntity.getUtil()));
-                    res.add(list);
-                }
-                // 发送POST请求
-                String response = HttpClient.doPost(modelPredUrl, JSON.toJSONString(res), null, "POST");
-                response = response.replaceAll("\r\n", "");
-                logger.info("主机地址：" + add + " 模型反馈：" + response);
-                if ("1".equals(response)) {
-                    // 转到报警流程
-                    MailEntity mail = new MailEntity();
-                    mail.setSentDate(new Date());
-                    AlarmConfig alarmConfig = alarmConfigService.getAlarmConfigByAddress(add);
-                    String alarmEmails = alarmConfig.getAlarmEmail();
-                    String[] emails = alarmEmails.split(",");
-                    mail.setTo(emails);
-                    mail.setSubject("系统监控告警");
-                    mail.setText("系统发生异常，请您检查主机" + add + "运行状况");
-                    mailService.sendSimpleMailMessage(mail);
-                    System.out.println("我报警了！！！！！！！！！");
-                }
+//                // 整合数据
+//                ArrayList<ArrayList<Double>> res = new ArrayList<>();
+//                int size = cpuEntities.size();
+//                for (int i = 0; i < size; i++) {
+//                    ArrayList<Double> list = new ArrayList<>();
+//                    // CPU
+//                    CPUEntity cpuEntity = cpuEntities.get(i);
+//                    list.add(Double.valueOf(cpuEntity.getCpuUsage()));
+//                    list.add(Double.valueOf(cpuEntity.getOneMinuteLoad()));
+//                    list.add(Double.valueOf(cpuEntity.getFiveMinuteLoad()));
+//                    list.add(Double.valueOf(cpuEntity.getFifteenMinuteLoad()));
+//                    // 内存
+//                    MemoryEntity memoryEntity = memoryEntities.get(i);
+//                    list.add(Double.valueOf(memoryEntity.getUsed()));
+//                    list.add(Double.valueOf(memoryEntity.getUsedPercent()));
+//                    // 磁盘
+//                    DiskEntity diskEntity = diskEntities.get(i);
+//                    list.add(Double.valueOf(diskEntity.getRio()));
+//                    list.add(Double.valueOf(diskEntity.getWio()));
+//                    list.add(Double.valueOf(diskEntity.getRkb()));
+//                    list.add(Double.valueOf(diskEntity.getWkb()));
+//                    list.add(Double.valueOf(diskEntity.getRAwait()));
+//                    list.add(Double.valueOf(diskEntity.getWAwait()));
+//                    list.add(Double.valueOf(diskEntity.getSvctm()));
+//                    list.add(Double.valueOf(diskEntity.getUtil()));
+//                    res.add(list);
+//                }
+//                // 发送POST请求
+//                String response = HttpClient.doPost(modelPredUrl, JSON.toJSONString(res), null, "POST");
+//                response = response.replaceAll("\r\n", "");
+//                logger.info("主机地址：" + add + " 模型反馈：" + response);
+//                if ("1".equals(response)) {
+//                    // 转到报警流程
+//                    MailEntity mail = new MailEntity();
+//                    mail.setSentDate(new Date());
+//                    AlarmConfig alarmConfig = alarmConfigService.getAlarmConfigByAddress(add);
+//                    String alarmEmails = alarmConfig.getAlarmEmail();
+//                    String[] emails = alarmEmails.split(",");
+//                    mail.setTo(emails);
+//                    mail.setSubject("系统监控告警");
+//                    mail.setText("系统发生异常，请您检查主机" + add + "运行状况");
+//                    mailService.sendSimpleMailMessage(mail);
+//                    System.out.println("我报警了！！！！！！！！！");
+//                }
                 continue;
             }
             // 大小不相等，无法预测

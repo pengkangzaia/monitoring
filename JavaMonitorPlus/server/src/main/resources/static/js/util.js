@@ -7,25 +7,27 @@ function GetQueryString(name) {
 }
 
 //折线颜色
-var colors = ['#cc0033', '#ff5722', '#2196f3', '#4caf50'];
+// var colors = ['#cc0033', '#ff5722', '#2196f3', '#4caf50'];
+var colors = ['#4bacc6', '#8064a2', '#9bbb59', '#c0504d'];
 //点
 var white = null;
 //背景色
-var background_color = '#21202D';
+// var background_color = '#21202D';
+var background_color = '#ffffff';
 
 var my_tooltip = {
-        trigger: 'axis',
-        axisPointer: {
-            animation: false,
-            type: 'cross',
-            lineStyle: {
-                color: '#376df4',
-                width: 2,
-                opacity: 1
-            }
+    trigger: 'axis',
+    axisPointer: {
+        animation: false,
+        type: 'cross',
+        lineStyle: {
+            // color: '#376df4',
+            width: 2,
+            opacity: 1
         }
-    };
-var my_toolbox ={
+    }
+};
+var my_toolbox = {
     left: 'center',
     feature: {
         dataZoom: {
@@ -40,8 +42,8 @@ var my_toolbox ={
 };
 //下载快照
 $("#heap_button").click(function () {
-    window.open(address+"/heap?id="+pid);
+    window.open(address + "/heap?id=" + pid);
 });
 $("#thread_button").click(function () {
-    window.open(address+"/thread?id="+pid);
+    window.open(address + "/thread?id=" + pid);
 });
