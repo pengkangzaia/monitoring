@@ -1,14 +1,15 @@
-package com.github.camille.server.controller.dto;
+package com.github.camille.server.database.entity.alarm;
 
 import lombok.Data;
-import org.omg.CORBA.PRIVATE_MEMBER;
+
+import java.util.Date;
 
 /**
  * @author pengkangzaia@foxmail.com
- * @create 2022-01-24 20:58
+ * @create 2022-01-28 18:44
  **/
 @Data
-public class Condition {
+public class AlarmConditionConfig {
 
     private Integer id;
     private Integer configId;
@@ -17,7 +18,8 @@ public class Condition {
     private Double value;
     private Integer continuePeriod;
     private Integer noticeFrequency;
-
+    private Date modifyTime;
+    private Date createTime;
 
 
 }

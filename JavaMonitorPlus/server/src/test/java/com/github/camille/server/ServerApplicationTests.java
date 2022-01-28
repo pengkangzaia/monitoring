@@ -1,15 +1,18 @@
 package com.github.camille.server;
 
 import com.github.camille.server.alarm.MailEntity;
+import com.github.camille.server.controller.dto.Condition;
 import com.github.camille.server.database.dao.AlarmConfigDao;
 import com.github.camille.server.database.dao.HostDao;
 import com.github.camille.server.database.dao.ThresholdDao;
 import com.github.camille.server.database.dao.UserDao;
 import com.github.camille.server.database.entity.Host;
+import com.github.camille.server.database.entity.alarm.AlarmConditionConfig;
 import com.github.camille.server.database.entity.alarm.AlarmConfig;
 import com.github.camille.server.database.entity.data.Threshold;
 import com.github.camille.server.database.entity.statistic.MinMaxMetric;
 import com.github.camille.server.database.entity.user.User;
+import com.github.camille.server.database.service.AlarmConfigService;
 import com.github.camille.server.database.service.MailService;
 import com.github.camille.server.database.service.StatisticsService;
 import org.junit.Test;
@@ -39,6 +42,8 @@ public class ServerApplicationTests {
     private HostDao hostDao;
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private AlarmConfigService alarmConfigService;
 
     @Test
     public void thresholdTest() {
@@ -97,6 +102,32 @@ public class ServerApplicationTests {
         list.add(2);
         List<User> res = userDao.selectByIds(list);
         System.out.println(res);
+    }
+
+    @Test
+    public void condition() {
+        List<Condition> conditions = new ArrayList<>();
+        Condition condition1 = new Condition();
+        condition1.setMetric("camille");
+        condition1.setOperator("<");
+        condition1.setValue(10.01);
+        condition1.setId(1);
+//        condition1.setContinuePeriod(3);
+//        condition1.setNoticeFrequency(3600);
+        conditions.add(condition1);
+
+
+        Condition condition2 = new Condition();
+        condition2.setId(2);
+        condition2.setMetric("cau");
+        condition2.setOperator(">=");
+        condition2.setValue(101.0);
+        condition2.setContinuePeriod(4);
+        condition2.setNoticeFrequency(3603);
+        conditions.add(condition2);
+        alarmConfigService.updateCondition(conditions);
+//        alarmConfigService.saveCondition(conditions, 3);
+
     }
 
 

@@ -55,6 +55,7 @@ public class AlarmController extends BaseController {
         alarmConfigService.saveConfig(config);
         int noticeUserId = alarmConfigDTO.getNoticeUserId();
         alarmConfigService.saveNoticeUser(config.getId(), noticeUserId);
+        alarmConfigService.saveCondition(alarmConfigDTO.getConditions(), config.getId());
         return getResponse(0, "添加成功");
     }
 
@@ -71,6 +72,7 @@ public class AlarmController extends BaseController {
         alarmConfigService.editConfig(config);
         int noticeUserId = alarmConfigDTO.getNoticeUserId();
         alarmConfigService.updateNoticeUser(config.getId(), noticeUserId);
+        alarmConfigService.updateCondition(alarmConfigDTO.getConditions());
         return getResponse(0, "修改成功");
     }
 

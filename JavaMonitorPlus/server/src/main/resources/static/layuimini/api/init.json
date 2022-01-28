@@ -4,70 +4,62 @@
     "href": "/layuimini/page/welcome-1.html?t=1"
   },
   "logoInfo": {
-    "title": "LAYUI MINI",
-    "image": "/layuimini/images/logo.png",
+    "title": "数据监控系统",
+    "image": "/layuimini/images/img.png",
     "href": ""
   },
   "menuInfo": [
     {
-      "title": "管理",
-      "icon": "fa fa-address-book",
-      "href": "",
+      "title": "主机监控",
+      "href": "host",
+      "icon": "fa fa-home",
+      "target": "_self"
+    },
+    {
+      "title": "告警服务",
+      "href": "/layuimini/page/menu.html",
+      "icon": "fa fa-window-maximize",
       "target": "_self",
       "child": [
         {
-          "title": "主机监控",
-          "href": "host",
-          "icon": "fa fa-home",
+          "title": "告警策略",
+          "href": "/layuimini/page/form-step.html",
+          "icon": "fa fa-navicon",
           "target": "_self"
         },
         {
-          "title": "告警服务",
-          "href": "/layuimini/page/menu.html",
-          "icon": "fa fa-window-maximize",
-          "target": "_self",
-          "child": [
-            {
-              "title": "告警策略",
-              "href": "/layuimini/page/form-step.html",
-              "icon": "fa fa-navicon",
-              "target": "_self"
-            },
-            {
-              "title": "告警历史",
-              "href": "/layuimini/page/form.html",
-              "icon": "fa fa-navicon",
-              "target": "_self"
-            }
-          ]
-        },
-        {
-          "title": "系统管理",
-          "href": "/layuimini/page/setting.html",
-          "icon": "fa fa-gears",
-          "target": "_self",
-          "child": [
-            {
-              "title": "主机管理",
-              "href": "/layuimini/page/form-step.html",
-              "icon": "fa fa-navicon",
-              "target": "_self"
-            },
-            {
-              "title": "角色管理",
-              "href": "/layuimini/page/form.html",
-              "icon": "fa fa-navicon",
-              "target": "_self"
-            }
-          ]
-        },
-        {
-          "title": "模型管理",
-          "href": "/layuimini/page/table.html",
-          "icon": "fa fa-file-text",
+          "title": "告警历史",
+          "href": "/layuimini/page/form.html",
+          "icon": "fa fa-navicon",
           "target": "_self"
         }
       ]
+    },
+    {
+      "title": "系统管理",
+      "href": "/layuimini/page/setting.html",
+      "icon": "fa fa-gears",
+      "target": "_self",
+      "child": [
+        {
+          "title": "主机管理",
+          "href": "/layuimini/page/form-step.html",
+          "icon": "fa fa-navicon",
+          "target": "_self"
+        },
+        {
+          "title": "角色管理",
+          "href": "/layuimini/page/form.html",
+          "icon": "fa fa-navicon",
+          "target": "_self"
+        }
+      ]
+    },
+    {
+      "title": "模型管理",
+      "href": "/layuimini/page/table.html",
+      "icon": "fa fa-file-text",
+      "target": "_self"
     }
   ]
 }

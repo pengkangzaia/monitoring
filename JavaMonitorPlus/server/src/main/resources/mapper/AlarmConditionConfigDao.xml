@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.camille.server.database.dao.AlarmConditionConfigDao">
+
+    <sql id="selectFields">
+        id, config_id, metric, operator, `value`, continue_period, notice_frequency, modify_time, create_time
+    </sql>
+
+    <sql id="insertFields">
+        config_id, metric, operator, `value`, continue_period, notice_frequency, modify_time, create_time
+    </sql>
+    <insert id="batchInsert" parameterType="java.util.List">
+        insert into alarm_condition_config(<include refid="insertFields"></include>)
+        values 
+        <foreach collection="list" separator="," item="item" index="index">
+            (
+             #{item.configId}, #{item.metric}, #{item.operator},
+             #{item.value}, #{item.continuePeriod}, #{item.noticeFrequency}, now(), now()
+            )
+        </foreach>
+    </insert>
+    <update id="update" parameterType="com.github.camille.server.database.entity.alarm.AlarmConditionConfig">
+        update alarm_condition_config
+        <set>
+            <if test="metric != null">
+                metric = #{metric},
+            </if>
+            <if test="operator != null">
+                operator = #{operator},
+            </if>
+            <if test="value != null">
+                value = #{value},
+            </if>
+            <if test="continuePeriod != null">
+                continue_period = #{continuePeriod},
+            </if>
+            <if test="noticeFrequency != null">
+                notice_frequency = #{noticeFrequency},
+            </if>
+            modify_time = now()
+        </set>
+        where id = #{id}
+    </update>
+    <select id="selectByConfigId"
+            resultType="com.github.camille.server.database.entity.alarm.AlarmConditionConfig">
+        select <include refid="selectFields"></include>
+        from alarm_condition_config
+        where config_id = #{configId}
+    </select>
+
+
+</mapper>
