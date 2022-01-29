@@ -23,4 +23,6 @@ public interface DiskDao {
     MinMaxDiskMetric selectMinMaxMetricByAddress(String address);
 
     List<DiskEntity> selectLimitByAddress(String address, int limit);
+
+    List<String> selectByColumn(String address, Integer limit, String columnName);
 }

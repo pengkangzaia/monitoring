@@ -32,6 +32,10 @@
         from alarm_config
         where host_id = #{hostId}
     </select>
+    <select id="selectAll" resultType="com.github.camille.server.database.entity.alarm.AlarmConfig">
+        select <include refid="selectFields"></include>
+        from alarm_config
+    </select>
 
 
 </mapper>

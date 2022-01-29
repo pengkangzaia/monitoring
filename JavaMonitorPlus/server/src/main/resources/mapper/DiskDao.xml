@@ -32,6 +32,12 @@
         order by id
         limit #{limit}
     </select>
+    <select id="selectByColumn" resultType="java.lang.String">
+        select ${columnName}
+        from disk_table
+        where address = #{address}
+        limit #{limit}
+    </select>
 
     <insert id="save" parameterType="com.github.camille.server.database.entity.data.HardDiskEntity">
         insert into disk_table(<include refid="insertFields"></include>)

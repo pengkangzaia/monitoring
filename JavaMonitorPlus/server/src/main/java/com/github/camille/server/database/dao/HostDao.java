@@ -18,4 +18,6 @@ public interface HostDao {
     int selectCount(String hostName, String hostIp);
 
     void insert(Host host);
+
+    Host selectById(int hostId);
 }

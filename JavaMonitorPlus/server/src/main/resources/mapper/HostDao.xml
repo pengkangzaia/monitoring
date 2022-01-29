@@ -39,6 +39,11 @@
             </if>
         </where>
     </select>
+    <select id="selectById" resultType="com.github.camille.server.database.entity.Host">
+        select <include refid="selectFields"></include>
+        from host
+        where id = #{hostId}
+    </select>
 
 
 </mapper>

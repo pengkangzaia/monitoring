@@ -102,4 +102,7 @@ public class AlarmConfigService {
         return alarmConditionConfigDao.selectByConfigId(configId);
     }
 
+    public List<AlarmConfig> getAllConfig() {
+        return alarmConfigDao.selectAll();
+    }
 }

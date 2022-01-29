@@ -23,4 +23,6 @@ public interface MemoryDao {
     MinMaxMemMetric selectMinMaxMetricByAddress(String address);
 
     List<MemoryEntity> selectLimitByAddress(String address, int limit);
+
+    List<String> selectByColumn(String address, Integer limit, String columnName);
 }

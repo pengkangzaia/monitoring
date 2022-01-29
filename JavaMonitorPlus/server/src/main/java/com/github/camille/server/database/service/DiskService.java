@@ -44,4 +44,8 @@ public class DiskService {
     public List<DiskEntity> selectPredictData(String address, int slidingWindowSize) {
         return diskDao.selectLimitByAddress(address, slidingWindowSize);
     }
+
+    public List<String> selectDataByColumnName(String address, Integer continuePeriod, String columnName) {
+        return diskDao.selectByColumn(address, continuePeriod, columnName);
+    }
 }

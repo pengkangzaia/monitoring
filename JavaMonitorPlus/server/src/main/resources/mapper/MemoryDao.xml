@@ -30,6 +30,12 @@
         order by id
         limit #{limit}
     </select>
+    <select id="selectByColumn" resultType="java.lang.String">
+        select ${columnName}
+        from memory_table
+        where address = #{address}
+        limit #{limit}
+    </select>
 
     <insert id="save" parameterType="com.github.camille.server.database.entity.data.MemEntity">
         insert into memory_table(<include refid="insertFields"></include>)

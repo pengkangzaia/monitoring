@@ -21,4 +21,6 @@ public interface CPUDao {
     MinMaxCPUMetric selectMinMaxMetricByAddress(String address);
 
     List<CPUEntity> selectLimitByAddress(String address, int limit);
+
+    List<String> selectByColumn(String address, Integer limit, String columnName);
 }

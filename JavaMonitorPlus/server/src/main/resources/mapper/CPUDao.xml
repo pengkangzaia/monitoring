@@ -31,6 +31,12 @@
         order by id
         limit #{limit}
     </select>
+    <select id="selectByColumn" resultType="java.lang.String">
+        select ${columnName}
+        from cpu_table
+        where address = #{address}
+        limit #{limit}
+    </select>
 
     <insert id="save" parameterType="com.github.camille.server.database.entity.data.CPUEntity">
         insert into cpu_table(<include refid="insertFields"></include>)

@@ -41,4 +41,8 @@ public class CPUService {
     public List<CPUEntity> selectPredictData(String address, int slidingWindowSize) {
         return cpuDao.selectLimitByAddress(address, slidingWindowSize);
     }
+
+    public List<String> selectDataByColumnName(String address, Integer continuePeriod, String columnName) {
+        return cpuDao.selectByColumn(address, continuePeriod, columnName);
+    }
 }

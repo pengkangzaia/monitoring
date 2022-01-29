@@ -27,4 +27,8 @@ public class HostService {
         int count = hostDao.selectCount(hostName, hostIp);
         return count;
     }
+
+    public Host selectById(int hostId) {
+        return hostDao.selectById(hostId);
+    }
 }

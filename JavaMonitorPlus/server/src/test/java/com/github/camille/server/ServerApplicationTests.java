@@ -13,6 +13,7 @@ import com.github.camille.server.database.entity.data.Threshold;
 import com.github.camille.server.database.entity.statistic.MinMaxMetric;
 import com.github.camille.server.database.entity.user.User;
 import com.github.camille.server.database.service.AlarmConfigService;
+import com.github.camille.server.database.service.CPUService;
 import com.github.camille.server.database.service.MailService;
 import com.github.camille.server.database.service.StatisticsService;
 import org.junit.Test;
@@ -44,6 +45,8 @@ public class ServerApplicationTests {
     private UserDao userDao;
     @Autowired
     private AlarmConfigService alarmConfigService;
+    @Autowired
+    private CPUService cpuService;
 
     @Test
     public void thresholdTest() {
@@ -128,6 +131,13 @@ public class ServerApplicationTests {
         alarmConfigService.updateCondition(conditions);
 //        alarmConfigService.saveCondition(conditions, 3);
 
+    }
+
+
+    @Test
+    public void column() {
+        List<String> res = cpuService.selectDataByColumnName("http://1.15.117.64:8081", 3, "cpu_usage");
+        System.out.println(res);
     }
 
 
