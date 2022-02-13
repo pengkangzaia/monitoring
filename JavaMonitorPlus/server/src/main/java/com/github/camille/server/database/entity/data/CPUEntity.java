@@ -1,21 +1,33 @@
 package com.github.camille.server.database.entity.data;
 
+import com.influxdb.annotations.Column;
+import com.influxdb.annotations.Measurement;
 import lombok.Data;
+
+import java.time.Instant;
 
 /**
  * @author pengkangzaia@foxmail.com
  * @create 2021-11-01 9:03
  **/
 @Data
+@Measurement(name = "cpu2")
 public class CPUEntity {
+    @Column(tag = true)
+    String address;
 
-    private Integer id;
-    private String address; //进程所在主机
-    private String date; //x：时间
-    private String cpuUsage;
-    private String oneMinuteLoad;
-    private String fiveMinuteLoad;
-    private String fifteenMinuteLoad;
+    @Column
+    Double cpuUsage;
 
+    @Column
+    Double fifteenMinuteLoad;
 
+    @Column
+    Double fiveMinuteLoad;
+
+    @Column
+    Double oneMinuteLoad;
+
+    @Column(timestamp = true)
+    Instant date;
 }

@@ -6,6 +6,8 @@ import com.github.camille.server.database.entity.data.CPUEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,11 +28,11 @@ public class CPUService {
     public void write(String address, String date, CpuInfoEntity cpuInfo) {
         CPUEntity entity = new CPUEntity();
         entity.setAddress(address);
-        entity.setDate(date);
-        entity.setCpuUsage(String.valueOf(cpuInfo.getCpuUsage()));
-        entity.setOneMinuteLoad(cpuInfo.getOneMinuteLoad());
-        entity.setFiveMinuteLoad(cpuInfo.getFiveMinuteLoad());
-        entity.setFifteenMinuteLoad(cpuInfo.getFifteenMinuteLoad());
+        entity.setDate(Instant.now());
+        entity.setCpuUsage(cpuInfo.getCpuUsage());
+        entity.setOneMinuteLoad(Double.valueOf(cpuInfo.getOneMinuteLoad()));
+        entity.setFiveMinuteLoad(Double.valueOf(cpuInfo.getFiveMinuteLoad()));
+        entity.setFifteenMinuteLoad(Double.valueOf(cpuInfo.getFifteenMinuteLoad()));
         cpuDao.save(entity);
     }
 

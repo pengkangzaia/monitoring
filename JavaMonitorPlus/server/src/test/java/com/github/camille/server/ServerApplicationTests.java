@@ -2,13 +2,11 @@ package com.github.camille.server;
 
 import com.github.camille.server.alarm.MailEntity;
 import com.github.camille.server.controller.dto.Condition;
-import com.github.camille.server.database.dao.AlarmConfigDao;
-import com.github.camille.server.database.dao.HostDao;
-import com.github.camille.server.database.dao.ThresholdDao;
-import com.github.camille.server.database.dao.UserDao;
+import com.github.camille.server.database.dao.*;
 import com.github.camille.server.database.entity.Host;
 import com.github.camille.server.database.entity.alarm.AlarmConditionConfig;
 import com.github.camille.server.database.entity.alarm.AlarmConfig;
+import com.github.camille.server.database.entity.data.CPUEntity;
 import com.github.camille.server.database.entity.data.Threshold;
 import com.github.camille.server.database.entity.statistic.MinMaxMetric;
 import com.github.camille.server.database.entity.user.User;
@@ -138,6 +136,19 @@ public class ServerApplicationTests {
     public void column() {
         List<String> res = cpuService.selectDataByColumnName("http://1.15.117.64:8081", 3, "cpu_usage");
         System.out.println(res);
+    }
+
+
+    @Autowired
+    private CPUDao cpuDao;
+
+    @Test
+    public void cpuInflux() {
+        List<CPUEntity> res = cpuDao.findAllByAddress("http://1.15.117.64:8081");
+        System.out.println(res.size());
+        for (CPUEntity re : res) {
+            System.out.println(re);
+        }
     }
 
 

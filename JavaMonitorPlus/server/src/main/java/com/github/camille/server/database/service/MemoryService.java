@@ -6,6 +6,7 @@ import com.github.camille.server.database.entity.data.MemEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -27,9 +28,9 @@ public class MemoryService {
     public void write(String address, String date, MemoryEntity memoryEntity) {
         MemEntity entity = new MemEntity();
         entity.setAddress(address);
-        entity.setDate(date);
-        entity.setUsed(memoryEntity.getUsed());
-        entity.setUsedPercent(memoryEntity.getUsedPercent());
+        entity.setDate(Instant.now());
+        entity.setUsed(Double.valueOf(memoryEntity.getUsed()));
+        entity.setUsedPercent(Double.valueOf(memoryEntity.getUsedPercent()));
         memoryDao.save(entity);
     }
 

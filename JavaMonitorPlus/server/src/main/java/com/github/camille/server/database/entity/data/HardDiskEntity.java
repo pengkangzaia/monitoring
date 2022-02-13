@@ -1,25 +1,39 @@
 package com.github.camille.server.database.entity.data;
 
+import com.influxdb.annotations.Column;
+import com.influxdb.annotations.Measurement;
 import lombok.Data;
+
+import java.time.Instant;
 
 /**
  * @author pengkangzaia@foxmail.com
  * @create 2022-01-16 13:34
  **/
 @Data
+@Measurement(name = "disk")
 public class HardDiskEntity {
 
-    private Integer id;
+    @Column(tag = true)
     private String address;
-    private String date;
-    private String rio;
-    private String wio;
-    private String rkb;
-    private String wkb;
-    private String rAwait;
-    private String wAwait;
-    private String svctm;
-    private String util;
+    @Column(timestamp = true)
+    private Instant date;
+    @Column
+    private Double rio;
+    @Column
+    private Double wio;
+    @Column
+    private Double rkb;
+    @Column
+    private Double wkb;
+    @Column
+    private Double rAwait;
+    @Column
+    private Double wAwait;
+    @Column
+    private Double svctm;
+    @Column
+    private Double util;
 
 
 

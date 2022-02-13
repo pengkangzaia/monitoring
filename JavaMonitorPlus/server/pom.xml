@@ -8,11 +8,11 @@
         <version>2.0.3.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-         
+
     <groupId>com.github.camille</groupId>
     <artifactId>server</artifactId>
     <version>0.0.2.RELEASE</version>
-         
+
     <name>server</name>
     <description>Demo project for Spring Boot</description>
 
@@ -111,6 +111,18 @@
             <version>2.0.4.RELEASE</version>
             <!-- 启用 -->
             <optional>true</optional>
+        </dependency>
+
+        <!-- influxdb -->
+        <dependency>
+            <groupId>com.influxdb</groupId>
+            <artifactId>influxdb-client-java</artifactId>
+            <version>4.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib</artifactId>
+            <version>1.3.70</version>
         </dependency>
 
 

@@ -6,6 +6,7 @@ import com.github.camille.server.database.entity.data.HardDiskEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -25,15 +26,15 @@ public class DiskService {
     public void write(String address, String data, DiskEntity diskEntity) {
         HardDiskEntity hardDiskEntity = new HardDiskEntity();
         hardDiskEntity.setAddress(address);
-        hardDiskEntity.setDate(data);
-        hardDiskEntity.setRio(diskEntity.getRio());
-        hardDiskEntity.setWio(diskEntity.getWio());
-        hardDiskEntity.setRkb(diskEntity.getRkb());
-        hardDiskEntity.setWkb(diskEntity.getWkb());
-        hardDiskEntity.setRAwait(diskEntity.getRAwait());
-        hardDiskEntity.setWAwait(diskEntity.getWAwait());
-        hardDiskEntity.setSvctm(diskEntity.getSvctm());
-        hardDiskEntity.setUtil(diskEntity.getUtil());
+        hardDiskEntity.setDate(Instant.now());
+        hardDiskEntity.setRio(Double.valueOf(diskEntity.getRio()));
+        hardDiskEntity.setWio(Double.valueOf(diskEntity.getWio()));
+        hardDiskEntity.setRkb(Double.valueOf(diskEntity.getRkb()));
+        hardDiskEntity.setWkb(Double.valueOf(diskEntity.getWkb()));
+        hardDiskEntity.setRAwait(Double.valueOf(diskEntity.getRAwait()));
+        hardDiskEntity.setWAwait(Double.valueOf(diskEntity.getWAwait()));
+        hardDiskEntity.setSvctm(Double.valueOf(diskEntity.getSvctm()));
+        hardDiskEntity.setUtil(Double.valueOf(diskEntity.getUtil()));
         diskDao.save(hardDiskEntity);
     }
 
