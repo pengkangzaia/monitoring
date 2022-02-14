@@ -8,6 +8,8 @@ import com.github.camille.server.database.entity.Host;
 import com.github.camille.server.database.entity.alarm.AlarmConditionConfig;
 import com.github.camille.server.database.entity.alarm.AlarmConfig;
 import com.github.camille.server.database.entity.data.CPUEntity;
+import com.github.camille.server.database.entity.data.HardDiskEntity;
+import com.github.camille.server.database.entity.data.MemEntity;
 import com.github.camille.server.database.entity.user.User;
 import com.github.camille.server.database.service.*;
 import com.github.camille.server.remote.parm.AddressParm;
@@ -39,8 +41,6 @@ public class PredictJob extends QuartzJobBean {
     private int slidingWindowSize;
     @Value("${model.pred.url}")
     private String modelPredUrl;
-    @Autowired
-    private AddressParm addressParm;
     @Autowired
     private CPUService cpuService;
     @Autowired
@@ -84,16 +84,13 @@ public class PredictJob extends QuartzJobBean {
                 String metric = condition.getMetric();
                 String columnName = MonitorConstant.metricMap.get(metric);
                 if (metric.startsWith("cpu")) {
-                    List<String> originValues = cpuService.selectDataByColumnName(address, condition.getContinuePeriod(), columnName);
-                    List<Double> values = originValues.stream().map(Double::valueOf).collect(Collectors.toList());
+                    List<Double> values = cpuService.selectDataByColumnName(address, condition.getContinuePeriod(), columnName);
                     isAbnormal = ConditionDiagnotor.diagnose(condition.getOperator(), condition.getValue(), values);
                 } else if (metric.startsWith("mem")) {
-                    List<String> originValues = memoryService.selectDataByColumnName(address, condition.getContinuePeriod(), columnName);
-                    List<Double> values = originValues.stream().map(Double::valueOf).collect(Collectors.toList());
+                    List<Double> values = memoryService.selectDataByColumnName(address, condition.getContinuePeriod(), columnName);
                     isAbnormal = ConditionDiagnotor.diagnose(condition.getOperator(), condition.getValue(), values);
                 } else if (metric.startsWith("disk")) {
-                    List<String> originValues = diskService.selectDataByColumnName(address, condition.getContinuePeriod(), columnName);
-                    List<Double> values = originValues.stream().map(Double::valueOf).collect(Collectors.toList());
+                    List<Double> values = diskService.selectDataByColumnName(address, condition.getContinuePeriod(), columnName);
                     isAbnormal = ConditionDiagnotor.diagnose(condition.getOperator(), condition.getValue(), values);
                 }
             }
@@ -105,8 +102,8 @@ public class PredictJob extends QuartzJobBean {
 
     public void dynamicPred(AlarmConfig alarmConfig, String address) {
         List<CPUEntity> cpuEntities = cpuService.selectPredictData(address, slidingWindowSize);
-        List<MemoryEntity> memoryEntities = memoryService.selectPredictData(address, slidingWindowSize);
-        List<DiskEntity> diskEntities = diskService.selectPredictData(address, slidingWindowSize);
+        List<MemEntity> memoryEntities = memoryService.selectPredictData(address, slidingWindowSize);
+        List<HardDiskEntity> diskEntities = diskService.selectPredictData(address, slidingWindowSize);
         if (cpuEntities == null || memoryEntities == null || diskEntities == null) {
             logger.warn("数据库中无数据，无法预测");
         }
@@ -118,24 +115,24 @@ public class PredictJob extends QuartzJobBean {
                 ArrayList<Double> list = new ArrayList<>();
                 // CPU
                 CPUEntity cpuEntity = cpuEntities.get(i);
-                list.add(Double.valueOf(cpuEntity.getCpuUsage()));
-                list.add(Double.valueOf(cpuEntity.getOneMinuteLoad()));
-                list.add(Double.valueOf(cpuEntity.getFiveMinuteLoad()));
-                list.add(Double.valueOf(cpuEntity.getFifteenMinuteLoad()));
+                list.add(cpuEntity.getCpuUsage());
+                list.add(cpuEntity.getOneMinuteLoad());
+                list.add(cpuEntity.getFiveMinuteLoad());
+                list.add(cpuEntity.getFifteenMinuteLoad());
                 // 内存
-                MemoryEntity memoryEntity = memoryEntities.get(i);
-                list.add(Double.valueOf(memoryEntity.getUsed()));
-                list.add(Double.valueOf(memoryEntity.getUsedPercent()));
+                MemEntity memoryEntity = memoryEntities.get(i);
+                list.add(memoryEntity.getUsed());
+                list.add(memoryEntity.getUsedPercent());
                 // 磁盘
-                DiskEntity diskEntity = diskEntities.get(i);
-                list.add(Double.valueOf(diskEntity.getRio()));
-                list.add(Double.valueOf(diskEntity.getWio()));
-                list.add(Double.valueOf(diskEntity.getRkb()));
-                list.add(Double.valueOf(diskEntity.getWkb()));
-                list.add(Double.valueOf(diskEntity.getRAwait()));
-                list.add(Double.valueOf(diskEntity.getWAwait()));
-                list.add(Double.valueOf(diskEntity.getSvctm()));
-                list.add(Double.valueOf(diskEntity.getUtil()));
+                HardDiskEntity diskEntity = diskEntities.get(i);
+                list.add(diskEntity.getRio());
+                list.add(diskEntity.getWio());
+                list.add(diskEntity.getRkb());
+                list.add(diskEntity.getWkb());
+                list.add(diskEntity.getRAwait());
+                list.add(diskEntity.getWAwait());
+                list.add(diskEntity.getSvctm());
+                list.add(diskEntity.getUtil());
                 res.add(list);
             }
             // 发送POST请求

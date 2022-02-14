@@ -83,11 +83,50 @@ public class CPUDao {
 
     //
     public List<CPUEntity> selectLimitByAddress(String address, int limit) {
-        return null;
+        InfluxDBClient client = InfluxDBClientFactory.create(url, token.toCharArray(), org, bucket);
+        String flux = "from(bucket: \"monitor\")\n" +
+                "  |> range(start: -1mo)\n" +
+                "  |> filter(fn: (r) => r[\"_measurement\"] == \"cpu2\")\n" +
+                "  |> filter(fn: (r) => r[\"address\"] == \"" + address + "\")\n" +
+                "  |> limit(n: " + limit + ")" +
+                "  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")";
+        QueryApi queryApi = client.getQueryApi();
+        List<FluxTable> tables = queryApi.query(flux);
+        List<CPUEntity> res = new ArrayList<>();
+        FluxTable table = tables.get(0);
+        List<FluxRecord> records = table.getRecords();
+        for (FluxRecord record : records) {
+            CPUEntity cpuEntity = new CPUEntity();
+            cpuEntity.setDate(record.getTime());
+            cpuEntity.setAddress((String) record.getValueByKey("address"));
+            cpuEntity.setCpuUsage((Double) record.getValueByKey("cpuUsage"));
+            cpuEntity.setOneMinuteLoad((Double) record.getValueByKey("oneMinuteLoad"));
+            cpuEntity.setFiveMinuteLoad((Double) record.getValueByKey("fiveMinuteLoad"));
+            cpuEntity.setFifteenMinuteLoad((Double) record.getValueByKey("fifteenMinuteLoad"));
+            res.add(cpuEntity);
+        }
+        client.close();
+        return res;
     }
 
     //
-    public List<String> selectByColumn(String address, Integer limit, String columnName) {
-        return null;
+    public List<Double> selectByColumn(String address, Integer limit, String columnName) {
+        InfluxDBClient client = InfluxDBClientFactory.create(url, token.toCharArray(), org, bucket);
+        String flux = "from(bucket: \"monitor\")\n" +
+                "  |> range(start: -1mo)\n" +
+                "  |> filter(fn: (r) => r[\"_measurement\"] == \"cpu2\")\n" +
+                "  |> filter(fn: (r) => r[\"address\"] == \"" + address + "\")\n" +
+                "  |> filter(fn: (r) => r[\"_field\"] == \"" + columnName + "\")" +
+                "  |> limit(n: " + limit + ")";
+        QueryApi queryApi = client.getQueryApi();
+        List<FluxTable> tables = queryApi.query(flux);
+        List<Double> res = new ArrayList<>();
+        FluxTable table = tables.get(0);
+        List<FluxRecord> records = table.getRecords();
+        for (FluxRecord record : records) {
+            res.add((Double) record.getValue());
+        }
+        client.close();
+        return res;
     }
 }

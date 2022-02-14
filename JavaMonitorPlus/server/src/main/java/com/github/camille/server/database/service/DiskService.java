@@ -42,11 +42,11 @@ public class DiskService {
         diskDao.deleteAll();
     }
 
-    public List<DiskEntity> selectPredictData(String address, int slidingWindowSize) {
+    public List<HardDiskEntity> selectPredictData(String address, int slidingWindowSize) {
         return diskDao.selectLimitByAddress(address, slidingWindowSize);
     }
 
-    public List<String> selectDataByColumnName(String address, Integer continuePeriod, String columnName) {
+    public List<Double> selectDataByColumnName(String address, Integer continuePeriod, String columnName) {
         return diskDao.selectByColumn(address, continuePeriod, columnName);
     }
 }

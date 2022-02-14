@@ -44,7 +44,7 @@ public class CPUService {
         return cpuDao.selectLimitByAddress(address, slidingWindowSize);
     }
 
-    public List<String> selectDataByColumnName(String address, Integer continuePeriod, String columnName) {
+    public List<Double> selectDataByColumnName(String address, Integer continuePeriod, String columnName) {
         return cpuDao.selectByColumn(address, continuePeriod, columnName);
     }
 }

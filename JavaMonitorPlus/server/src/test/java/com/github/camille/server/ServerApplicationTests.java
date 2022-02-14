@@ -134,7 +134,7 @@ public class ServerApplicationTests {
 
     @Test
     public void column() {
-        List<String> res = cpuService.selectDataByColumnName("http://1.15.117.64:8081", 3, "cpu_usage");
+        List<Double> res = cpuService.selectDataByColumnName("http://1.15.117.64:8081", 3, "cpu_usage");
         System.out.println(res);
     }
 
@@ -144,10 +144,16 @@ public class ServerApplicationTests {
 
     @Test
     public void cpuInflux() {
-        List<CPUEntity> res = cpuDao.findAllByAddress("http://1.15.117.64:8081");
-        System.out.println(res.size());
-        for (CPUEntity re : res) {
-            System.out.println(re);
+//        List<CPUEntity> res = cpuDao.findAllByAddress("http://1.15.117.64:8081");
+//        System.out.println(res.size());
+//        for (CPUEntity re : res) {
+//            System.out.println(re);
+//        }
+//        List<Double> cpuUsage = cpuDao.selectByColumn("http://1.15.117.64:8081", 10, "cpuUsage");
+//        System.out.println(cpuUsage);
+        List<CPUEntity> cpuEntities = cpuDao.selectLimitByAddress("http://1.15.117.64:8081", 10);
+        for (CPUEntity cpuEntity : cpuEntities) {
+            System.out.println(cpuEntity);
         }
     }
 
