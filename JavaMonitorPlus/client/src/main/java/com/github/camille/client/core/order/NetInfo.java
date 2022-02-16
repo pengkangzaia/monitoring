@@ -1,0 +1,34 @@
+package com.github.camille.client.core.order;
+
+import com.github.camille.client.core.cmd.ExecuteCmd;
+import com.github.camille.client.core.entity.NetEntity;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+/**
+ * @author pengkangzaia@foxmail.com
+ * @create 2022-02-15 20:10
+ **/
+public class NetInfo {
+
+    public static NetEntity info() {
+        String traffic = ExecuteCmd.execute(new String[]{"sh", "-c", "sar -n DEV 1 1 | grep eth0 | awk 'NR==1 {for(i=4;i<=7;i++) {print $i}}'"});
+        String[] trafficInfo = traffic.split("\n");
+        ArrayList<Double> values = new ArrayList<>();
+        for (String s : trafficInfo) {
+            values.add(Double.valueOf(s));
+        }
+        String tcpCount = ExecuteCmd.execute(new String[]{"sh", "-c", "netstat -n | grep tcp | wc -l"});
+        tcpCount = tcpCount.replace("\n", "");
+        NetEntity netEntity = new NetEntity(values.get(0), values.get(1), values.get(2), values.get(3), Integer.parseInt(tcpCount));
+        return netEntity;
+    }
+
+    public static void main(String[] args) {
+        String s = "40\n".replace("\n", "");
+        int ans = Integer.parseInt(s);
+        System.out.println(ans);
+    }
+
+}

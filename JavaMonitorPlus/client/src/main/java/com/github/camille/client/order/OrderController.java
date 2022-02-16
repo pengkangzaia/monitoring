@@ -64,4 +64,10 @@ public class OrderController {
         return DiskInfo.usage();
     }
 
+    @RequestMapping("/network")
+    public NetEntity getNetInfo() {
+        return NetInfo.info();
+    }
+
+
 }
