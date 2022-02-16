@@ -12,22 +12,22 @@ import org.springframework.web.bind.annotation.RestController;
 public class OrderController {
 
     @RequestMapping("/cpuLoadInfo")
-    public CpuEntity getCpuLoadInfo() {
+    public CpuEntityDTO getCpuLoadInfo() {
         return CpuInfo.info();
     }
 
     @RequestMapping("/memUsage")
-    public MemEntity getMemUsage() {
+    public MemEntityDTO getMemUsage() {
         return MemInfo.usage();
     }
 
     @RequestMapping("/disk")
-    public DiskEntity getDiskInfo() {
+    public DiskEntityDTO getDiskInfo() {
         return DiskInfo.usage();
     }
 
     @RequestMapping("/network")
-    public NetEntity getNetInfo() {
+    public NetEntityDTO getNetInfo() {
         return NetInfo.info();
     }
 

@@ -1,4 +1,4 @@
-package com.github.camille.client.core.entity;
+package com.github.camille.server.client;
 
 import lombok.Data;
 
@@ -7,7 +7,7 @@ import lombok.Data;
  * @create 2021-10-31下午6:50
  **/
 @Data
-public class CpuEntity {
+public class CpuEntityDTO {
 
     /**
      * CPU利用率
@@ -26,7 +26,7 @@ public class CpuEntity {
      */
     private String fifteenMinuteLoad;
 
-    public CpuEntity(double cpuUsage, String oneMinuteLoad, String fiveMinuteLoad, String fifteenMinuteLoad) {
+    public CpuEntityDTO(double cpuUsage, String oneMinuteLoad, String fiveMinuteLoad, String fifteenMinuteLoad) {
         this.cpuUsage = cpuUsage;
         this.oneMinuteLoad = oneMinuteLoad;
         this.fiveMinuteLoad = fiveMinuteLoad;

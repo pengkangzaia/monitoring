@@ -1,7 +1,7 @@
 package com.github.camille.client.core.order;
 
 import com.github.camille.client.core.cmd.ExecuteCmd;
-import com.github.camille.client.core.entity.NetEntity;
+import com.github.camille.client.core.entity.NetEntityDTO;
 
 import java.util.ArrayList;
 
@@ -11,7 +11,7 @@ import java.util.ArrayList;
  **/
 public class NetInfo {
 
-    public static NetEntity info() {
+    public static NetEntityDTO info() {
         String traffic = ExecuteCmd.execute(new String[]{"sh", "-c", "sar -n DEV 1 1 | grep eth0 | awk 'NR==1 {for(i=4;i<=7;i++) {print $i}}'"});
         String[] trafficInfo = traffic.split("\n");
         ArrayList<Double> values = new ArrayList<>();
@@ -20,7 +20,7 @@ public class NetInfo {
         }
         String tcpCount = ExecuteCmd.execute(new String[]{"sh", "-c", "netstat -n | grep tcp | wc -l"});
         tcpCount = tcpCount.replace("\n", "");
-        return new NetEntity(values.get(0), values.get(1), values.get(2), values.get(3), Integer.parseInt(tcpCount));
+        return new NetEntityDTO(values.get(0), values.get(1), values.get(2), values.get(3), Integer.parseInt(tcpCount));
     }
 
 }

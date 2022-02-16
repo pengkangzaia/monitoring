@@ -1,5 +1,6 @@
 package com.github.camille.server.database.service;
 
+import com.github.camille.server.client.DiskEntityDTO;
 import com.github.camille.server.database.dao.DiskDao;
 import com.github.camille.server.database.entity.data.DiskEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class DiskService {
         return diskDao.findAllByAddress(address);
     }
 
-    public void write(String address, Instant date, com.github.camille.server.client.DiskEntity diskEntity) {
+    public void write(String address, Instant date, DiskEntityDTO diskEntity) {
         DiskEntity hardDiskEntity = new DiskEntity();
         hardDiskEntity.setAddress(address);
         hardDiskEntity.setDate(date);

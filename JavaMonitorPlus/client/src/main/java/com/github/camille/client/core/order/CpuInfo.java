@@ -1,6 +1,6 @@
 package com.github.camille.client.core.order;
 
-import com.github.camille.client.core.entity.CpuEntity;
+import com.github.camille.client.core.entity.CpuEntityDTO;
 import com.github.camille.client.core.cmd.ExecuteCmd;
 import com.sun.management.OperatingSystemMXBean;
 
@@ -12,14 +12,14 @@ import java.lang.management.ManagementFactory;
  **/
 public class CpuInfo {
 
-    public static CpuEntity info() {
+    public static CpuEntityDTO info() {
         OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(
                 OperatingSystemMXBean.class);
         // What % load the overall system is at, from 0.0-1.0
         double cpuUsage = osBean.getSystemCpuLoad();
         String loads = ExecuteCmd.execute(new String[]{"sh", "-c", "cat /proc/loadavg | awk '{for(i = 1; i <=3; i++) {print $i}}'"});
         String[] loadInfo = loads.split("\n");
-        return new CpuEntity(cpuUsage, loadInfo[0], loadInfo[1], loadInfo[2]);
+        return new CpuEntityDTO(cpuUsage, loadInfo[0], loadInfo[1], loadInfo[2]);
     }
 
     public static void main(String[] args) {

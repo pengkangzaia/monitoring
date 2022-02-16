@@ -1,7 +1,8 @@
 package com.github.camille.server.database.service;
 
-import com.github.camille.server.client.NetEntity;
+import com.github.camille.server.client.NetEntityDTO;
 import com.github.camille.server.database.dao.NetDao;
+import com.github.camille.server.database.entity.data.NetEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +19,8 @@ public class NetworkService {
     private NetDao netDao;
 
 
-    public void write(String address, Instant now, NetEntity net) {
-        com.github.camille.server.database.entity.data.NetEntity netEntity = new com.github.camille.server.database.entity.data.NetEntity();
+    public void write(String address, Instant now, NetEntityDTO net) {
+        NetEntity netEntity = new NetEntity();
         netEntity.setDate(now);
         netEntity.setAddress(address);
         netEntity.setReceivePacket(net.getReceivePacket());

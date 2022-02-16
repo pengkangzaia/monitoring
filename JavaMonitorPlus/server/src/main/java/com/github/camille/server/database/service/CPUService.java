@@ -1,6 +1,6 @@
 package com.github.camille.server.database.service;
 
-import com.github.camille.server.client.CpuEntity;
+import com.github.camille.server.client.CpuEntityDTO;
 import com.github.camille.server.database.dao.CPUDao;
 import com.github.camille.server.database.entity.data.CPUEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class CPUService {
     }
 
 
-    public void write(String address, Instant date, CpuEntity cpuInfo) {
+    public void write(String address, Instant date, CpuEntityDTO cpuInfo) {
         CPUEntity entity = new CPUEntity();
         entity.setAddress(address);
         entity.setDate(date);

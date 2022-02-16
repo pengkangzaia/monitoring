@@ -1,15 +1,14 @@
 package com.github.camille.server.timer.job;
 
 
-import com.github.camille.server.client.CpuEntity;
-import com.github.camille.server.client.DiskEntity;
-import com.github.camille.server.client.MemEntity;
-import com.github.camille.server.client.NetEntity;
+import com.github.camille.server.client.CpuEntityDTO;
+import com.github.camille.server.client.DiskEntityDTO;
+import com.github.camille.server.client.MemEntityDTO;
+import com.github.camille.server.client.NetEntityDTO;
 import com.github.camille.server.database.service.*;
 import com.github.camille.server.remote.CallingMethod;
 import com.github.camille.server.remote.parm.AddressParm;
 import com.github.camille.server.remote.parm.entity.Address;
-import com.github.camille.server.timer.util.TimerUtil;
 import org.quartz.JobExecutionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,10 +42,10 @@ public class UpdateJob extends QuartzJobBean {
         for (Address address : address.getServe()) {
             String addressAddress = address.getAddress();
             try {
-                CpuEntity cpuInfo = CallingMethod.getCpuInfo(addressAddress);
-                MemEntity memEntity = CallingMethod.getMemoryUsage(addressAddress);
-                DiskEntity diskEntity = CallingMethod.getDiskInfo(addressAddress);
-                NetEntity netEntity = CallingMethod.getNetInfo(addressAddress);
+                CpuEntityDTO cpuInfo = CallingMethod.getCpuInfo(addressAddress);
+                MemEntityDTO memEntity = CallingMethod.getMemoryUsage(addressAddress);
+                DiskEntityDTO diskEntity = CallingMethod.getDiskInfo(addressAddress);
+                NetEntityDTO netEntity = CallingMethod.getNetInfo(addressAddress);
                 Instant instant = Instant.now();
                 //写入系统当前CPU使用信息
                 cpuService.write(addressAddress, instant, cpuInfo);

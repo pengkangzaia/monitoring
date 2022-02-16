@@ -7,7 +7,7 @@ import lombok.Data;
  * @create 2022-02-15 20:06
  **/
 @Data
-public class NetEntity {
+public class NetEntityDTO {
 
     /**
      * 接收数据包
@@ -34,7 +34,7 @@ public class NetEntity {
      */
     private Integer tcpConnect;
 
-    public NetEntity(Double receivePacket, Double sendPacket, Double receive, Double send, Integer tcpConnect) {
+    public NetEntityDTO(Double receivePacket, Double sendPacket, Double receive, Double send, Integer tcpConnect) {
         this.receivePacket = receivePacket;
         this.sendPacket = sendPacket;
         this.receive = receive;

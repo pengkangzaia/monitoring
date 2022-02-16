@@ -1,6 +1,6 @@
 package com.github.camille.client.core.order;
 
-import com.github.camille.client.core.entity.DiskEntity;
+import com.github.camille.client.core.entity.DiskEntityDTO;
 import com.github.camille.client.core.cmd.ExecuteCmd;
 
 /**
@@ -9,7 +9,7 @@ import com.github.camille.client.core.cmd.ExecuteCmd;
  **/
 public class DiskInfo {
 
-    public static DiskEntity usage() {
+    public static DiskEntityDTO usage() {
         // rio,wio,rkb,wkb,
         String rio = ExecuteCmd.execute(new String[]{"sh","-c","iostat -d -x | awk 'NR > 3 {print $2}' | awk '{sum += $1};END {print sum}'"});
         rio = replaceLineBreak(rio);
@@ -28,7 +28,7 @@ public class DiskInfo {
         svctm = replaceLineBreak(svctm);
         String util = ExecuteCmd.execute(new String[]{"sh","-c","iostat -d -x | awk 'NR > 3 {print $16}' | awk '{sum += $1};END {print sum/(NR-1)}'"});
         util = replaceLineBreak(util);
-        return new DiskEntity(rio, wio, rkb, wkb, rAwiat, wAwiat, svctm, util);
+        return new DiskEntityDTO(rio, wio, rkb, wkb, rAwiat, wAwiat, svctm, util);
     }
 
     public static String replaceLineBreak(String origin) {

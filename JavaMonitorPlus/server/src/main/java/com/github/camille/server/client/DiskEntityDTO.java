@@ -1,4 +1,4 @@
-package com.github.camille.client.core.entity;
+package com.github.camille.server.client;
 
 import lombok.Data;
 
@@ -7,7 +7,7 @@ import lombok.Data;
  * @create 2022-01-16 12:54
  **/
 @Data
-public class DiskEntity {
+public class DiskEntityDTO {
 
     // 每秒完成的读I/O设备次数（所有设备求和）
     private String rio;
@@ -26,7 +26,7 @@ public class DiskEntity {
     // 一秒中CPU有多少时间用于I/O操作（所有设备求平均）
     private String util;
 
-    public DiskEntity(String rio, String wio, String rkb, String wkb, String rAwait, String wAwait, String svctm, String util) {
+    public DiskEntityDTO(String rio, String wio, String rkb, String wkb, String rAwait, String wAwait, String svctm, String util) {
         this.rio = rio;
         this.wio = wio;
         this.rkb = rkb;
