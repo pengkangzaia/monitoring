@@ -23,6 +23,8 @@ public class GreetingController {
     private MemoryService memoryService;
     @Autowired
     private DiskService diskService;
+    @Autowired
+    private NetworkService networkService;
 
     @MessageMapping("/cpu")
     @SendTo("/topic/cpu")
@@ -42,4 +44,9 @@ public class GreetingController {
         return diskService.findAllByAddress(message.getAddress());
     }
 
+    @MessageMapping("/network")
+    @SendTo("/topic/network")
+    public List<NetEntity> socketNetwork(Message message) {
+        return networkService.findAllByAddress(message.getAddress());
+    }
 }

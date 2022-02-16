@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.List;
 
 /**
  * @author pengkangzaia@foxmail.com
@@ -29,5 +30,10 @@ public class NetworkService {
         netEntity.setSend(net.getSend());
         netEntity.setTcpCount(net.getTcpConnect());
         netDao.save(netEntity);
+    }
+
+
+    public List<NetEntity> findAllByAddress(String address) {
+        return netDao.findAllByAddress(address);
     }
 }

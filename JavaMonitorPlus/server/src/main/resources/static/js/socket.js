@@ -111,6 +111,23 @@ function disk() {
     });
 }
 
+function net() {
+    var socket = new SockJS('/websocket');
+    var stompClient = Stomp.over(socket);
+    stompClient.connect({}, function (frame) {
+        stompClient.subscribe('/topic/network', function (d) {
+            var data = JSON.parse(d.body)
+            netRetx(data)
+            netRetxPacket(data)
+            netTcpCount(data)
+            setTimeout(function () {
+                stompClient.send("/app/network", {}, JSON.stringify({"address":address}));
+            }, interval_time);
+        });
+        stompClient.send("/app/network", {}, JSON.stringify({"address":address}));
+    });
+}
+
 //链接
 gc()
 cl()
@@ -118,6 +135,7 @@ thread()
 cpu()
 memory()
 disk()
+net()
 
 //设置频率
 $("#pinlv").click(function () {
