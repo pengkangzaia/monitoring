@@ -1,6 +1,6 @@
 package com.github.camille.server.database.dao;
 
-import com.github.camille.server.database.entity.data.HardDiskEntity;
+import com.github.camille.server.database.entity.data.DiskEntity;
 import com.github.camille.server.database.entity.statistic.MinMaxDiskMetric;
 import com.influxdb.client.InfluxDBClient;
 import com.influxdb.client.InfluxDBClientFactory;
@@ -34,7 +34,7 @@ public class DiskDao {
     @Value("${influx.bucket}")
     public String bucket;
 
-    public List<HardDiskEntity> findAllByAddress(String address) {
+    public List<DiskEntity> findAllByAddress(String address) {
         InfluxDBClient client = InfluxDBClientFactory.create(url, token.toCharArray(), org, bucket);
         String flux = "from(bucket:\"monitor\")" +
                 " |> range(start: -1mo) " +
@@ -44,11 +44,11 @@ public class DiskDao {
                 "|> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")";
         QueryApi queryApi = client.getQueryApi();
         List<FluxTable> tables = queryApi.query(flux);
-        List<HardDiskEntity> res = new ArrayList<>();
+        List<DiskEntity> res = new ArrayList<>();
         FluxTable table = tables.get(0);
         List<FluxRecord> records = table.getRecords();
         for (FluxRecord record : records) {
-            HardDiskEntity diskEntity = new HardDiskEntity();
+            DiskEntity diskEntity = new DiskEntity();
             diskEntity.setDate(record.getTime());
             diskEntity.setAddress((String) record.getValueByKey("address"));
             diskEntity.setRio((Double) record.getValueByKey("rio"));
@@ -65,7 +65,7 @@ public class DiskDao {
         return res;
     }
 
-    public void save(HardDiskEntity hardDiskEntity) {
+    public void save(DiskEntity hardDiskEntity) {
         InfluxDBClient client = InfluxDBClientFactory.create(url, token.toCharArray(), org, bucket);
         // 写数据
         WriteApiBlocking writeApi = client.getWriteApiBlocking();
@@ -81,7 +81,7 @@ public class DiskDao {
         return null;
     }
 
-    public List<HardDiskEntity> selectLimitByAddress(String address, int limit) {
+    public List<DiskEntity> selectLimitByAddress(String address, int limit) {
         InfluxDBClient client = InfluxDBClientFactory.create(url, token.toCharArray(), org, bucket);
         String flux = "from(bucket: \"monitor\")\n" +
                 "  |> range(start: -1mo)\n" +
@@ -91,11 +91,11 @@ public class DiskDao {
                 "  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")";
         QueryApi queryApi = client.getQueryApi();
         List<FluxTable> tables = queryApi.query(flux);
-        List<HardDiskEntity> res = new ArrayList<>();
+        List<DiskEntity> res = new ArrayList<>();
         FluxTable table = tables.get(0);
         List<FluxRecord> records = table.getRecords();
         for (FluxRecord record : records) {
-            HardDiskEntity diskEntity = new HardDiskEntity();
+            DiskEntity diskEntity = new DiskEntity();
             diskEntity.setDate(record.getTime());
             diskEntity.setAddress((String) record.getValueByKey("address"));
             diskEntity.setRio((Double) record.getValueByKey("rio"));

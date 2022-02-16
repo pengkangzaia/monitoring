@@ -6,7 +6,7 @@ import com.github.camille.server.database.entity.Host;
 import com.github.camille.server.database.entity.alarm.AlarmConditionConfig;
 import com.github.camille.server.database.entity.alarm.AlarmConfig;
 import com.github.camille.server.database.entity.data.CPUEntity;
-import com.github.camille.server.database.entity.data.HardDiskEntity;
+import com.github.camille.server.database.entity.data.DiskEntity;
 import com.github.camille.server.database.entity.data.MemEntity;
 import com.github.camille.server.database.entity.user.User;
 import com.github.camille.server.database.service.*;
@@ -99,7 +99,7 @@ public class PredictJob extends QuartzJobBean {
     public void dynamicPred(AlarmConfig alarmConfig, String address) {
         List<CPUEntity> cpuEntities = cpuService.selectPredictData(address, slidingWindowSize);
         List<MemEntity> memoryEntities = memoryService.selectPredictData(address, slidingWindowSize);
-        List<HardDiskEntity> diskEntities = diskService.selectPredictData(address, slidingWindowSize);
+        List<DiskEntity> diskEntities = diskService.selectPredictData(address, slidingWindowSize);
         if (cpuEntities == null || memoryEntities == null || diskEntities == null) {
             logger.warn("数据库中无数据，无法预测");
         }
@@ -120,7 +120,7 @@ public class PredictJob extends QuartzJobBean {
                 list.add(memoryEntity.getUsed());
                 list.add(memoryEntity.getUsedPercent());
                 // 磁盘
-                HardDiskEntity diskEntity = diskEntities.get(i);
+                DiskEntity diskEntity = diskEntities.get(i);
                 list.add(diskEntity.getRio());
                 list.add(diskEntity.getWio());
                 list.add(diskEntity.getRkb());

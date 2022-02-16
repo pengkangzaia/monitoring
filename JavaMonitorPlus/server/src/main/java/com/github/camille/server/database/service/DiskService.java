@@ -1,8 +1,7 @@
 package com.github.camille.server.database.service;
 
-import com.github.camille.server.client.DiskEntity;
 import com.github.camille.server.database.dao.DiskDao;
-import com.github.camille.server.database.entity.data.HardDiskEntity;
+import com.github.camille.server.database.entity.data.DiskEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,12 +18,12 @@ public class DiskService {
     @Autowired
     private DiskDao diskDao;
 
-    public List<HardDiskEntity> findAllByAddress(String address) {
+    public List<DiskEntity> findAllByAddress(String address) {
         return diskDao.findAllByAddress(address);
     }
 
-    public void write(String address, String data, DiskEntity diskEntity) {
-        HardDiskEntity hardDiskEntity = new HardDiskEntity();
+    public void write(String address, String data, com.github.camille.server.client.DiskEntity diskEntity) {
+        DiskEntity hardDiskEntity = new DiskEntity();
         hardDiskEntity.setAddress(address);
         hardDiskEntity.setDate(Instant.now());
         hardDiskEntity.setRio(Double.valueOf(diskEntity.getRio()));
@@ -42,7 +41,7 @@ public class DiskService {
         diskDao.deleteAll();
     }
 
-    public List<HardDiskEntity> selectPredictData(String address, int slidingWindowSize) {
+    public List<DiskEntity> selectPredictData(String address, int slidingWindowSize) {
         return diskDao.selectLimitByAddress(address, slidingWindowSize);
     }
 

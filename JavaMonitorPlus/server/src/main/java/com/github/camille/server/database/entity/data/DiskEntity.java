@@ -12,7 +12,7 @@ import java.time.Instant;
  **/
 @Data
 @Measurement(name = "disk")
-public class HardDiskEntity {
+public class DiskEntity {
 
     @Column(tag = true)
     private String address;

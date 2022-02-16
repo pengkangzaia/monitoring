@@ -38,7 +38,7 @@ public class GreetingController {
 
     @MessageMapping("/disk")
     @SendTo("/topic/disk")
-    public List<HardDiskEntity> socketDisk(Message message) {
+    public List<DiskEntity> socketDisk(Message message) {
         return diskService.findAllByAddress(message.getAddress());
     }
 
