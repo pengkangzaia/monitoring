@@ -1,8 +1,7 @@
 package com.github.camille.server.database.service;
 
-import com.github.camille.server.core.entity.MemoryEntity;
+import com.github.camille.server.client.MemEntity;
 import com.github.camille.server.database.dao.MemoryDao;
-import com.github.camille.server.database.entity.data.MemEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,17 +19,17 @@ public class MemoryService {
     private MemoryDao memoryDao;
 
 
-    public List<MemEntity> findAllByAddress(String address) {
+    public List<com.github.camille.server.database.entity.data.MemEntity> findAllByAddress(String address) {
         return memoryDao.findAllByAddress(address);
     }
 
 
-    public void write(String address, String date, MemoryEntity memoryEntity) {
-        MemEntity entity = new MemEntity();
+    public void write(String address, String date, MemEntity memEntity) {
+        com.github.camille.server.database.entity.data.MemEntity entity = new com.github.camille.server.database.entity.data.MemEntity();
         entity.setAddress(address);
         entity.setDate(Instant.now());
-        entity.setUsed(Double.valueOf(memoryEntity.getUsed()));
-        entity.setUsedPercent(Double.valueOf(memoryEntity.getUsedPercent()));
+        entity.setUsed(Double.valueOf(memEntity.getUsed()));
+        entity.setUsedPercent(Double.valueOf(memEntity.getUsedPercent()));
         memoryDao.save(entity);
     }
 
@@ -39,7 +38,7 @@ public class MemoryService {
     }
 
 
-    public List<MemEntity> selectPredictData(String address, int slidingWindowSize) {
+    public List<com.github.camille.server.database.entity.data.MemEntity> selectPredictData(String address, int slidingWindowSize) {
         return memoryDao.selectLimitByAddress(address, slidingWindowSize);
     }
 

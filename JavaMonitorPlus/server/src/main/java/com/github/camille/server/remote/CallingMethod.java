@@ -1,7 +1,9 @@
 package com.github.camille.server.remote;
 
 import com.alibaba.fastjson.JSON;
-import com.github.camille.server.core.entity.*;
+import com.github.camille.server.client.CpuEntity;
+import com.github.camille.server.client.DiskEntity;
+import com.github.camille.server.client.MemEntity;
 import com.github.camille.server.remote.util.HttpUtil;
 
 import java.io.IOException;
@@ -23,28 +25,17 @@ public class CallingMethod {
         return connectHost(url);
     }
 
-    public static JinfoEntity getInfo(String address, String id) throws IOException {
-        String url = address + "/info" + "?id=" + id;
-        String body = connectHost(url);
-        return JSON.parseObject(body,JinfoEntity.class);
-    }
 
-    public static JstackEntity getJstack(String address, String id) throws IOException {
-        String url = address + "/jstack" + "?id=" + id;
-        String body = connectHost(url);
-        return JSON.parseObject(body,JstackEntity.class);
-    }
-
-    public static CpuInfoEntity getCpuInfo(String address) throws IOException {
+    public static CpuEntity getCpuInfo(String address) throws IOException {
         String url = address + "/cpuLoadInfo";
         String body = connectHost(url);
-        return JSON.parseObject(body, CpuInfoEntity.class);
+        return JSON.parseObject(body, CpuEntity.class);
     }
 
-    public static MemoryEntity getMemoryUsage(String address) throws IOException {
+    public static MemEntity getMemoryUsage(String address) throws IOException {
         String url = address + "/memUsage";
         String body = connectHost(url);
-        return JSON.parseObject(body, MemoryEntity.class);
+        return JSON.parseObject(body, MemEntity.class);
     }
 
     public static DiskEntity getDiskInfo(String address) throws IOException {
@@ -54,32 +45,9 @@ public class CallingMethod {
     }
 
 
-    public static Map<String, JpsEntity> getJps(String address) throws IOException {
-        String url = address + "/jps";
-        String body = connectHost(url);
-        return JSON.parseObject(body, Map.class);
-    }
-
-    public static List<KVEntity> getJstatClass(String address, String id) throws Exception {
-        String url = address + "/jstatclass" + "?id=" + id;
-        String body = connectHost(url);
-        return JSON.parseArray(body,KVEntity.class);
-    }
-
-    public static List<KVEntity> getJstatGc(String address, String id) throws Exception {
-        String url = address + "/jstatgc" + "?id=" + id;
-        String body = connectHost(url);
-        return JSON.parseArray(body,KVEntity.class);
-    }
-
-    public static List<KVEntity> getJstatUtil(String address, String id) throws Exception {
-        String url = address + "/jstatutil" + "?id=" + id;
-        String body = connectHost(url);
-        return JSON.parseArray(body,KVEntity.class);
-    }
-
     /**
      * 统一异常处理
+     *
      * @param url
      * @return
      * @throws IOException

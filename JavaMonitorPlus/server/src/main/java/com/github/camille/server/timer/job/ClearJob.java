@@ -16,23 +16,18 @@ public class ClearJob extends QuartzJobBean {
     private Logger logger = LoggerFactory.getLogger(getClass().getName());
 
     @Autowired
-    private GcService gcService;
-    @Autowired
-    private ClassService classService;
-    @Autowired
-    private ThreadService threadService;
-    @Autowired
     private CPUService cpuService;
     @Autowired
     private MemoryService memoryService;
+    @Autowired
+    private DiskService diskService;
+
 
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         logger.warn("Clear all data on a regular basis");
-        gcService.clearAll();
-        classService.clearAll();
-        threadService.clearAll();
         cpuService.clearAll();
         memoryService.clearAll();
+        diskService.clearAll();
     }
 }

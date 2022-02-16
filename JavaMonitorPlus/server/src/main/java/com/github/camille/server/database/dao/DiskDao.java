@@ -1,9 +1,6 @@
 package com.github.camille.server.database.dao;
 
-import com.github.camille.server.core.entity.DiskEntity;
-import com.github.camille.server.database.entity.data.CPUEntity;
 import com.github.camille.server.database.entity.data.HardDiskEntity;
-import com.github.camille.server.database.entity.data.MemEntity;
 import com.github.camille.server.database.entity.statistic.MinMaxDiskMetric;
 import com.influxdb.client.InfluxDBClient;
 import com.influxdb.client.InfluxDBClientFactory;
@@ -12,7 +9,6 @@ import com.influxdb.client.WriteApiBlocking;
 import com.influxdb.client.domain.WritePrecision;
 import com.influxdb.query.FluxRecord;
 import com.influxdb.query.FluxTable;
-import org.apache.ibatis.annotations.Mapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

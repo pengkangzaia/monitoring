@@ -1,4 +1,4 @@
-package com.github.camille.server.core.entity;
+package com.github.camille.server.client;
 
 import lombok.Data;
 
@@ -7,12 +7,12 @@ import lombok.Data;
  * @create 2021-11-06下午5:14
  **/
 @Data
-public class MemoryEntity {
+public class MemEntity {
 
     private String used;
     private String usedPercent;
 
-    public MemoryEntity(String used, String usedPercent) {
+    public MemEntity(String used, String usedPercent) {
         this.used = used;
         this.usedPercent = usedPercent;
     }

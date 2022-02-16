@@ -18,35 +18,11 @@ import java.util.List;
 public class GreetingController {
 
     @Autowired
-    private GcService gcService;
-    @Autowired
-    private ClassService classService;
-    @Autowired
-    private ThreadService threadService;
-    @Autowired
     private CPUService cpuService;
     @Autowired
     private MemoryService memoryService;
     @Autowired
     private DiskService diskService;
-
-    @MessageMapping("/gc")
-    @SendTo("/topic/gc")
-    public List<GcEntity> socketGc(Message message) {
-        return gcService.findAllByAddressAndName(message.getAddress(),message.getPid());
-    }
-
-    @MessageMapping("/class")
-    @SendTo("/topic/class")
-    public List<ClassLoadEntity> socketClass(Message message) throws Exception {
-        return classService.findAllByAddressAndName(message.getAddress(),message.getPid());
-    }
-
-    @MessageMapping("/thread")
-    @SendTo("/topic/thread")
-    public List<ThreadEntity> socketThread(Message message) throws Exception {
-        return threadService.findAllByAddressAndName(message.getAddress(),message.getPid());
-    }
 
     @MessageMapping("/cpu")
     @SendTo("/topic/cpu")

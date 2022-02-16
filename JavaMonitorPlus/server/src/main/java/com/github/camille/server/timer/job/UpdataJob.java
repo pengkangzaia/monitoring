@@ -1,7 +1,9 @@
 package com.github.camille.server.timer.job;
 
 
-import com.github.camille.server.core.entity.*;
+import com.github.camille.server.client.CpuEntity;
+import com.github.camille.server.client.DiskEntity;
+import com.github.camille.server.client.MemEntity;
 import com.github.camille.server.database.service.*;
 import com.github.camille.server.remote.CallingMethod;
 import com.github.camille.server.remote.parm.AddressParm;
@@ -13,20 +15,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
-import java.util.List;
-import java.util.Map;
-
 /**
  * Create by yster@foxmail.com 2018/11/11 0011 15:25
  */
 public class UpdataJob extends QuartzJobBean {
     private Logger logger = LoggerFactory.getLogger(getClass().getName());
-    @Autowired
-    private GcService gcService;
-    @Autowired
-    private ClassService classService;
-    @Autowired
-    private ThreadService threadService;
     @Autowired
     private CPUService cpuService;
     @Autowired
@@ -45,28 +38,13 @@ public class UpdataJob extends QuartzJobBean {
         for (Address address : address.getServe()) {
             String addressAddress = address.getAddress();
             try {
-                Map<String, JpsEntity> jps = CallingMethod.getJps(addressAddress);
-                Object[] s = jps.keySet().toArray();
-                for (Object o : s) {
-                    String id = o.toString();
-                    JstackEntity jstatk = CallingMethod.getJstack(addressAddress, id);
-                    List<KVEntity> jstatClass = CallingMethod.getJstatClass(addressAddress, id);
-                    List<KVEntity> jstatGc = CallingMethod.getJstatGc(addressAddress, id);
-                    String date = TimerUtil.now();
-                    //写入线程信息
-                    threadService.write(addressAddress, id, date, jstatk);
-                    //写入类加载信息
-                    classService.write(addressAddress, id, date, jstatClass);
-                    //写入堆内存信息
-                    gcService.write(addressAddress, id, date, jstatGc);
-                }
-                CpuInfoEntity cpuInfo = CallingMethod.getCpuInfo(addressAddress);
-                MemoryEntity memoryEntity = CallingMethod.getMemoryUsage(addressAddress);
+                CpuEntity cpuInfo = CallingMethod.getCpuInfo(addressAddress);
+                MemEntity memEntity = CallingMethod.getMemoryUsage(addressAddress);
                 DiskEntity diskEntity = CallingMethod.getDiskInfo(addressAddress);
                 //写入系统当前CPU使用信息
                 cpuService.write(addressAddress, TimerUtil.now(), cpuInfo);
                 //写入系统当前内存使用信息
-                memoryService.write(addressAddress, TimerUtil.now(), memoryEntity);
+                memoryService.write(addressAddress, TimerUtil.now(), memEntity);
                 diskService.write(addressAddress, TimerUtil.now(), diskEntity);
             } catch (Exception e) {
                 logger.error(e.getMessage());

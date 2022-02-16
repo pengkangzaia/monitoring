@@ -1,4 +1,4 @@
-package com.github.camille.server.core.entity;
+package com.github.camille.server.client;
 
 import lombok.Data;
 

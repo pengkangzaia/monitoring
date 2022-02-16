@@ -2,8 +2,6 @@ package com.github.camille.server.timer.job;
 
 import com.alibaba.fastjson.JSON;
 import com.github.camille.server.alarm.MailEntity;
-import com.github.camille.server.core.entity.DiskEntity;
-import com.github.camille.server.core.entity.MemoryEntity;
 import com.github.camille.server.database.entity.Host;
 import com.github.camille.server.database.entity.alarm.AlarmConditionConfig;
 import com.github.camille.server.database.entity.alarm.AlarmConfig;
@@ -12,7 +10,6 @@ import com.github.camille.server.database.entity.data.HardDiskEntity;
 import com.github.camille.server.database.entity.data.MemEntity;
 import com.github.camille.server.database.entity.user.User;
 import com.github.camille.server.database.service.*;
-import com.github.camille.server.remote.parm.AddressParm;
 import com.github.camille.server.remote.util.HttpClient;
 import com.github.camille.server.util.ConditionDiagnotor;
 import com.github.camille.server.util.MonitorConstant;
@@ -27,7 +24,6 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author pengkangzaia@foxmail.com

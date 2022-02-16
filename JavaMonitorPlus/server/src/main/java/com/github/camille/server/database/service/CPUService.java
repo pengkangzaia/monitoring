@@ -1,13 +1,12 @@
 package com.github.camille.server.database.service;
 
-import com.github.camille.server.core.entity.CpuInfoEntity;
+import com.github.camille.server.client.CpuEntity;
 import com.github.camille.server.database.dao.CPUDao;
 import com.github.camille.server.database.entity.data.CPUEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,7 +24,7 @@ public class CPUService {
     }
 
 
-    public void write(String address, String date, CpuInfoEntity cpuInfo) {
+    public void write(String address, String date, CpuEntity cpuInfo) {
         CPUEntity entity = new CPUEntity();
         entity.setAddress(address);
         entity.setDate(Instant.now());

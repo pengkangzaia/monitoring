@@ -1,6 +1,6 @@
 package com.github.camille.server.database.service;
 
-import com.github.camille.server.core.entity.DiskEntity;
+import com.github.camille.server.client.DiskEntity;
 import com.github.camille.server.database.dao.DiskDao;
 import com.github.camille.server.database.entity.data.HardDiskEntity;
 import org.springframework.beans.factory.annotation.Autowired;
