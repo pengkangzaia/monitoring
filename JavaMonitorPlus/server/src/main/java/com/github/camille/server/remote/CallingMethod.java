@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.github.camille.server.client.CpuEntity;
 import com.github.camille.server.client.DiskEntity;
 import com.github.camille.server.client.MemEntity;
+import com.github.camille.server.client.NetEntity;
 import com.github.camille.server.remote.util.HttpUtil;
 
 import java.io.IOException;
@@ -45,6 +46,13 @@ public class CallingMethod {
     }
 
 
+    public static NetEntity getNetInfo(String address) throws IOException {
+        String url = address + "/network";
+        String body = connectHost(url);
+        return JSON.parseObject(body, NetEntity.class);
+    }
+
+
     /**
      * 统一异常处理
      *
@@ -59,4 +67,5 @@ public class CallingMethod {
             throw new IOException("连接主机异常：" + url, e);
         }
     }
+
 }

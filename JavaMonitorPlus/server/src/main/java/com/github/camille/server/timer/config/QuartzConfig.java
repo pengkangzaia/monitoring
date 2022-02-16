@@ -2,7 +2,7 @@ package com.github.camille.server.timer.config;
 
 import com.github.camille.server.timer.job.ClearJob;
 import com.github.camille.server.timer.job.PredictJob;
-import com.github.camille.server.timer.job.UpdataJob;
+import com.github.camille.server.timer.job.UpdateJob;
 import com.github.camille.server.timer.parm.CronParm;
 import org.quartz.*;
 import org.slf4j.Logger;
@@ -41,7 +41,7 @@ public class QuartzConfig {
 
     @Bean
     public JobDetail updataQuartzDetail() {
-        return JobBuilder.newJob(UpdataJob.class).withIdentity("updataJob").storeDurably().build();
+        return JobBuilder.newJob(UpdateJob.class).withIdentity("updataJob").storeDurably().build();
     }
 
     @Bean

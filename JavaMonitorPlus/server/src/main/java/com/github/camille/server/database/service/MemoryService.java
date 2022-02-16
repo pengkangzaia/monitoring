@@ -24,10 +24,10 @@ public class MemoryService {
     }
 
 
-    public void write(String address, String date, MemEntity memEntity) {
+    public void write(String address, Instant date, MemEntity memEntity) {
         com.github.camille.server.database.entity.data.MemEntity entity = new com.github.camille.server.database.entity.data.MemEntity();
         entity.setAddress(address);
-        entity.setDate(Instant.now());
+        entity.setDate(date);
         entity.setUsed(Double.valueOf(memEntity.getUsed()));
         entity.setUsedPercent(Double.valueOf(memEntity.getUsedPercent()));
         memoryDao.save(entity);

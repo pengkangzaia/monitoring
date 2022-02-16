@@ -22,10 +22,10 @@ public class DiskService {
         return diskDao.findAllByAddress(address);
     }
 
-    public void write(String address, String data, com.github.camille.server.client.DiskEntity diskEntity) {
+    public void write(String address, Instant date, com.github.camille.server.client.DiskEntity diskEntity) {
         DiskEntity hardDiskEntity = new DiskEntity();
         hardDiskEntity.setAddress(address);
-        hardDiskEntity.setDate(Instant.now());
+        hardDiskEntity.setDate(date);
         hardDiskEntity.setRio(Double.valueOf(diskEntity.getRio()));
         hardDiskEntity.setWio(Double.valueOf(diskEntity.getWio()));
         hardDiskEntity.setRkb(Double.valueOf(diskEntity.getRkb()));

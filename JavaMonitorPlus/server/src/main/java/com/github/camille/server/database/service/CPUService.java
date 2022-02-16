@@ -24,10 +24,10 @@ public class CPUService {
     }
 
 
-    public void write(String address, String date, CpuEntity cpuInfo) {
+    public void write(String address, Instant date, CpuEntity cpuInfo) {
         CPUEntity entity = new CPUEntity();
         entity.setAddress(address);
-        entity.setDate(Instant.now());
+        entity.setDate(date);
         entity.setCpuUsage(cpuInfo.getCpuUsage());
         entity.setOneMinuteLoad(Double.valueOf(cpuInfo.getOneMinuteLoad()));
         entity.setFiveMinuteLoad(Double.valueOf(cpuInfo.getFiveMinuteLoad()));
