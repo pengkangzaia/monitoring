@@ -7,7 +7,7 @@ import lombok.Data;
  * @create 2021-10-31下午6:50
  **/
 @Data
-public class CpuInfoEntity {
+public class CpuEntity {
 
     /**
      * CPU利用率
@@ -26,7 +26,7 @@ public class CpuInfoEntity {
      */
     private String fifteenMinuteLoad;
 
-    public CpuInfoEntity(double cpuUsage, String oneMinuteLoad, String fiveMinuteLoad, String fifteenMinuteLoad) {
+    public CpuEntity(double cpuUsage, String oneMinuteLoad, String fiveMinuteLoad, String fifteenMinuteLoad) {
         this.cpuUsage = cpuUsage;
         this.oneMinuteLoad = oneMinuteLoad;
         this.fiveMinuteLoad = fiveMinuteLoad;

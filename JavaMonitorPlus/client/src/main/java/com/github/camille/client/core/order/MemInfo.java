@@ -1,15 +1,15 @@
 package com.github.camille.client.core.order;
 
-import com.github.camille.client.core.entity.MemoryEntity;
+import com.github.camille.client.core.entity.MemEntity;
 import com.github.camille.client.core.cmd.ExecuteCmd;
 
 /**
  * @author pengkangzaia@foxmail.com
  * @create 2021-10-31 15:32
  **/
-public class MemUsage {
+public class MemInfo {
 
-    public static MemoryEntity usage() {
+    public static MemEntity usage() {
         String memUsedPercent = ExecuteCmd.execute(new String[]{"sh","-c","free -m | grep Mem | awk '{print $3 / $2}'"});
         if (memUsedPercent != null) {
             memUsedPercent = memUsedPercent.replaceAll("\n", "");
@@ -18,11 +18,11 @@ public class MemUsage {
         if (memUsed != null) {
             memUsed = memUsed.replaceAll("\n", "");
         }
-        return new MemoryEntity(memUsed, memUsedPercent);
+        return new MemEntity(memUsed, memUsedPercent);
     }
 
     public static void main(String[] args) {
-        MemoryEntity usage = usage();
+        MemEntity usage = usage();
         System.out.println(usage);
     }
 

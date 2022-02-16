@@ -4,7 +4,6 @@ import com.github.camille.client.core.cmd.ExecuteCmd;
 import com.github.camille.client.core.entity.NetEntity;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * @author pengkangzaia@foxmail.com
@@ -21,14 +20,7 @@ public class NetInfo {
         }
         String tcpCount = ExecuteCmd.execute(new String[]{"sh", "-c", "netstat -n | grep tcp | wc -l"});
         tcpCount = tcpCount.replace("\n", "");
-        NetEntity netEntity = new NetEntity(values.get(0), values.get(1), values.get(2), values.get(3), Integer.parseInt(tcpCount));
-        return netEntity;
-    }
-
-    public static void main(String[] args) {
-        String s = "40\n".replace("\n", "");
-        int ans = Integer.parseInt(s);
-        System.out.println(ans);
+        return new NetEntity(values.get(0), values.get(1), values.get(2), values.get(3), Integer.parseInt(tcpCount));
     }
 
 }
