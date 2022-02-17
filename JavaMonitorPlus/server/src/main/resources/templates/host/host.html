@@ -64,6 +64,7 @@
                     {field: 'name', title: '主机名'},
                     {field: 'ip', title: 'IP地址', sort: true},
                     {field: 'desc', title: '备注'},
+                    {field: 'agentPort', hide: true},
                     {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
                 ]
             ],
@@ -112,7 +113,7 @@
                     maxmin: true,
                     shadeClose: true,
                     area: ['100%', '100%'],
-                    content: '/monitor?address=' + data.ip
+                    content: '/monitor?address=' + 'http://' + data.ip + ':' + data.agentPort
                 });
                 $(window).on("resize", function () {
                     layer.full(index);

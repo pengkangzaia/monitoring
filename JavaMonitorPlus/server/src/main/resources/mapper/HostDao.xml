@@ -5,11 +5,11 @@
 <mapper namespace="com.github.camille.server.database.dao.HostDao">
 
     <sql id="selectFields">
-        id, `name`, ip, `desc`
+        id, `name`, ip, `desc`, agent_port
     </sql>
 
     <sql id="insertFields">
-        `name`, ip, `desc`
+        `name`, ip, `desc`, agent_port
     </sql>
     <insert id="insert">
         insert into host(<include refid="insertFields"></include>)
