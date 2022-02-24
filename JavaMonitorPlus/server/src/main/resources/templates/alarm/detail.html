@@ -16,7 +16,8 @@
             <div class="layui-form-item">
                 <label class="layui-form-label required">策略名称</label>
                 <div class="layui-input-block">
-                    <input type="text" name="name" lay-verify="required" lay-reqtext="策略名称不能为空" th:value="${config.name}"
+                    <input type="text" name="name" lay-verify="required" lay-reqtext="策略名称不能为空"
+                           th:value="${config.name}"
                            class="layui-input">
                 </div>
             </div>
@@ -37,9 +38,11 @@
             <div class="layui-form-item">
                 <label class="layui-form-label required">阈值类型</label>
                 <div class="layui-input-block">
-                    <input type="radio" name="dynamic" value="1" title="动态" th:attr="checked=${config.dynamic?true:false}"
+                    <input type="radio" name="dynamic" value="1" title="动态"
+                           th:attr="checked=${config.dynamic?true:false}"
                            lay-filter="dym">
-                    <input type="radio" name="dynamic" value="0" title="静态" th:attr="checked=${!config.dynamic?true:false}"
+                    <input type="radio" name="dynamic" value="0" title="静态"
+                           th:attr="checked=${!config.dynamic?true:false}"
                            lay-filter="static">
                 </div>
             </div>
