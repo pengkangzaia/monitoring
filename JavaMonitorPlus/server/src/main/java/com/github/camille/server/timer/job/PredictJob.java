@@ -97,49 +97,12 @@ public class PredictJob extends QuartzJobBean {
     }
 
     public void dynamicPred(AlarmConfig alarmConfig, String address) {
-        List<CPUEntity> cpuEntities = cpuService.selectPredictData(address, slidingWindowSize);
-        List<MemEntity> memoryEntities = memoryService.selectPredictData(address, slidingWindowSize);
-        List<DiskEntity> diskEntities = diskService.selectPredictData(address, slidingWindowSize);
-        if (cpuEntities == null || memoryEntities == null || diskEntities == null) {
-            logger.warn("数据库中无数据，无法预测");
-        }
-        if (cpuEntities.size() == memoryEntities.size() && cpuEntities.size() == diskEntities.size()) {
-            // 整合数据
-            ArrayList<ArrayList<Double>> res = new ArrayList<>();
-            int size = cpuEntities.size();
-            for (int i = 0; i < size; i++) {
-                ArrayList<Double> list = new ArrayList<>();
-                // CPU
-                CPUEntity cpuEntity = cpuEntities.get(i);
-                list.add(cpuEntity.getCpuUsage());
-                list.add(cpuEntity.getOneMinuteLoad());
-                list.add(cpuEntity.getFiveMinuteLoad());
-                list.add(cpuEntity.getFifteenMinuteLoad());
-                // 内存
-                MemEntity memoryEntity = memoryEntities.get(i);
-                list.add(memoryEntity.getUsed());
-                list.add(memoryEntity.getUsedPercent());
-                // 磁盘
-                DiskEntity diskEntity = diskEntities.get(i);
-                list.add(diskEntity.getRio());
-                list.add(diskEntity.getWio());
-                list.add(diskEntity.getRkb());
-                list.add(diskEntity.getWkb());
-                list.add(diskEntity.getRAwait());
-                list.add(diskEntity.getWAwait());
-                list.add(diskEntity.getSvctm());
-                list.add(diskEntity.getUtil());
-                res.add(list);
-            }
-            // 发送POST请求
-            String response = HttpClient.doPost(modelPredUrl, JSON.toJSONString(res), null, "POST");
-            response = response.replaceAll("\r\n", "");
-            logger.info("主机地址：" + address + " 模型反馈：" + response);
-            if ("1".equals(response)) {
-                sendAlarm(alarmConfig, address);
-            }
-            // 大小不相等，无法预测
-            logger.warn("数据库中数据不足，当前无法预测，请稍后再试");
+        // 发送GET请求
+        String response = HttpClient.doGet(modelPredUrl + "?ip=127.0.0.1");
+        response = response.replaceAll("\r\n", "");
+        logger.info("主机地址：" + address + " 模型反馈：" + response);
+        if ("1".equals(response)) {
+            sendAlarm(alarmConfig, address);
         }
     }
 
