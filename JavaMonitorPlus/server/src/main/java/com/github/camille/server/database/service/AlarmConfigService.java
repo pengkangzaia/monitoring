@@ -4,10 +4,12 @@ import com.github.camille.server.controller.dto.Condition;
 import com.github.camille.server.database.dao.AlarmConditionConfigDao;
 import com.github.camille.server.database.dao.AlarmConfigDao;
 import com.github.camille.server.database.dao.AlarmUserConfigDao;
+import com.github.camille.server.database.entity.Host;
 import com.github.camille.server.database.entity.alarm.AlarmConditionConfig;
 import com.github.camille.server.database.entity.alarm.AlarmConfig;
 import com.github.camille.server.database.entity.alarm.AlarmUserConfig;
 import com.github.camille.server.database.entity.user.User;
+import com.github.camille.server.remote.util.HttpClient;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,16 +27,25 @@ import java.util.stream.Collectors;
 public class AlarmConfigService {
 
     @Autowired
+    private UserService userService;
+    @Autowired
+    private HostService hostService;
+    @Autowired
     private AlarmConfigDao alarmConfigDao;
     @Autowired
     private AlarmUserConfigDao alarmUserConfigDao;
     @Autowired
     private AlarmConditionConfigDao alarmConditionConfigDao;
-    @Autowired
-    private UserService userService;
 
     public int saveConfig(AlarmConfig config) {
         int res = alarmConfigDao.insertConfig(config);
+        if (config.isDynamic()) {
+            // todo 创建模型
+            Host host = hostService.selectById(config.getHostId());
+            // ip暂时作为主机唯一标识
+            String ip = host.getIp();
+            HttpClient.doGet("http://127.0.0.1:5000/train?ip=" + ip);
+        }
         return res;
     }
 

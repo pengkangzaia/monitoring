@@ -39,6 +39,7 @@ public class UpdateJob extends QuartzJobBean {
             throw new RuntimeException("没有配置要监控的远程主机");
         }
         logger.debug("Regularly updated data...");
+        Instant instant = Instant.now();
         for (Address address : address.getServe()) {
             String addressAddress = address.getAddress();
             try {
@@ -46,7 +47,6 @@ public class UpdateJob extends QuartzJobBean {
                 MemEntityDTO memEntity = CallingMethod.getMemoryUsage(addressAddress);
                 DiskEntityDTO diskEntity = CallingMethod.getDiskInfo(addressAddress);
                 NetEntityDTO netEntity = CallingMethod.getNetInfo(addressAddress);
-                Instant instant = Instant.now();
                 //写入系统当前CPU使用信息
                 cpuService.write(addressAddress, instant, cpuInfo);
                 //写入系统当前内存使用信息

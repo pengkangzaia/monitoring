@@ -52,9 +52,12 @@ public class AlarmController extends BaseController {
         config.setDynamic(Objects.equals(alarmConfigDTO.getDynamic(), 1));
         config.setEmailNotice(Objects.equals(alarmConfigDTO.getEmailNotice(), 1));
         config.setPhoneNotice(Objects.equals(alarmConfigDTO.getPhoneNotice(), 1));
+        // 基本配置
         alarmConfigService.saveConfig(config);
         int noticeUserId = alarmConfigDTO.getNoticeUserId();
+        // 通知用户
         alarmConfigService.saveNoticeUser(config.getId(), noticeUserId);
+        // 静态报警条件
         alarmConfigService.saveCondition(alarmConfigDTO.getConditions(), config.getId());
         return getResponse(0, "添加成功");
     }
