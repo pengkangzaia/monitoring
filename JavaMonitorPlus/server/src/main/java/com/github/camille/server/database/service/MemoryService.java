@@ -39,10 +39,6 @@ public class MemoryService {
     }
 
 
-    public List<MemEntity> selectPredictData(String address, int slidingWindowSize) {
-        return memoryDao.selectLimitByAddress(address, slidingWindowSize);
-    }
-
     public List<Double> selectDataByColumnName(String address, Integer continuePeriod, String columnName) {
         return memoryDao.selectByColumn(address, continuePeriod, columnName);
     }

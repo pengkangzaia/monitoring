@@ -4,16 +4,13 @@ import com.github.camille.server.alarm.MailEntity;
 import com.github.camille.server.controller.dto.Condition;
 import com.github.camille.server.database.dao.*;
 import com.github.camille.server.database.entity.Host;
-import com.github.camille.server.database.entity.alarm.AlarmConditionConfig;
 import com.github.camille.server.database.entity.alarm.AlarmConfig;
 import com.github.camille.server.database.entity.data.CPUEntity;
 import com.github.camille.server.database.entity.data.Threshold;
-import com.github.camille.server.database.entity.statistic.MinMaxMetric;
 import com.github.camille.server.database.entity.user.User;
 import com.github.camille.server.database.service.AlarmConfigService;
 import com.github.camille.server.database.service.CPUService;
 import com.github.camille.server.database.service.MailService;
-import com.github.camille.server.database.service.StatisticsService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +29,6 @@ public class ServerApplicationTests {
     @Autowired
     private ThresholdDao thresholdDao;
     @Autowired
-    private StatisticsService statisticsService;
-    @Autowired
     private AlarmConfigDao alarmConfigDao;
     @Autowired
     private MailService mailService;
@@ -50,12 +45,6 @@ public class ServerApplicationTests {
     public void thresholdTest() {
         Threshold threshold = thresholdDao.getThresholdByAddress("http://101.35.159.221:8081");
         System.out.println(threshold);
-    }
-
-    @Test
-    public void statisticsTest() {
-        MinMaxMetric res = statisticsService.getMinMaxMetric("http://1.15.117.64:8081");
-        System.out.println(res);
     }
 
     @Test
@@ -138,24 +127,6 @@ public class ServerApplicationTests {
         System.out.println(res);
     }
 
-
-    @Autowired
-    private CPUDao cpuDao;
-
-    @Test
-    public void cpuInflux() {
-//        List<CPUEntity> res = cpuDao.findAllByAddress("http://1.15.117.64:8081");
-//        System.out.println(res.size());
-//        for (CPUEntity re : res) {
-//            System.out.println(re);
-//        }
-//        List<Double> cpuUsage = cpuDao.selectByColumn("http://1.15.117.64:8081", 10, "cpuUsage");
-//        System.out.println(cpuUsage);
-        List<CPUEntity> cpuEntities = cpuDao.selectLimitByAddress("http://1.15.117.64:8081", 10);
-        for (CPUEntity cpuEntity : cpuEntities) {
-            System.out.println(cpuEntity);
-        }
-    }
 
 
 }

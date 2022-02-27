@@ -1,7 +1,6 @@
 package com.github.camille.server.database.dao;
 
 import com.github.camille.server.database.entity.data.CPUEntity;
-import com.github.camille.server.database.entity.statistic.MinMaxCPUMetric;
 import com.influxdb.client.InfluxDBClient;
 import com.influxdb.client.InfluxDBClientFactory;
 import com.influxdb.client.QueryApi;
@@ -9,12 +8,10 @@ import com.influxdb.client.WriteApiBlocking;
 import com.influxdb.client.domain.WritePrecision;
 import com.influxdb.query.FluxRecord;
 import com.influxdb.query.FluxTable;
-import org.apache.ibatis.annotations.Mapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -76,40 +73,6 @@ public class CPUDao {
 
     }
 
-    //
-    public MinMaxCPUMetric selectMinMaxMetricByAddress(String address) {
-        return null;
-    }
-
-    //
-    public List<CPUEntity> selectLimitByAddress(String address, int limit) {
-        InfluxDBClient client = InfluxDBClientFactory.create(url, token.toCharArray(), org, bucket);
-        String flux = "from(bucket: \"monitor\")\n" +
-                "  |> range(start: -1mo)\n" +
-                "  |> filter(fn: (r) => r[\"_measurement\"] == \"cpu2\")\n" +
-                "  |> filter(fn: (r) => r[\"address\"] == \"" + address + "\")\n" +
-                "  |> limit(n: " + limit + ")" +
-                "  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")";
-        QueryApi queryApi = client.getQueryApi();
-        List<FluxTable> tables = queryApi.query(flux);
-        List<CPUEntity> res = new ArrayList<>();
-        FluxTable table = tables.get(0);
-        List<FluxRecord> records = table.getRecords();
-        for (FluxRecord record : records) {
-            CPUEntity cpuEntity = new CPUEntity();
-            cpuEntity.setDate(record.getTime());
-            cpuEntity.setAddress((String) record.getValueByKey("address"));
-            cpuEntity.setCpuUsage((Double) record.getValueByKey("cpuUsage"));
-            cpuEntity.setOneMinuteLoad((Double) record.getValueByKey("oneMinuteLoad"));
-            cpuEntity.setFiveMinuteLoad((Double) record.getValueByKey("fiveMinuteLoad"));
-            cpuEntity.setFifteenMinuteLoad((Double) record.getValueByKey("fifteenMinuteLoad"));
-            res.add(cpuEntity);
-        }
-        client.close();
-        return res;
-    }
-
-    //
     public List<Double> selectByColumn(String address, Integer limit, String columnName) {
         InfluxDBClient client = InfluxDBClientFactory.create(url, token.toCharArray(), org, bucket);
         String flux = "from(bucket: \"monitor\")\n" +

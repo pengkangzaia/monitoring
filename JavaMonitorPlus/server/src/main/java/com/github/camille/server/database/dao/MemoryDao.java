@@ -1,7 +1,6 @@
 package com.github.camille.server.database.dao;
 
 import com.github.camille.server.database.entity.data.MemEntity;
-import com.github.camille.server.database.entity.statistic.MinMaxMemMetric;
 import com.influxdb.client.InfluxDBClient;
 import com.influxdb.client.InfluxDBClientFactory;
 import com.influxdb.client.QueryApi;
@@ -71,34 +70,6 @@ public class MemoryDao {
 
     }
 
-    public MinMaxMemMetric selectMinMaxMetricByAddress(String address) {
-        return null;
-    }
-
-    public List<MemEntity> selectLimitByAddress(String address, int limit) {
-        InfluxDBClient client = InfluxDBClientFactory.create(url, token.toCharArray(), org, bucket);
-        String flux = "from(bucket: \"monitor\")\n" +
-                "  |> range(start: -1mo)\n" +
-                "  |> filter(fn: (r) => r[\"_measurement\"] == \"memory\")\n" +
-                "  |> filter(fn: (r) => r[\"address\"] == \"" + address + "\")\n" +
-                "  |> limit(n: " + limit + ")" +
-                "  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")";
-        QueryApi queryApi = client.getQueryApi();
-        List<FluxTable> tables = queryApi.query(flux);
-        List<MemEntity> res = new ArrayList<>();
-        FluxTable table = tables.get(0);
-        List<FluxRecord> records = table.getRecords();
-        for (FluxRecord record : records) {
-            MemEntity memEntity = new MemEntity();
-            memEntity.setDate(record.getTime());
-            memEntity.setAddress((String) record.getValueByKey("address"));
-            memEntity.setUsed((Double) record.getValueByKey("used"));
-            memEntity.setUsedPercent((Double) record.getValueByKey("usedPercent"));
-            res.add(memEntity);
-        }
-        client.close();
-        return res;
-    }
 
     public List<Double> selectByColumn(String address, Integer limit, String columnName) {
         InfluxDBClient client = InfluxDBClientFactory.create(url, token.toCharArray(), org, bucket);
