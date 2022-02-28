@@ -98,7 +98,7 @@ public class PredictJob extends QuartzJobBean {
 
     public void dynamicPred(AlarmConfig alarmConfig, String address) {
         // 发送GET请求
-        String response = HttpClient.doGet(modelPredUrl + "?ip=127.0.0.1");
+        String response = HttpClient.doGet(modelPredUrl + "?ip=" + address);
         response = response.replaceAll("\r\n", "");
         logger.info("主机地址：" + address + " 模型反馈：" + response);
         if ("1".equals(response)) {
