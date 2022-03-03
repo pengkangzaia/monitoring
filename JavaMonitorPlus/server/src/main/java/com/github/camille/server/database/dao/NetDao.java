@@ -71,4 +71,25 @@ public class NetDao {
         client.close();
         return res;
     }
+
+    public List<Double> selectByColumn(String address, Integer limit, String columnName) {
+        InfluxDBClient client = InfluxDBClientFactory.create(url, token.toCharArray(), org, bucket);
+        // 1mo
+        String flux = "from(bucket: \"monitor\")\n" +
+                "  |> range(start: -1h)\n" +
+                "  |> filter(fn: (r) => r[\"_measurement\"] == \"net\")\n" +
+                "  |> filter(fn: (r) => r[\"address\"] == \"" + address + "\")\n" +
+                "  |> filter(fn: (r) => r[\"_field\"] == \"" + columnName + "\")" +
+                "  |> limit(n: " + limit + ")";
+        QueryApi queryApi = client.getQueryApi();
+        List<FluxTable> tables = queryApi.query(flux);
+        List<Double> res = new ArrayList<>();
+        FluxTable table = tables.get(0);
+        List<FluxRecord> records = table.getRecords();
+        for (FluxRecord record : records) {
+            res.add((Double) record.getValue());
+        }
+        client.close();
+        return res;
+    }
 }

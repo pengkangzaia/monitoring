@@ -46,6 +46,8 @@ public class PredictJob extends QuartzJobBean {
     @Autowired
     private MailService mailService;
     @Autowired
+    private NetworkService networkService;
+    @Autowired
     private AlarmConfigService alarmConfigService;
     @Autowired
     private HostService hostService;
@@ -76,6 +78,7 @@ public class PredictJob extends QuartzJobBean {
         List<AlarmConditionConfig> conditions = alarmConfigService.selectByConfigId(alarmConfig.getId());
         if (CollectionUtils.isNotEmpty(conditions)) {
             boolean isAbnormal = false;
+            String alarmTemplate = "发生异常";
             for (AlarmConditionConfig condition : conditions) {
                 String metric = condition.getMetric();
                 String columnName = MonitorConstant.metricMap.get(metric);
@@ -87,6 +90,9 @@ public class PredictJob extends QuartzJobBean {
                     isAbnormal = ConditionDiagnotor.diagnose(condition.getOperator(), condition.getValue(), values);
                 } else if (metric.startsWith("disk")) {
                     List<Double> values = diskService.selectDataByColumnName(address, condition.getContinuePeriod(), columnName);
+                    isAbnormal = ConditionDiagnotor.diagnose(condition.getOperator(), condition.getValue(), values);
+                } else if (metric.startsWith("net")) {
+                    List<Double> values = networkService.selectDataByColumnName(address, condition.getContinuePeriod(), columnName);
                     isAbnormal = ConditionDiagnotor.diagnose(condition.getOperator(), condition.getValue(), values);
                 }
             }
@@ -120,7 +126,6 @@ public class PredictJob extends QuartzJobBean {
         mail.setSubject("系统监控告警");
         mail.setText("系统发生异常，请您检查主机" + address + "运行状况");
         mailService.sendSimpleMailMessage(mail);
-        System.out.println("我报警了！！！！！！！！！");
     }
 
 }
