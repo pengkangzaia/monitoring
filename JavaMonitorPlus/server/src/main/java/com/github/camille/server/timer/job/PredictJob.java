@@ -1,29 +1,28 @@
 package com.github.camille.server.timer.job;
 
-import com.alibaba.fastjson.JSON;
 import com.github.camille.server.alarm.MailEntity;
 import com.github.camille.server.database.entity.Host;
 import com.github.camille.server.database.entity.alarm.AlarmConditionConfig;
 import com.github.camille.server.database.entity.alarm.AlarmConfig;
-import com.github.camille.server.database.entity.data.CPUEntity;
-import com.github.camille.server.database.entity.data.DiskEntity;
-import com.github.camille.server.database.entity.data.MemEntity;
+import com.github.camille.server.database.entity.alarm.AlarmEvent;
 import com.github.camille.server.database.entity.user.User;
 import com.github.camille.server.database.service.*;
 import com.github.camille.server.remote.util.HttpClient;
+import com.github.camille.server.timer.util.TimerUtil;
 import com.github.camille.server.util.ConditionDiagnotor;
 import com.github.camille.server.util.MonitorConstant;
 import org.apache.commons.collections.CollectionUtils;
-import org.quartz.JobExecutionContext;
+import org.quartz.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author pengkangzaia@foxmail.com
@@ -51,6 +50,10 @@ public class PredictJob extends QuartzJobBean {
     private AlarmConfigService alarmConfigService;
     @Autowired
     private HostService hostService;
+    @Autowired
+    private AlarmEventService alarmEventService;
+    @Autowired
+    private Scheduler scheduler;
 
 
     @Override
@@ -62,23 +65,28 @@ public class PredictJob extends QuartzJobBean {
         logger.debug("predict data to check if abnormal...");
         for (AlarmConfig alarmConfig : alarmConfigs) {
             int hostId = alarmConfig.getHostId();
+            // 判断当前是否有告警状态的AlarmEvent
+            List<AlarmEvent> events = alarmEventService.getActiveEventByHostId(hostId);
             Host host = hostService.selectById(hostId);
             String address = host.getIp();
             if (alarmConfig.isDynamic()) {
-                dynamicPred(alarmConfig, address);
+                try {
+                    dynamicPred(alarmConfig, address, events);
+                } catch (SchedulerException e) {
+                    e.printStackTrace();
+                }
             } else {
                 // 静态的
-                staticDetect(alarmConfig, address);
+                staticDetect(alarmConfig, address, events);
             }
 
         }
     }
 
-    private void staticDetect(AlarmConfig alarmConfig, String address) {
+    private void staticDetect(AlarmConfig alarmConfig, String address, List<AlarmEvent> events) {
         List<AlarmConditionConfig> conditions = alarmConfigService.selectByConfigId(alarmConfig.getId());
         if (CollectionUtils.isNotEmpty(conditions)) {
             boolean isAbnormal = false;
-            String alarmTemplate = "发生异常";
             for (AlarmConditionConfig condition : conditions) {
                 String metric = condition.getMetric();
                 String columnName = MonitorConstant.metricMap.get(metric);
@@ -102,13 +110,61 @@ public class PredictJob extends QuartzJobBean {
         }
     }
 
-    public void dynamicPred(AlarmConfig alarmConfig, String address) {
+    public void dynamicPred(AlarmConfig alarmConfig, String address, List<AlarmEvent> events) throws SchedulerException {
         // 发送GET请求
         String response = HttpClient.doGet(modelPredUrl + "?ip=" + address);
+        System.out.println("原响应：" + response);
         response = response.replaceAll("\r\n", "");
         logger.info("主机地址：" + address + " 模型反馈：" + response);
+        Map<String, AlarmEvent> eventMap = events.stream().
+                collect(Collectors.toMap(AlarmEvent::getMetricName, event -> event, (k1, k2) -> k1));
         if ("1".equals(response)) {
-            sendAlarm(alarmConfig, address);
+            if (eventMap.containsKey("dynamic")) {
+                // 已有动态告警任务，不做处理
+            } else {
+                // 创建AlarmEvent
+                AlarmEvent newEvent = new AlarmEvent();
+                newEvent.setIsAlarm(1);
+                newEvent.setHostId(alarmConfig.getHostId());
+                newEvent.setContent(String.format("经动态阈值检测，主机发生异常\n"
+                                + "告警对象：%s\n" + "告警策略:%s\n" + "告警指标:%s\n" + "触发时间:%s\n"
+                        , address, alarmConfig.getName(), "dynamic", TimerUtil.now())); // 告警内容
+                newEvent.setMetricName("dynamic");
+                // AlarmEvent落库
+                alarmEventService.save(newEvent);
+                // 创建告警任务
+                JobDetail jobDetail = JobBuilder.newJob(AlarmJob.class)
+                        .usingJobData("eventId", newEvent.getId())
+                        .usingJobData("configId", alarmConfig.getId())
+                        .withIdentity("alarmJob" + newEvent.getId())
+                        .build();
+                Trigger trigger = TriggerBuilder.newTrigger()
+                        .withIdentity("alarmJob" + newEvent.getId())
+                        .startNow()
+                        .withSchedule(
+                                SimpleScheduleBuilder.simpleSchedule()
+                                        .withIntervalInSeconds(30)
+                                        .repeatForever()
+                        )
+                        .build();
+                scheduler.scheduleJob(jobDetail, trigger);
+                if (!scheduler.isShutdown()) {
+                    scheduler.start();
+                }
+            }
+        } else if ("0".equals(response)) {
+            // 如果该主机对应的event有状态为正在告警的，需要设置无告警状态并且设置告警停止时间
+            if (eventMap.containsKey("dynamic")) {
+                AlarmEvent event = eventMap.get("dynamic");
+                alarmEventService.releaseAlarm(event);
+                // 停止Job
+                String jobKey = "alarmJob" + event.getId();
+                scheduler.pauseTrigger(TriggerKey.triggerKey(jobKey)); // 暂停触发器
+                scheduler.unscheduleJob(TriggerKey.triggerKey(jobKey)); // 移除触发器
+                scheduler.deleteJob(JobKey.jobKey(jobKey)); // 删除Job
+                // todo 发送告警恢复消息
+            }
+
         }
     }
 

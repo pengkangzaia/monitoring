@@ -6,7 +6,6 @@ import com.github.camille.server.database.dao.*;
 import com.github.camille.server.database.entity.Host;
 import com.github.camille.server.database.entity.alarm.AlarmConfig;
 import com.github.camille.server.database.entity.alarm.AlarmEvent;
-import com.github.camille.server.database.entity.data.CPUEntity;
 import com.github.camille.server.database.entity.data.Threshold;
 import com.github.camille.server.database.entity.user.User;
 import com.github.camille.server.database.service.AlarmConfigService;
@@ -139,7 +138,7 @@ public class ServerApplicationTests {
     public void alarmEventTest() {
         for (int i = 0; i < 10; i++) {
             AlarmEvent event = new AlarmEvent();
-            event.setConfigId(i + 1);
+            event.setHostId(i + 1);
             event.setIsAlarm((int) (Math.random() * 2));
             event.setContent("测试内容" + i);
             alarmEventDao.insert(event);

@@ -5,16 +5,30 @@
 <mapper namespace="com.github.camille.server.database.dao.AlarmEventDao">
 
     <sql id="selectFields">
-        id, config_id, content, is_alarm, create_time, modify_time
+        id, host_id, metric_name, content, is_alarm, create_time, modify_time
     </sql>
 
     <sql id="insertFields">
-        config_id, content, is_alarm, create_time, modify_time
+        host_id, metric_name, content, is_alarm, create_time, modify_time
     </sql>
-    <insert id="insert">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         insert into alarm_event(<include refid="insertFields"></include>)
-        values(#{configId}, #{content}, #{isAlarm}, now(), now())
+        values(#{hostId}, #{metricName}, #{content}, #{isAlarm}, now(), now())
     </insert>
+    <update id="updateStatus">
+        update alarm_event set
+        is_alarm = #{isAlarm}, modify_time = now()
+        where id = #{id}
+    </update>
+    <select id="selectActiveByHostId" resultType="com.github.camille.server.database.entity.alarm.AlarmEvent">
+        select <include refid="selectFields"></include> from alarm_event
+        where host_id = #{hostId}
+        and is_alarm = 1
+    </select>
+    <select id="selectById" resultType="com.github.camille.server.database.entity.alarm.AlarmEvent">
+        select <include refid="selectFields"></include> from alarm_event
+        where id = #{id}
+    </select>
 
 
 </mapper>

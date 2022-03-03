@@ -12,7 +12,8 @@ import java.util.Date;
 public class AlarmEvent {
 
     private int id;
-    private int configId;
+    private int hostId;
+    private String metricName;
     private String content;
     private int isAlarm;
     private Date createTime;
