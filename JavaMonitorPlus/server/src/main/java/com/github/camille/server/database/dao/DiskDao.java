@@ -78,8 +78,9 @@ public class DiskDao {
 
     public List<Double> selectByColumn(String address, Integer limit, String columnName) {
         InfluxDBClient client = InfluxDBClientFactory.create(url, token.toCharArray(), org, bucket);
+        // 1mo
         String flux = "from(bucket: \"monitor\")\n" +
-                "  |> range(start: -1mo)\n" +
+                "  |> range(start: -1h)\n" +
                 "  |> filter(fn: (r) => r[\"_measurement\"] == \"disk\")\n" +
                 "  |> filter(fn: (r) => r[\"address\"] == \"" + address + "\")\n" +
                 "  |> filter(fn: (r) => r[\"_field\"] == \"" + columnName + "\")" +

@@ -61,12 +61,12 @@ public class PredictJob extends QuartzJobBean {
         for (AlarmConfig alarmConfig : alarmConfigs) {
             int hostId = alarmConfig.getHostId();
             Host host = hostService.selectById(hostId);
-            String add = host.getIp();
+            String address = host.getIp();
             if (alarmConfig.isDynamic()) {
-                dynamicPred(alarmConfig, add);
+                dynamicPred(alarmConfig, address);
             } else {
                 // 静态的
-                staticDetect(alarmConfig, add);
+                staticDetect(alarmConfig, address);
             }
 
         }

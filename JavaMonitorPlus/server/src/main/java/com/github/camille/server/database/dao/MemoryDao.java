@@ -74,7 +74,7 @@ public class MemoryDao {
     public List<Double> selectByColumn(String address, Integer limit, String columnName) {
         InfluxDBClient client = InfluxDBClientFactory.create(url, token.toCharArray(), org, bucket);
         String flux = "from(bucket: \"monitor\")\n" +
-                "  |> range(start: -1mo)\n" +
+                "  |> range(start: -1h)\n" +
                 "  |> filter(fn: (r) => r[\"_measurement\"] == \"memory\")\n" +
                 "  |> filter(fn: (r) => r[\"address\"] == \"" + address + "\")\n" +
                 "  |> filter(fn: (r) => r[\"_field\"] == \"" + columnName + "\")" +
