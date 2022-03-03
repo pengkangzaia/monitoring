@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.camille.server.database.dao.AlarmEventDao">
+
+    <sql id="selectFields">
+        id, config_id, content, is_alarm, create_time, modify_time
+    </sql>
+
+    <sql id="insertFields">
+        config_id, content, is_alarm, create_time, modify_time
+    </sql>
+    <insert id="insert">
+        insert into alarm_event(<include refid="insertFields"></include>)
+        values(#{configId}, #{content}, #{isAlarm}, now(), now())
+    </insert>
+
+
+</mapper>

@@ -5,12 +5,14 @@ import com.github.camille.server.controller.dto.Condition;
 import com.github.camille.server.database.dao.*;
 import com.github.camille.server.database.entity.Host;
 import com.github.camille.server.database.entity.alarm.AlarmConfig;
+import com.github.camille.server.database.entity.alarm.AlarmEvent;
 import com.github.camille.server.database.entity.data.CPUEntity;
 import com.github.camille.server.database.entity.data.Threshold;
 import com.github.camille.server.database.entity.user.User;
 import com.github.camille.server.database.service.AlarmConfigService;
 import com.github.camille.server.database.service.CPUService;
 import com.github.camille.server.database.service.MailService;
+import com.github.camille.server.database.service.NetworkService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,11 +122,28 @@ public class ServerApplicationTests {
 
     }
 
+    @Autowired
+    private NetworkService networkService;
 
     @Test
     public void column() {
-        List<Double> res = cpuService.selectDataByColumnName("http://1.15.117.64:8081", 3, "cpu_usage");
-        System.out.println(res);
+        List<Double> res1 = networkService.selectDataByColumnName("http://1.15.117.64:8081", 3, "sendPacket");
+        List<Double> res = cpuService.selectDataByColumnName("http://1.15.117.64:8081", 3, "cpuUsage");
+        System.out.println(res1);
+    }
+
+    @Autowired
+    private AlarmEventDao alarmEventDao;
+
+    @Test
+    public void alarmEventTest() {
+        for (int i = 0; i < 10; i++) {
+            AlarmEvent event = new AlarmEvent();
+            event.setConfigId(i + 1);
+            event.setIsAlarm((int) (Math.random() * 2));
+            event.setContent("测试内容" + i);
+            alarmEventDao.insert(event);
+        }
     }
 
 
