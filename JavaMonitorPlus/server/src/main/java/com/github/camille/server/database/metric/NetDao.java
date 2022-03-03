@@ -1,4 +1,4 @@
-package com.github.camille.server.database.dao;
+package com.github.camille.server.database.metric;
 
 import com.github.camille.server.database.entity.data.CPUEntity;
 import com.github.camille.server.database.entity.data.MemEntity;
@@ -87,7 +87,7 @@ public class NetDao {
         FluxTable table = tables.get(0);
         List<FluxRecord> records = table.getRecords();
         for (FluxRecord record : records) {
-            res.add((Double) record.getValue());
+            res.add(Double.valueOf(record.getValue().toString()));
         }
         client.close();
         return res;

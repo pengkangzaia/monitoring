@@ -1,7 +1,7 @@
 package com.github.camille.server.database.service;
 
 import com.github.camille.server.client.MemEntityDTO;
-import com.github.camille.server.database.dao.MemoryDao;
+import com.github.camille.server.database.metric.MemoryDao;
 import com.github.camille.server.database.entity.data.MemEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

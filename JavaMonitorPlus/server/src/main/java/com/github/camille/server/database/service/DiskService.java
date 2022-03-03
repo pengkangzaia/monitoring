@@ -1,7 +1,7 @@
 package com.github.camille.server.database.service;
 
 import com.github.camille.server.client.DiskEntityDTO;
-import com.github.camille.server.database.dao.DiskDao;
+import com.github.camille.server.database.metric.DiskDao;
 import com.github.camille.server.database.entity.data.DiskEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

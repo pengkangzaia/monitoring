@@ -1,4 +1,4 @@
-package com.github.camille.server.database.dao;
+package com.github.camille.server.database.metric;
 
 import com.github.camille.server.database.entity.data.CPUEntity;
 import com.influxdb.client.InfluxDBClient;

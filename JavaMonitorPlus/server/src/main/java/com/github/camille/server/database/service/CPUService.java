@@ -1,7 +1,7 @@
 package com.github.camille.server.database.service;
 
 import com.github.camille.server.client.CpuEntityDTO;
-import com.github.camille.server.database.dao.CPUDao;
+import com.github.camille.server.database.metric.CPUDao;
 import com.github.camille.server.database.entity.data.CPUEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

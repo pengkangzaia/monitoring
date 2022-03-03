@@ -1,7 +1,7 @@
 package com.github.camille.server.database.service;
 
 import com.github.camille.server.client.NetEntityDTO;
-import com.github.camille.server.database.dao.NetDao;
+import com.github.camille.server.database.metric.NetDao;
 import com.github.camille.server.database.entity.data.NetEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
