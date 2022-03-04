@@ -103,7 +103,7 @@ public class PredictJob extends QuartzJobBean {
             if (eventMap.containsKey("dynamic")) {
                 // 已有动态告警任务，不做处理
             } else {
-                createAlarmJob(eventMap, address, alarmConfig, "dynamic");
+                createAlarmJob(eventMap, address, alarmConfig, "dynamic", null);
             }
         } else if ("0".equals(response)) {
             deleteAlarmJob(eventMap, "dynamic");
@@ -113,7 +113,7 @@ public class PredictJob extends QuartzJobBean {
     private void diagnose(AlarmConditionConfig condition, List<Double> values, Map<String, AlarmEvent> eventMap, String address, AlarmConfig alarmConfig, String metric) throws SchedulerException {
         boolean isAbnormal = ConditionDiagnosis.diagnose(condition.getOperator(), condition.getValue(), values);
         if (isAbnormal) {
-            createAlarmJob(eventMap, address, alarmConfig, metric);
+            createAlarmJob(eventMap, address, alarmConfig, metric, condition.getNoticeFrequency());
         } else {
             deleteAlarmJob(eventMap, metric);
         }
@@ -134,7 +134,7 @@ public class PredictJob extends QuartzJobBean {
     }
 
 
-    private void createAlarmJob(Map<String, AlarmEvent> eventMap, String address, AlarmConfig alarmConfig, String metric) throws SchedulerException {
+    private void createAlarmJob(Map<String, AlarmEvent> eventMap, String address, AlarmConfig alarmConfig, String metric, Integer noticeFreq) throws SchedulerException {
         if (eventMap.containsKey(metric)) {
             // 已有动态告警任务，不做处理
         } else {
@@ -142,8 +142,10 @@ public class PredictJob extends QuartzJobBean {
             AlarmEvent newEvent = new AlarmEvent();
             newEvent.setIsAlarm(1);
             newEvent.setHostId(alarmConfig.getHostId());
-            newEvent.setContent(String.format("经动态阈值检测，主机发生异常\n"
-                            + "告警对象：%s\n" + "告警策略:%s\n" + "告警指标:%s\n" + "触发时间:%s\n"
+            newEvent.setContent(String.format(
+                    "dynamic".equals(metric)
+                            ? MonitorConstant.Dynamic_Alarm_Template
+                            : MonitorConstant.Static_Alarm_Template
                     , address, alarmConfig.getName(), metric, TimerUtil.now())); // 告警内容
             newEvent.setMetricName(metric);
             // AlarmEvent落库
@@ -159,7 +161,7 @@ public class PredictJob extends QuartzJobBean {
                     .startNow()
                     .withSchedule(
                             SimpleScheduleBuilder.simpleSchedule()
-                                    .withIntervalInSeconds(30)
+                                    .withIntervalInSeconds(noticeFreq == null ? 3600 : noticeFreq)
                                     .repeatForever()
                     )
                     .build();

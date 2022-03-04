@@ -40,5 +40,10 @@ public class MonitorConstant {
         metricSet.add(measurements[3] + underline + "tcpCount");
     }
 
+    public static final String Dynamic_Alarm_Template = "经动态检测，主机发生异常\n"
+            + "告警对象：%s\n" + "告警策略:%s\n" + "告警指标:%s\n" + "触发时间:%s\n";
+
+    public static final String Static_Alarm_Template = "经静态门限阈值检测，主机发生异常\n"
+            + "告警对象：%s\n" + "告警策略:%s\n" + "告警指标:%s\n" + "触发时间:%s\n";
 
 }
