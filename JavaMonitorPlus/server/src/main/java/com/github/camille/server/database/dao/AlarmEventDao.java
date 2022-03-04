@@ -19,4 +19,6 @@ public interface AlarmEventDao {
     AlarmEvent selectById(int id);
 
     void updateStatus(AlarmEvent event);
+
+    List<AlarmEvent> list();
 }

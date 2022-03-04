@@ -29,6 +29,10 @@
         select <include refid="selectFields"></include> from alarm_event
         where id = #{id}
     </select>
+    <select id="list" resultType="com.github.camille.server.database.entity.alarm.AlarmEvent">
+        select <include refid="selectFields"></include> from alarm_event
+        order by is_alarm desc, create_time desc
+    </select>
 
 
 </mapper>

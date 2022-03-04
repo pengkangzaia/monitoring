@@ -40,4 +40,10 @@ public class AlarmEventService {
         event.setIsAlarm(0);
         alarmEventDao.updateStatus(event);
     }
+
+    public List<AlarmEvent> list() {
+        return alarmEventDao.list();
+    }
+
+
 }
