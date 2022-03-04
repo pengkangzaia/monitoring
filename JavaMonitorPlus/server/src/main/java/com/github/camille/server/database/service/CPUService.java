@@ -38,8 +38,4 @@ public class CPUService {
     public void clearAll() {
         cpuDao.deleteAll();
     }
-
-    public List<Double> selectDataByColumnName(String address, Integer continuePeriod, String columnName) {
-        return cpuDao.selectByColumn(address, continuePeriod, columnName);
-    }
 }

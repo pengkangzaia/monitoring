@@ -11,7 +11,6 @@ import com.github.camille.server.database.entity.user.User;
 import com.github.camille.server.database.service.AlarmConfigService;
 import com.github.camille.server.database.service.CPUService;
 import com.github.camille.server.database.service.MailService;
-import com.github.camille.server.database.service.NetworkService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,15 +120,6 @@ public class ServerApplicationTests {
 
     }
 
-    @Autowired
-    private NetworkService networkService;
-
-    @Test
-    public void column() {
-        List<Double> res1 = networkService.selectDataByColumnName("http://1.15.117.64:8081", 3, "sendPacket");
-        List<Double> res = cpuService.selectDataByColumnName("http://1.15.117.64:8081", 3, "cpuUsage");
-        System.out.println(res1);
-    }
 
     @Autowired
     private AlarmEventDao alarmEventDao;
@@ -144,7 +134,6 @@ public class ServerApplicationTests {
             alarmEventDao.insert(event);
         }
     }
-
 
 
 }

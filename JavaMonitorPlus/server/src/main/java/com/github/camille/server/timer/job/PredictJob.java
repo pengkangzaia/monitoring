@@ -1,15 +1,16 @@
 package com.github.camille.server.timer.job;
 
-import com.github.camille.server.alarm.MailEntity;
 import com.github.camille.server.database.entity.Host;
 import com.github.camille.server.database.entity.alarm.AlarmConditionConfig;
 import com.github.camille.server.database.entity.alarm.AlarmConfig;
 import com.github.camille.server.database.entity.alarm.AlarmEvent;
-import com.github.camille.server.database.entity.user.User;
-import com.github.camille.server.database.service.*;
+import com.github.camille.server.database.service.AlarmConfigService;
+import com.github.camille.server.database.service.AlarmEventService;
+import com.github.camille.server.database.service.HostService;
+import com.github.camille.server.database.service.MetricService;
 import com.github.camille.server.remote.util.HttpClient;
 import com.github.camille.server.timer.util.TimerUtil;
-import com.github.camille.server.util.ConditionDiagnotor;
+import com.github.camille.server.util.ConditionDiagnosis;
 import com.github.camille.server.util.MonitorConstant;
 import org.apache.commons.collections.CollectionUtils;
 import org.quartz.*;
@@ -19,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -32,20 +32,8 @@ public class PredictJob extends QuartzJobBean {
 
     private Logger logger = LoggerFactory.getLogger(getClass().getName());
 
-    @Value("${model.sliding.window}")
-    private int slidingWindowSize;
     @Value("${model.pred.url}")
     private String modelPredUrl;
-    @Autowired
-    private CPUService cpuService;
-    @Autowired
-    private MemoryService memoryService;
-    @Autowired
-    private DiskService diskService;
-    @Autowired
-    private MailService mailService;
-    @Autowired
-    private NetworkService networkService;
     @Autowired
     private AlarmConfigService alarmConfigService;
     @Autowired
@@ -54,6 +42,8 @@ public class PredictJob extends QuartzJobBean {
     private AlarmEventService alarmEventService;
     @Autowired
     private Scheduler scheduler;
+    @Autowired
+    private MetricService metricService;
 
 
     @Override
@@ -68,47 +58,38 @@ public class PredictJob extends QuartzJobBean {
             // 判断当前是否有告警状态的AlarmEvent
             List<AlarmEvent> events = alarmEventService.getActiveEventByHostId(hostId);
             Host host = hostService.selectById(hostId);
-            String address = host.getIp();
-            if (alarmConfig.isDynamic()) {
-                try {
+            String address = "http://" + host.getIp() + ":" + host.getAgentPort();
+            try {
+                if (alarmConfig.isDynamic()) {
                     dynamicPred(alarmConfig, address, events);
-                } catch (SchedulerException e) {
-                    e.printStackTrace();
+                } else {
+                    // 静态的
+                    staticDetect(alarmConfig, address, events);
                 }
-            } else {
-                // 静态的
-                staticDetect(alarmConfig, address, events);
+            } catch (SchedulerException e) {
+                e.printStackTrace();
             }
+
 
         }
     }
 
-    private void staticDetect(AlarmConfig alarmConfig, String address, List<AlarmEvent> events) {
+    private void staticDetect(AlarmConfig alarmConfig, String address, List<AlarmEvent> events) throws SchedulerException {
         List<AlarmConditionConfig> conditions = alarmConfigService.selectByConfigId(alarmConfig.getId());
         if (CollectionUtils.isNotEmpty(conditions)) {
-            boolean isAbnormal = false;
+            Map<String, AlarmEvent> eventMap = events.stream().
+                    collect(Collectors.toMap(AlarmEvent::getMetricName, event -> event, (k1, k2) -> k1));
             for (AlarmConditionConfig condition : conditions) {
                 String metric = condition.getMetric();
-                String columnName = MonitorConstant.metricMap.get(metric);
-                if (metric.startsWith("cpu")) {
-                    List<Double> values = cpuService.selectDataByColumnName(address, condition.getContinuePeriod(), columnName);
-                    isAbnormal = ConditionDiagnotor.diagnose(condition.getOperator(), condition.getValue(), values);
-                } else if (metric.startsWith("mem")) {
-                    List<Double> values = memoryService.selectDataByColumnName(address, condition.getContinuePeriod(), columnName);
-                    isAbnormal = ConditionDiagnotor.diagnose(condition.getOperator(), condition.getValue(), values);
-                } else if (metric.startsWith("disk")) {
-                    List<Double> values = diskService.selectDataByColumnName(address, condition.getContinuePeriod(), columnName);
-                    isAbnormal = ConditionDiagnotor.diagnose(condition.getOperator(), condition.getValue(), values);
-                } else if (metric.startsWith("net")) {
-                    List<Double> values = networkService.selectDataByColumnName(address, condition.getContinuePeriod(), columnName);
-                    isAbnormal = ConditionDiagnotor.diagnose(condition.getOperator(), condition.getValue(), values);
-                }
-            }
-            if (isAbnormal) {
-                sendAlarm(alarmConfig, address);
+                String[] split = metric.split(MonitorConstant.underline);
+                String measurement = split[0];
+                String field = split[1];
+                List<Double> values = metricService.selectByColumn(measurement, address, condition.getContinuePeriod(), field);
+                diagnose(condition, values, eventMap, address, alarmConfig, metric);
             }
         }
     }
+
 
     public void dynamicPred(AlarmConfig alarmConfig, String address, List<AlarmEvent> events) throws SchedulerException {
         // 发送GET请求
@@ -122,66 +103,71 @@ public class PredictJob extends QuartzJobBean {
             if (eventMap.containsKey("dynamic")) {
                 // 已有动态告警任务，不做处理
             } else {
-                // 创建AlarmEvent
-                AlarmEvent newEvent = new AlarmEvent();
-                newEvent.setIsAlarm(1);
-                newEvent.setHostId(alarmConfig.getHostId());
-                newEvent.setContent(String.format("经动态阈值检测，主机发生异常\n"
-                                + "告警对象：%s\n" + "告警策略:%s\n" + "告警指标:%s\n" + "触发时间:%s\n"
-                        , address, alarmConfig.getName(), "dynamic", TimerUtil.now())); // 告警内容
-                newEvent.setMetricName("dynamic");
-                // AlarmEvent落库
-                alarmEventService.save(newEvent);
-                // 创建告警任务
-                JobDetail jobDetail = JobBuilder.newJob(AlarmJob.class)
-                        .usingJobData("eventId", newEvent.getId())
-                        .usingJobData("configId", alarmConfig.getId())
-                        .withIdentity("alarmJob" + newEvent.getId())
-                        .build();
-                Trigger trigger = TriggerBuilder.newTrigger()
-                        .withIdentity("alarmJob" + newEvent.getId())
-                        .startNow()
-                        .withSchedule(
-                                SimpleScheduleBuilder.simpleSchedule()
-                                        .withIntervalInSeconds(30)
-                                        .repeatForever()
-                        )
-                        .build();
-                scheduler.scheduleJob(jobDetail, trigger);
-                if (!scheduler.isShutdown()) {
-                    scheduler.start();
-                }
+                createAlarmJob(eventMap, address, alarmConfig, "dynamic");
             }
         } else if ("0".equals(response)) {
-            // 如果该主机对应的event有状态为正在告警的，需要设置无告警状态并且设置告警停止时间
-            if (eventMap.containsKey("dynamic")) {
-                AlarmEvent event = eventMap.get("dynamic");
-                alarmEventService.releaseAlarm(event);
-                // 停止Job
-                String jobKey = "alarmJob" + event.getId();
-                scheduler.pauseTrigger(TriggerKey.triggerKey(jobKey)); // 暂停触发器
-                scheduler.unscheduleJob(TriggerKey.triggerKey(jobKey)); // 移除触发器
-                scheduler.deleteJob(JobKey.jobKey(jobKey)); // 删除Job
-                // todo 发送告警恢复消息
-            }
+            deleteAlarmJob(eventMap, "dynamic");
+        }
+    }
 
+    private void diagnose(AlarmConditionConfig condition, List<Double> values, Map<String, AlarmEvent> eventMap, String address, AlarmConfig alarmConfig, String metric) throws SchedulerException {
+        boolean isAbnormal = ConditionDiagnosis.diagnose(condition.getOperator(), condition.getValue(), values);
+        if (isAbnormal) {
+            createAlarmJob(eventMap, address, alarmConfig, metric);
+        } else {
+            deleteAlarmJob(eventMap, metric);
+        }
+    }
+
+    private void deleteAlarmJob(Map<String, AlarmEvent> eventMap, String metric) throws SchedulerException {
+        // 如果该主机对应的event有状态为正在告警的，需要设置无告警状态并且设置告警停止时间
+        if (eventMap.containsKey(metric)) {
+            AlarmEvent event = eventMap.get(metric);
+            alarmEventService.releaseAlarm(event);
+            // 停止Job
+            String jobKey = "alarmJob" + event.getId();
+            scheduler.pauseTrigger(TriggerKey.triggerKey(jobKey)); // 暂停触发器
+            scheduler.unscheduleJob(TriggerKey.triggerKey(jobKey)); // 移除触发器
+            scheduler.deleteJob(JobKey.jobKey(jobKey)); // 删除Job
+            // todo 发送告警恢复消息
         }
     }
 
 
-    public void sendAlarm(AlarmConfig alarmConfig, String address) {
-        // 转到报警流程
-        MailEntity mail = new MailEntity();
-        mail.setSentDate(new Date());
-        List<User> noticeUser = alarmConfigService.getNoticeUser(alarmConfig.getId());
-        String[] emails = new String[noticeUser.size()];
-        for (int i = 0; i < noticeUser.size(); i++) {
-            emails[i] = noticeUser.get(i).getEmail();
+    private void createAlarmJob(Map<String, AlarmEvent> eventMap, String address, AlarmConfig alarmConfig, String metric) throws SchedulerException {
+        if (eventMap.containsKey(metric)) {
+            // 已有动态告警任务，不做处理
+        } else {
+            // 创建AlarmEvent
+            AlarmEvent newEvent = new AlarmEvent();
+            newEvent.setIsAlarm(1);
+            newEvent.setHostId(alarmConfig.getHostId());
+            newEvent.setContent(String.format("经动态阈值检测，主机发生异常\n"
+                            + "告警对象：%s\n" + "告警策略:%s\n" + "告警指标:%s\n" + "触发时间:%s\n"
+                    , address, alarmConfig.getName(), metric, TimerUtil.now())); // 告警内容
+            newEvent.setMetricName(metric);
+            // AlarmEvent落库
+            alarmEventService.save(newEvent);
+            // 创建告警任务
+            JobDetail jobDetail = JobBuilder.newJob(AlarmJob.class)
+                    .usingJobData("eventId", newEvent.getId())
+                    .usingJobData("configId", alarmConfig.getId())
+                    .withIdentity("alarmJob" + newEvent.getId())
+                    .build();
+            Trigger trigger = TriggerBuilder.newTrigger()
+                    .withIdentity("alarmJob" + newEvent.getId())
+                    .startNow()
+                    .withSchedule(
+                            SimpleScheduleBuilder.simpleSchedule()
+                                    .withIntervalInSeconds(30)
+                                    .repeatForever()
+                    )
+                    .build();
+            scheduler.scheduleJob(jobDetail, trigger);
+            if (!scheduler.isShutdown()) {
+                scheduler.start();
+            }
         }
-        mail.setTo(emails);
-        mail.setSubject("系统监控告警");
-        mail.setText("系统发生异常，请您检查主机" + address + "运行状况");
-        mailService.sendSimpleMailMessage(mail);
     }
 
 }

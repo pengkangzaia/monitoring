@@ -43,8 +43,4 @@ public class DiskService {
     }
 
 
-
-    public List<Double> selectDataByColumnName(String address, Integer continuePeriod, String columnName) {
-        return diskDao.selectByColumn(address, continuePeriod, columnName);
-    }
 }

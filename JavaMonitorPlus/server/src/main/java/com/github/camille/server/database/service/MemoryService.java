@@ -37,9 +37,4 @@ public class MemoryService {
     public void clearAll() {
         memoryDao.deleteAll();
     }
-
-
-    public List<Double> selectDataByColumnName(String address, Integer continuePeriod, String columnName) {
-        return memoryDao.selectByColumn(address, continuePeriod, columnName);
-    }
 }

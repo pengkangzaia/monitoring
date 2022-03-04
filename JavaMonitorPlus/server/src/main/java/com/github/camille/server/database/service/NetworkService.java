@@ -37,7 +37,5 @@ public class NetworkService {
         return netDao.findAllByAddress(address);
     }
 
-    public List<Double> selectDataByColumnName(String address, Integer continuePeriod, String columnName) {
-        return netDao.selectByColumn(address, continuePeriod, columnName);
-    }
+
 }
