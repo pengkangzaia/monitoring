@@ -17,9 +17,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(loginTicketInterceptor)
-                .excludePathPatterns(NO_NEED_PERMISSION_ARRAY)
-                .excludePathPatterns("/**/*.css", "/**/*.js", "/**/*.png", "/**/*.jpg", "/**/*.jpeg");
+//        registry.addInterceptor(loginTicketInterceptor)
+//                .excludePathPatterns(NO_NEED_PERMISSION_ARRAY)
+//                .excludePathPatterns("/**/*.css", "/**/*.js", "/**/*.png", "/**/*.jpg", "/**/*.jpeg");
     }
 
 }
