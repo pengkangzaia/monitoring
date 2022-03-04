@@ -42,6 +42,12 @@
         select <include refid="selectFields"></include>
         from user
     </select>
+    <select id="selectByUsername" resultType="com.github.camille.server.database.entity.user.User">
+        select
+        <include refid="selectFields"></include>
+        from user
+        where username = #{username}
+    </select>
 
 
 </mapper>

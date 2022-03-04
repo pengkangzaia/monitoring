@@ -27,10 +27,17 @@ public class UserService {
     private LoginTicketDao loginTicketDao;
 
 
-    public User get(String email) {
+    public User getByEmail(String email) {
         User user = userDao.selectByEmail(email);
         return user;
     }
+
+    public User getByUsername(String username) {
+        User user = userDao.selectByUsername(username);
+        return user;
+    }
+
+
 
     /**
      * 创建并持久化ticket

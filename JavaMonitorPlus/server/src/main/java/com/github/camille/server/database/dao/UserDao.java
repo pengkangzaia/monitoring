@@ -15,6 +15,8 @@ public interface UserDao {
 
     User selectByEmail(String email);
 
+    User selectByUsername(String username);
+
     Integer insertUser(User user);
 
 
