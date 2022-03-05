@@ -2,6 +2,7 @@ package com.github.camille.server.database.service;
 
 import com.github.camille.server.database.dao.HostDao;
 import com.github.camille.server.database.entity.Host;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +39,8 @@ public class HostService {
 
 
     public void updateStatus(List<Integer> idList, int status) {
-        hostDao.updateStatus(idList, status);
+        if (CollectionUtils.isNotEmpty(idList)) {
+            hostDao.updateStatus(idList, status);
+        }
     }
 }
