@@ -24,4 +24,6 @@ public interface HostDao {
     List<Integer> selectAliveHostId();
 
     void updateStatus(@Param("idList") List<Integer> idList, @Param("status") int status);
+
+    List<Host> selectAliveHost();
 }

@@ -37,6 +37,10 @@ public class HostService {
         return hostDao.selectAliveHostId();
     }
 
+    public List<Host> getAliveHost() {
+        return hostDao.selectAliveHost();
+    }
+
 
     public void updateStatus(List<Integer> idList, int status) {
         if (CollectionUtils.isNotEmpty(idList)) {

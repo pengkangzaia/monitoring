@@ -56,6 +56,11 @@
         from host
         where status = 1
     </select>
+    <select id="selectAliveHost" resultType="com.github.camille.server.database.entity.Host">
+        select <include refid="selectFields"></include>
+        from host
+        where status = 1
+    </select>
 
 
 </mapper>

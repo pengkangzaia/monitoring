@@ -5,10 +5,10 @@ import com.github.camille.server.client.CpuEntityDTO;
 import com.github.camille.server.client.DiskEntityDTO;
 import com.github.camille.server.client.MemEntityDTO;
 import com.github.camille.server.client.NetEntityDTO;
+import com.github.camille.server.database.entity.Host;
 import com.github.camille.server.database.service.*;
 import com.github.camille.server.remote.CallingMethod;
-import com.github.camille.server.remote.parm.AddressParm;
-import com.github.camille.server.remote.parm.entity.Address;
+import org.apache.commons.collections.CollectionUtils;
 import org.quartz.JobExecutionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import java.time.Instant;
+import java.util.List;
 
 /**
  * Create by yster@foxmail.com 2018/11/11 0011 15:25
@@ -32,28 +33,30 @@ public class UpdateJob extends QuartzJobBean {
     @Autowired
     private NetworkService networkService;
     @Autowired
-    private AddressParm address;
+    private HostService hostService;
 
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) {
-        if (address.getServe() == null || address.getServe().size() == 0) {
-            throw new RuntimeException("没有配置要监控的远程主机");
+        List<Host> aliveHost = hostService.getAliveHost();
+        if (CollectionUtils.isEmpty(aliveHost)) {
+            throw new RuntimeException("当前无在线主机");
         }
         logger.debug("Regularly updated data...");
         Instant instant = Instant.now();
-        for (Address address : address.getServe()) {
-            String addressAddress = address.getAddress();
+        for (Host host : aliveHost) {
+            String ip = host.getIp();
+            String address = "http://" + ip + ":" + host.getAgentPort();
             try {
-                CpuEntityDTO cpuInfo = CallingMethod.getCpuInfo(addressAddress);
-                MemEntityDTO memEntity = CallingMethod.getMemoryUsage(addressAddress);
-                DiskEntityDTO diskEntity = CallingMethod.getDiskInfo(addressAddress);
-                NetEntityDTO netEntity = CallingMethod.getNetInfo(addressAddress);
+                CpuEntityDTO cpuInfo = CallingMethod.getCpuInfo(address);
+                MemEntityDTO memEntity = CallingMethod.getMemoryUsage(address);
+                DiskEntityDTO diskEntity = CallingMethod.getDiskInfo(address);
+                NetEntityDTO netEntity = CallingMethod.getNetInfo(address);
                 //写入系统当前CPU使用信息
-                cpuService.write(addressAddress, instant, cpuInfo);
+                cpuService.write(address, instant, cpuInfo);
                 //写入系统当前内存使用信息
-                memoryService.write(addressAddress, instant, memEntity);
-                diskService.write(addressAddress, instant, diskEntity);
-                networkService.write(addressAddress, instant, netEntity);
+                memoryService.write(address, instant, memEntity);
+                diskService.write(address, instant, diskEntity);
+                networkService.write(address, instant, netEntity);
             } catch (Exception e) {
                 logger.error(e.getMessage());
             }
