@@ -21,6 +21,7 @@ import java.time.Instant;
  * Create by yster@foxmail.com 2018/11/11 0011 15:25
  */
 public class UpdateJob extends QuartzJobBean {
+
     private Logger logger = LoggerFactory.getLogger(getClass().getName());
     @Autowired
     private CPUService cpuService;

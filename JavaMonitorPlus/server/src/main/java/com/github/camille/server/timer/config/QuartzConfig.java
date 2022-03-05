@@ -1,6 +1,7 @@
 package com.github.camille.server.timer.config;
 
 import com.github.camille.server.timer.job.ClearJob;
+import com.github.camille.server.timer.job.HealthCheckJob;
 import com.github.camille.server.timer.job.PredictJob;
 import com.github.camille.server.timer.job.UpdateJob;
 import com.github.camille.server.timer.parm.CronParm;
@@ -16,6 +17,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class QuartzConfig {
+
     private Logger logger = LoggerFactory.getLogger(getClass().getName());
 
     @Autowired
@@ -40,15 +42,15 @@ public class QuartzConfig {
     }
 
     @Bean
-    public JobDetail updataQuartzDetail() {
-        return JobBuilder.newJob(UpdateJob.class).withIdentity("updataJob").storeDurably().build();
+    public JobDetail updateQuartzDetail() {
+        return JobBuilder.newJob(UpdateJob.class).withIdentity("updateJob").storeDurably().build();
     }
 
     @Bean
-    public Trigger updataQuartzTrigger() {
+    public Trigger updateQuartzTrigger() {
         logger.warn("monitor.rate: " + cronParm.getRate());
-        return TriggerBuilder.newTrigger().forJob(updataQuartzDetail())
-                .withIdentity("updataTrigger")
+        return TriggerBuilder.newTrigger().forJob(updateQuartzDetail())
+                .withIdentity("updateTrigger")
                 .startNow()
                 .withSchedule(
                         SimpleScheduleBuilder.simpleSchedule()
@@ -69,6 +71,26 @@ public class QuartzConfig {
         logger.warn("monitor.rate: " + cronParm.getRate());
         return TriggerBuilder.newTrigger().forJob(predictQuartzDetail())
                 .withIdentity("predictTrigger")
+                .startNow()
+                .withSchedule(
+                        SimpleScheduleBuilder.simpleSchedule()
+                                .withIntervalInSeconds(cronParm.getRate())
+                                .repeatForever()
+                )
+                .build();
+    }
+
+
+    @Bean
+    public JobDetail healthCheckQuartzDetail() {
+        return JobBuilder.newJob(HealthCheckJob.class).withIdentity("healthCheckJob").storeDurably().build();
+    }
+
+    @Bean
+    public Trigger healthCheckQuartzTrigger() {
+        logger.warn("monitor.rate: " + cronParm.getRate());
+        return TriggerBuilder.newTrigger().forJob(healthCheckQuartzDetail())
+                .withIdentity("healthCheckJobTrigger")
                 .startNow()
                 .withSchedule(
                         SimpleScheduleBuilder.simpleSchedule()
