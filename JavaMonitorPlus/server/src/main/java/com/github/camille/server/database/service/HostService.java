@@ -18,8 +18,8 @@ public class HostService {
     @Autowired
     private HostDao hostDao;
 
-    public List<Host> hostList(String hostName, String hostIp, int offset, int limit) {
-        List<Host> hosts = hostDao.selectHosts(hostName, hostIp, offset, limit);
+    public List<Host> hostList(String hostName, String hostIp, int status, int offset, int limit) {
+        List<Host> hosts = hostDao.selectHosts(hostName, hostIp, status, offset, limit);
         return hosts;
     }
 

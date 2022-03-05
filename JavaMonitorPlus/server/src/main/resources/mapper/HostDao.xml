@@ -32,6 +32,9 @@
             <if test="hostIp != null">
                 and ip like concat('%', #{hostIp}, '%')
              </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
         </where>
         limit #{offset}, #{limit}
     </select>

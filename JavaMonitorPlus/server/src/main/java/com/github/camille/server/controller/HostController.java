@@ -28,9 +28,9 @@ public class HostController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/host/list", method = RequestMethod.GET)
-    public String getHostList(int current, int pageSize, String name, String ip) {
+    public String getHostList(int current, int pageSize, String name, String ip, Integer status) {
         int offset = (current - 1) * pageSize;
-        List<Host> hosts = hostService.hostList(name, ip, offset, pageSize);
+        List<Host> hosts = hostService.hostList(name, ip, status, offset, pageSize);
         int count = hostService.hostCount(name, ip);
         return getResponse(0, "成功", count, hosts);
     }
