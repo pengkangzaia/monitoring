@@ -136,5 +136,16 @@ public class ServerApplicationTests {
     }
 
 
+
+    @Test
+    public void hostStatusTest() {
+        List<Integer> list = new ArrayList<>();
+        list.add(1);
+        list.add(2);
+        hostDao.updateStatus(list, 1);
+    }
+
+
+
 }
 

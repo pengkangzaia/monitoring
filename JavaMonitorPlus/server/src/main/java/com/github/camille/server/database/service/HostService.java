@@ -31,4 +31,13 @@ public class HostService {
     public Host selectById(int hostId) {
         return hostDao.selectById(hostId);
     }
+
+    public List<Integer> getAliveHostId() {
+        return hostDao.selectAliveHostId();
+    }
+
+
+    public void updateStatus(List<Integer> idList, int status) {
+        hostDao.updateStatus(idList, status);
+    }
 }

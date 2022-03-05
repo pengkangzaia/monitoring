@@ -2,18 +2,24 @@ package com.github.camille.server.timer.job;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.github.camille.server.database.entity.Host;
+import com.github.camille.server.database.service.HostService;
 import com.github.camille.server.remote.util.HttpClient;
+import org.apache.commons.collections.CollectionUtils;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
+import javax.xml.ws.Service;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author pengkangzaia@foxmail.com
@@ -29,18 +35,41 @@ public class HealthCheckJob extends QuartzJobBean {
     @Value("${spring.cloud.consul.port}")
     private String consulPort;
 
+    @Autowired
+    private HostService hostService;
+
 
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) {
         String response = HttpClient.doGet("http://" + consulHost + ":" + consulPort + "/v1/health/state/passing");
-        Set<String> serviceList = new HashSet<>();
+        List<Integer> serviceList = new ArrayList<>();
         JSONArray parsed = (JSONArray) JSON.parse(response);
         for (int i = 0; i < parsed.size(); i++) {
             String serviceName = (String) parsed.getJSONObject(i).get("ServiceName");
             if (serviceName.startsWith("client")) {
-                serviceList.add(serviceName.split("-")[1]);
+                serviceList.add(Integer.parseInt(serviceName.split("-")[1]));
             }
         }
-
+        List<Integer> aliveHostsList = hostService.getAliveHostId();
+        List<Integer> updateOnline = new ArrayList<>();
+        List<Integer> updateOffline = new ArrayList<>();
+        Set<Integer> aliveIds = new HashSet<>(aliveHostsList);
+        for (Integer serviceId : serviceList) {
+            if (!aliveIds.contains(serviceId)) {
+                updateOnline.add(serviceId);
+            }
+        }
+        // 此次更新下线主机
+        Set<Integer> serverSet = new HashSet<>(serviceList);
+        for (Integer aliveId : aliveHostsList) {
+            if (!serverSet.contains(aliveId)) {
+                updateOffline.add(aliveId);
+            }
+        }
+        hostService.updateStatus(updateOnline, 1);
+        if (CollectionUtils.isNotEmpty(updateOffline)) {
+            hostService.updateStatus(updateOffline, 0);
+            // 告警
+        }
     }
 }

@@ -5,16 +5,23 @@
 <mapper namespace="com.github.camille.server.database.dao.HostDao">
 
     <sql id="selectFields">
-        id, `name`, ip, `desc`, agent_port
+        id, `name`, ip, status, `desc`, agent_port, last_survive_time
     </sql>
 
     <sql id="insertFields">
-        `name`, ip, `desc`, agent_port
+        `name`, ip, status, `desc`, agent_port, last_survive_time
     </sql>
     <insert id="insert">
         insert into host(<include refid="insertFields"></include>)
-        values(#{name}, #{ip}, #{desc})
+        values(#{name}, #{ip}, #{status}, #{desc}, #{agentPort}, #{lastSurviveTime})
     </insert>
+    <update id="updateStatus">
+        update host set status = #{status}, last_survive_time = now()
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </update>
     <select id="selectHosts" resultType="com.github.camille.server.database.entity.Host">
         select <include refid="selectFields"></include>
         from host
@@ -43,6 +50,11 @@
         select <include refid="selectFields"></include>
         from host
         where id = #{hostId}
+    </select>
+    <select id="selectAliveHostId" resultType="java.lang.Integer">
+        select id
+        from host
+        where status = 1
     </select>
 
 
