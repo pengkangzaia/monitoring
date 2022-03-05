@@ -51,14 +51,7 @@ public class HealthCheckJob extends QuartzJobBean {
             }
         }
         List<Integer> aliveHostsList = hostService.getAliveHostId();
-        List<Integer> updateOnline = new ArrayList<>();
         List<Integer> updateOffline = new ArrayList<>();
-        Set<Integer> aliveIds = new HashSet<>(aliveHostsList);
-        for (Integer serviceId : serviceList) {
-            if (!aliveIds.contains(serviceId)) {
-                updateOnline.add(serviceId);
-            }
-        }
         // 此次更新下线主机
         Set<Integer> serverSet = new HashSet<>(serviceList);
         for (Integer aliveId : aliveHostsList) {
@@ -66,7 +59,7 @@ public class HealthCheckJob extends QuartzJobBean {
                 updateOffline.add(aliveId);
             }
         }
-        hostService.updateStatus(updateOnline, 1);
+        hostService.updateStatus(serviceList, 1);
         if (CollectionUtils.isNotEmpty(updateOffline)) {
             hostService.updateStatus(updateOffline, 0);
             // 告警
