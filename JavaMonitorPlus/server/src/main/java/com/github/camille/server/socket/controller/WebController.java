@@ -1,6 +1,5 @@
 package com.github.camille.server.socket.controller;
 
-
 import com.github.camille.server.controller.vo.CpuVO;
 import com.github.camille.server.controller.vo.DiskVO;
 import com.github.camille.server.controller.vo.MemoryVO;
@@ -14,21 +13,21 @@ import com.github.camille.server.database.service.DiskService;
 import com.github.camille.server.database.service.MemoryService;
 import com.github.camille.server.database.service.NetworkService;
 import com.github.camille.server.timer.util.TimerUtil;
-import com.github.camille.server.view.entity.Message;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Create by yster@foxmail.com 2018/6/19/019 23:49
- */
-@Controller
-public class GreetingController {
+ * @author pengkangzaia@foxmail.com
+ * @create 2022-03-06 14:23
+ **/
+@RestController
+public class WebController {
+
 
     @Autowired
     private CPUService cpuService;
@@ -39,10 +38,10 @@ public class GreetingController {
     @Autowired
     private NetworkService networkService;
 
-    @MessageMapping("/cpu")
-    @SendTo("/topic/cpu")
-    public List<CpuVO> socketCpu(Message message) {
-        List<CPUEntity> entities = cpuService.findAllByAddress(message.getAddress());
+
+    @GetMapping("/cpu")
+    public List<CpuVO> webCpu() {
+        List<CPUEntity> entities = cpuService.findAllByAddress("http://1.15.117.64:8081");
         List<CpuVO> res = new ArrayList<>();
         for (CPUEntity cpu : entities) {
             CpuVO vo = new CpuVO();
@@ -55,10 +54,9 @@ public class GreetingController {
 
 
 
-    @MessageMapping("/memory")
-    @SendTo("/topic/memory")
-    public List<MemoryVO> socketMemory(Message message) {
-        List<MemEntity> entities = memoryService.findAllByAddress(message.getAddress());
+    @GetMapping("/memory")
+    public List<MemoryVO> socketMemory() {
+        List<MemEntity> entities = memoryService.findAllByAddress("http://1.15.117.64:8081");
         List<MemoryVO> res = new ArrayList<>();
         for (MemEntity mem : entities) {
             MemoryVO vo = new MemoryVO();
@@ -69,10 +67,9 @@ public class GreetingController {
         return res;
     }
 
-    @MessageMapping("/disk")
-    @SendTo("/topic/disk")
-    public List<DiskVO> socketDisk(Message message) {
-        List<DiskEntity> diskEntities = diskService.findAllByAddress(message.getAddress());
+    @GetMapping("/disk")
+    public List<DiskVO> socketDisk() {
+        List<DiskEntity> diskEntities = diskService.findAllByAddress("http://1.15.117.64:8081");
         List<DiskVO> res = new ArrayList<>();
         for (DiskEntity diskEntity : diskEntities) {
             DiskVO vo = new DiskVO();
@@ -83,10 +80,9 @@ public class GreetingController {
         return res;
     }
 
-    @MessageMapping("/network")
-    @SendTo("/topic/network")
-    public List<NetworkVO> socketNetwork(Message message) {
-        List<NetEntity> netEntityList = networkService.findAllByAddress(message.getAddress());
+    @GetMapping("/net")
+    public List<NetworkVO> socketNetwork() {
+        List<NetEntity> netEntityList = networkService.findAllByAddress("http://1.15.117.64:8081");
         List<NetworkVO> res = new ArrayList<>();
         for (NetEntity netEntity : netEntityList) {
             NetworkVO vo = new NetworkVO();
@@ -96,4 +92,5 @@ public class GreetingController {
         }
         return res;
     }
+
 }

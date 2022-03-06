@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
@@ -28,15 +29,12 @@ public class HostController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/host/list", method = RequestMethod.GET)
-    public String getHostList(int current, int pageSize, String name, String ip, Integer status) {
+    public String getHostList(int current, int pageSize, @RequestParam(required = false) Integer status, String name, String ip) {
         int offset = (current - 1) * pageSize;
         List<Host> hosts = hostService.hostList(name, ip, status, offset, pageSize);
         int count = hostService.hostCount(name, ip);
         return getResponse(0, "成功", count, hosts);
     }
-
-
-
 
 
 }

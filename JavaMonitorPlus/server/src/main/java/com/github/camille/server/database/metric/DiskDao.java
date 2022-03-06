@@ -36,7 +36,7 @@ public class DiskDao {
     public List<DiskEntity> findAllByAddress(String address) {
         InfluxDBClient client = InfluxDBClientFactory.create(url, token.toCharArray(), org, bucket);
         String flux = "from(bucket:\"monitor\")" +
-                " |> range(start: -1mo) " +
+                " |> range(start: -1h) " +
                 " |> filter(" +
                 "fn: (r) => r._measurement == \"disk\" and r.address ==\"" + address +
                 "\")" +
