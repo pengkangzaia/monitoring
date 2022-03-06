@@ -8,9 +8,7 @@ import com.github.camille.server.database.entity.alarm.AlarmConfig;
 import com.github.camille.server.database.entity.alarm.AlarmEvent;
 import com.github.camille.server.database.entity.data.Threshold;
 import com.github.camille.server.database.entity.user.User;
-import com.github.camille.server.database.service.AlarmConfigService;
-import com.github.camille.server.database.service.CPUService;
-import com.github.camille.server.database.service.MailService;
+import com.github.camille.server.database.service.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -143,6 +141,31 @@ public class ServerApplicationTests {
         list.add(1);
         list.add(2);
         hostDao.updateStatus(list, 1);
+    }
+
+    @Autowired
+    private HostService hostService;
+
+    @Test
+    public void hostList() {
+        List<Integer> hostIds = new ArrayList<>();
+        hostIds.add(1);
+        hostIds.add(2);
+        hostIds.add(3);
+        List<Host> hosts = hostService.getHosts(hostIds);
+        System.out.println(hosts);
+    }
+
+    @Autowired
+    private AlarmService alarmService;
+
+    @Test
+    public void hostOffline() {
+        List<Integer> hostIds = new ArrayList<>();
+        hostIds.add(1);
+        hostIds.add(2);
+        hostIds.add(3);
+        alarmService.hostOffline(hostIds);
     }
 
 

@@ -20,6 +20,7 @@ public class AlarmConfig {
     private boolean phoneNotice;
     // 用户组ID，如果为0则不采用用户组
     private int groupId;
+    private int isDeleted;
     private Date createTime;
     private Date modifyTime;
 

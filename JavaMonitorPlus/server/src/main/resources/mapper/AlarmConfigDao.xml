@@ -5,25 +5,25 @@
 <mapper namespace="com.github.camille.server.database.dao.AlarmConfigDao">
 
     <sql id="selectFields">
-        id, host_id, `name`, remark, `dynamic`, email_notice, phone_notice, group_id, create_time, modify_time
+        id, host_id, `name`, remark, `dynamic`, email_notice, phone_notice, group_id, is_deleted, create_time, modify_time
     </sql>
 
     <sql id="insertFields">
-        host_id, `name`, remark, `dynamic`, email_notice, phone_notice, group_id, create_time, modify_time
+        host_id, `name`, remark, `dynamic`, email_notice, phone_notice, group_id, is_deleted, create_time, modify_time
     </sql>
 
     <sql id="updateFields">
-        `name`, remark, `dynamic`, email_notice, phone_notice, group_id, modify_time
+        `name`, remark, `dynamic`, email_notice, phone_notice, group_id, is_deleted, modify_time
     </sql>
 
     <insert id="insertConfig" useGeneratedKeys="true" keyProperty="id" parameterType="com.github.camille.server.database.entity.alarm.AlarmConfig">
         insert into alarm_config(<include refid="insertFields"></include>)
-        values(#{hostId}, #{name}, #{remark}, #{dynamic}, #{emailNotice}, #{phoneNotice}, #{groupId}, now(), now())
+        values(#{hostId}, #{name}, #{remark}, #{dynamic}, #{emailNotice}, #{phoneNotice}, #{groupId}, 0, now(), now())
     </insert>
     <update id="updateConfig">
         update alarm_config set
         name = #{name}, remark = #{remark}, dynamic = #{dynamic}, email_notice = #{emailNotice},
-        phone_notice = #{phoneNotice}, group_id = #{groupId}, modify_time = now()
+        phone_notice = #{phoneNotice}, group_id = #{groupId}, is_deleted = #{isDeleted}, modify_time = now()
         where id = #{id}
     </update>
 
@@ -31,10 +31,21 @@
         select <include refid="selectFields"></include>
         from alarm_config
         where host_id = #{hostId}
+        and is_deleted = 0
     </select>
     <select id="selectAll" resultType="com.github.camille.server.database.entity.alarm.AlarmConfig">
         select <include refid="selectFields"></include>
         from alarm_config
+        where is_deleted = 0
+    </select>
+    <select id="selectByHostIds" resultType="com.github.camille.server.database.entity.alarm.AlarmConfig">
+        select <include refid="selectFields"></include>
+        from alarm_config
+        where is_deleted = 0
+        and host_id in
+        <foreach collection="hostIds" open="(" close=")" separator="," item="hostId">
+            #{hostId}
+        </foreach>
     </select>
 
 

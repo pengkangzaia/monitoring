@@ -2,6 +2,7 @@ package com.github.camille.server.database.dao;
 
 import com.github.camille.server.database.entity.alarm.AlarmConfig;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -16,8 +17,9 @@ public interface AlarmConfigDao {
 
     int insertConfig(AlarmConfig alarmConfig);
 
-
     void updateConfig(AlarmConfig config);
 
     List<AlarmConfig> selectAll();
+
+    List<AlarmConfig> selectByHostIds(@Param("hostIds") List<Integer> hostIds);
 }

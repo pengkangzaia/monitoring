@@ -6,6 +6,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,5 +47,12 @@ public class HostService {
         if (CollectionUtils.isNotEmpty(idList)) {
             hostDao.updateStatus(idList, status);
         }
+    }
+
+    public List<Host> getHosts(List<Integer> hostIds) {
+        if (CollectionUtils.isNotEmpty(hostIds)) {
+            return hostDao.selectByIds(hostIds);
+        }
+        return new ArrayList<>();
     }
 }

@@ -116,4 +116,11 @@ public class AlarmConfigService {
     public List<AlarmConfig> getAllConfig() {
         return alarmConfigDao.selectAll();
     }
+
+    public List<AlarmConfig> getConfigByHostIds(List<Integer> hostIds) {
+        if (CollectionUtils.isNotEmpty(hostIds)) {
+            return alarmConfigDao.selectByHostIds(hostIds);
+        }
+        return new ArrayList<>();
+    }
 }

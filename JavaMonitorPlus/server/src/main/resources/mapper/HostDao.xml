@@ -64,6 +64,14 @@
         from host
         where status = 1
     </select>
+    <select id="selectByIds" resultType="com.github.camille.server.database.entity.Host">
+        select <include refid="selectFields"></include>
+        from host
+        where id in
+        <foreach collection="hostIds" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </select>
 
 
 </mapper>
