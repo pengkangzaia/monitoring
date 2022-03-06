@@ -4,14 +4,12 @@ import com.github.camille.server.controller.vo.CpuVO;
 import com.github.camille.server.controller.vo.DiskVO;
 import com.github.camille.server.controller.vo.MemoryVO;
 import com.github.camille.server.controller.vo.NetworkVO;
+import com.github.camille.server.database.entity.Host;
 import com.github.camille.server.database.entity.data.CPUEntity;
 import com.github.camille.server.database.entity.data.DiskEntity;
 import com.github.camille.server.database.entity.data.MemEntity;
 import com.github.camille.server.database.entity.data.NetEntity;
-import com.github.camille.server.database.service.CPUService;
-import com.github.camille.server.database.service.DiskService;
-import com.github.camille.server.database.service.MemoryService;
-import com.github.camille.server.database.service.NetworkService;
+import com.github.camille.server.database.service.*;
 import com.github.camille.server.timer.util.TimerUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,11 +35,15 @@ public class WebController {
     private DiskService diskService;
     @Autowired
     private NetworkService networkService;
+    @Autowired
+    private HostService hostService;
 
 
     @GetMapping("/cpu")
-    public List<CpuVO> webCpu() {
-        List<CPUEntity> entities = cpuService.findAllByAddress("http://1.15.117.64:8081");
+    public List<CpuVO> webCpu(int id) {
+        Host host = hostService.selectById(id);
+        String address = "http://" + host.getIp() + ":" + host.getAgentPort();
+        List<CPUEntity> entities = cpuService.findAllByAddress(address);
         List<CpuVO> res = new ArrayList<>();
         for (CPUEntity cpu : entities) {
             CpuVO vo = new CpuVO();
@@ -55,8 +57,10 @@ public class WebController {
 
 
     @GetMapping("/memory")
-    public List<MemoryVO> socketMemory() {
-        List<MemEntity> entities = memoryService.findAllByAddress("http://1.15.117.64:8081");
+    public List<MemoryVO> socketMemory(int id) {
+        Host host = hostService.selectById(id);
+        String address = "http://" + host.getIp() + ":" + host.getAgentPort();
+        List<MemEntity> entities = memoryService.findAllByAddress(address);
         List<MemoryVO> res = new ArrayList<>();
         for (MemEntity mem : entities) {
             MemoryVO vo = new MemoryVO();
@@ -68,8 +72,10 @@ public class WebController {
     }
 
     @GetMapping("/disk")
-    public List<DiskVO> socketDisk() {
-        List<DiskEntity> diskEntities = diskService.findAllByAddress("http://1.15.117.64:8081");
+    public List<DiskVO> socketDisk(int id) {
+        Host host = hostService.selectById(id);
+        String address = "http://" + host.getIp() + ":" + host.getAgentPort();
+        List<DiskEntity> diskEntities = diskService.findAllByAddress(address);
         List<DiskVO> res = new ArrayList<>();
         for (DiskEntity diskEntity : diskEntities) {
             DiskVO vo = new DiskVO();
@@ -81,8 +87,10 @@ public class WebController {
     }
 
     @GetMapping("/net")
-    public List<NetworkVO> socketNetwork() {
-        List<NetEntity> netEntityList = networkService.findAllByAddress("http://1.15.117.64:8081");
+    public List<NetworkVO> socketNetwork(int id) {
+        Host host = hostService.selectById(id);
+        String address = "http://" + host.getIp() + ":" + host.getAgentPort();
+        List<NetEntity> netEntityList = networkService.findAllByAddress(address);
         List<NetworkVO> res = new ArrayList<>();
         for (NetEntity netEntity : netEntityList) {
             NetworkVO vo = new NetworkVO();
