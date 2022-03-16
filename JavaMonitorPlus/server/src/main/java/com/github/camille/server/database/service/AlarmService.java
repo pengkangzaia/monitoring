@@ -60,7 +60,7 @@ public class AlarmService {
             emails[i] = noticeUser.get(i).getEmail();
         }
         mail.setTo(emails);
-        mail.setSubject("主机下线告警");
+        mail.setSubject("主机告警");
         mail.setText(content);
         mailService.sendSimpleMailMessage(mail);
     }
